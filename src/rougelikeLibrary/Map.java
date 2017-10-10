@@ -24,4 +24,9 @@ public class Map {
 	{
 		return height;
 	}
+	
+	public Boolean checkSpotEmpty()
+	{
+		return true;
+	}
 }

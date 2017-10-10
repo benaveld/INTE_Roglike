@@ -54,5 +54,11 @@ public class MapTests {
 		assertEquals(-150, map.getHeight());
 	}
 	
+	@Test
+	public void testCheckSpotEmpty()
+	{
+		Map map = new Map(50,50);
+		assertTrue(map.checkSpotEmpty());
+	}
 	
 }
