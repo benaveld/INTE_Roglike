@@ -3,7 +3,7 @@ package rougelikeLibrary;
 public class Player {
 
 	private int health = 0;
-	
+	private float speed = 0f;
 	
 	public Player(){}
 	
@@ -15,7 +15,7 @@ public class Player {
   
   public float getSpeed(){
 		
-		return 0f;
+		return speed;
 		
 	}
   
