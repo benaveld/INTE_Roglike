@@ -40,7 +40,3 @@ public class LivingObject {
 		this.health = health;
 	}
 }
-
-	
-	
-}
