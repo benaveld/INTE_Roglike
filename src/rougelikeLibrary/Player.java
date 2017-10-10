@@ -2,10 +2,16 @@ package rougelikeLibrary;
 
 public class Player {
 
-	public int health = 0;
+	
+	private int health = 0;
 	
 	public Player(){}
 	
+	public float getSpeed(){
+		
+		return 0f;
+		
+	}
 	public int getHealth(){
 		
 		return health;

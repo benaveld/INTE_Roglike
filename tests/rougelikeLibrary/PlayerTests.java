@@ -12,6 +12,9 @@ public class PlayerTests {
 		
 	}
 	
-	
+	public void playerSpeedTest(){
+		Player p = new Player();
+		assertEquals(0f, p.getSpeed(), 0.00001);
+	}
 	
 }
