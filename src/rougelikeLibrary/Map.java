@@ -2,8 +2,8 @@ package rougelikeLibrary;
 
 public class Map {
 
-	int width;
-	int height;
+	private int width;
+	private int height;
 	
 	public Map(int width, int height)
 	{
