@@ -3,9 +3,14 @@ package rougelikeLibrary;
 public class Player {
 
 	private int health = 0;
-	private float speed = 0f;
+	private int speed = 0;
 	
-	public Player(){}
+	public Player(int speed){
+		
+		this.speed = speed;
+	}
+	
+	
 	
 	public void takeDamage(int damge) {
 		if(damge < 0) throw new IllegalArgumentException("Can't take negativ damge.");
@@ -13,7 +18,7 @@ public class Player {
 	}
 
   
-  public float getSpeed(){
+  public int getSpeed(){
 		
 		return speed;
 		
