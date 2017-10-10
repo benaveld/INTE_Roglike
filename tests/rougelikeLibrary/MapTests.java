@@ -6,7 +6,7 @@ import org.junit.*;
 public class MapTests {
 	
 	@Test
-	public void CreateMap256By256Test()
+	public void testCreateMap256By256()
 	{
 		Map map = new Map(256,256);
 		assertEquals(256, map.getWidth());
@@ -14,7 +14,7 @@ public class MapTests {
 	}
 	
 	@Test
-	public void CreateMap50by150()
+	public void testCreateMap50by150()
 	{
 		Map map = new Map(50,150);
 		assertEquals(50, map.getWidth());
@@ -22,7 +22,7 @@ public class MapTests {
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void CreateMap0by150()
+	public void testCreateMap0by150()
 	{
 		Map map = new Map(0,150);
 		assertEquals(0, map.getWidth());
@@ -30,7 +30,7 @@ public class MapTests {
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void CreateMapNegative50by150()
+	public void testCreateMapNegative50by150()
 	{
 		Map map = new Map(-50,150);
 		assertEquals(-50, map.getWidth());
@@ -39,7 +39,7 @@ public class MapTests {
 	
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void CreateMap50by0()
+	public void testCreateMap50by0()
 	{
 		Map map = new Map(50,0);
 		assertEquals(50, map.getWidth());
@@ -47,7 +47,7 @@ public class MapTests {
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void CreateMap50ByNegative150()
+	public void testCreateMap50ByNegative150()
 	{
 		Map map = new Map(50,-150);
 		assertEquals(50, map.getWidth());
