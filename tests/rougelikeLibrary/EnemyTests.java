@@ -3,9 +3,8 @@ package rougelikeLibrary;
 import static org.junit.Assert.*;
 import org.junit.*;
 
-public class PlayerTests {
+public class EnemyTests {
 
-	
 	
 	
 	
