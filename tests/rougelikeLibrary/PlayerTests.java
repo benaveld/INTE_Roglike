@@ -22,26 +22,26 @@ public class PlayerTests {
 	
 	
 	@Test
-	public void playerSpeedTest(){
+	public void testPlayerSpeed(){
 		
 		Player p = new Player(1);
-		assertEquals(1, p.getSpeed(), 0.00001);
+		assertEquals(1, p.getSpeed());
 		
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void playerNegativeSpeedTest(){
+	public void testPlayerNegativeSpeed(){
 		
 		Player p = new Player(-1);
-		assertEquals(0, p.getSpeed(), 0.00001);
+		assertEquals(0, p.getSpeed());
 		
 	}
 	
 	
 	@Test
-  public void playerSpeedTestZero(){
+	public void testPlayerSpeedZero(){
 		Player p = new Player(0);
-		assertEquals(0, p.getSpeed(), 0.00001);
+		assertEquals(0, p.getSpeed());
 	}
 
   

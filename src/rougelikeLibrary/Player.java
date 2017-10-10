@@ -3,7 +3,7 @@ package rougelikeLibrary;
 public class Player {
 
 	private int health = 0;
-	private int speed = 0;
+	private int speed;
 	
 	public Player(int speed){
 		if(speed < 0){
