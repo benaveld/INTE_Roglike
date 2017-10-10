@@ -6,8 +6,13 @@ public class Player {
 	private int speed = 0;
 	
 	public Player(int speed){
-		
+		if(speed < 0){
+			
+			throw new IllegalArgumentException("Speed needs to both be more than 0");			
+		}
+		else{
 		this.speed = speed;
+		}
 	}
 	
 	
