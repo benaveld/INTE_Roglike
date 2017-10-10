@@ -18,14 +18,6 @@ public class PlayerTests {
 		assertEquals(0, p.getHealth());
 		
 	}
-
-	@Test
-	public void playerDamageTest() {
-		Player p = new Player(0,0);
-		p.setHealth(100);
-		p.takeDamage(10);
-		assertEquals(90, p.getHealth());
-	}
 	
 	
 	@Test
@@ -51,19 +43,31 @@ public class PlayerTests {
 		assertEquals(0, p.getSpeed());
 	}
 
+	@Test
+	public void testPlayerDamage() {
+		Player p = new Player(0,100);
+		p.takeDamage(10);
+		assertEquals(90, p.getHealth());
+	}
   
 	@Test
-	public void player0Damage() {
-		Player p = new Player(0,0);
-		p.setHealth(100);
+	public void testPlayer0Damage() {
+		Player p = new Player(0,100);
 		p.takeDamage(0);
+		assertEquals(p.getHealth(), 100);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void playerNagativDamage() {
-		Player p = new Player(0,0);
-		p.setHealth(100);
+	public void testPlayerNegativeDamage() {
+		Player p = new Player(0,100);
 		p.takeDamage(-10);
+		assertEquals(p.getHealth(), 100);
+	}
+	@Test
+	public void testPlayerNegativeHealthAfterDamage() {
+		Player p = new Player(0,100);
+		p.takeDamage(110);
+		assertEquals(p.getHealth(), 0);
 	}
 	
 	
