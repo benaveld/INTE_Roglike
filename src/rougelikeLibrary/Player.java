@@ -2,13 +2,13 @@ package rougelikeLibrary;
 
 public class Player {
 
-	public int health;
+	public int health = 0;
 	
 	public Player(){}
 	
 	public int getHealth(){
 		
-		return 0;
+		return health;
 	}
 	
 	
