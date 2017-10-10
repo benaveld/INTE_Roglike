@@ -2,16 +2,18 @@ package rougelikeLibrary;
 
 public class Player {
 
-	private int health = 0;
+	private int health;
 	private int speed;
 	
-	public Player(int speed){
-		if(speed < 0){
+	public Player(int speed, int health){
+		
+		if(speed < 0 || health < 0){
 			
-			throw new IllegalArgumentException("Speed needs to both be more than 0");			
+			throw new IllegalArgumentException("Speed and health both need to be 0 or more");			
 		}
 		else{
 		this.speed = speed;
+		this.health = health;
 		}
 	}
 	
