@@ -2,8 +2,9 @@ package rougelikeLibrary;
 
 public class Player {
 
-	private int health;
 	private int speed;
+	private int health;
+	
 	
 	public Player(int speed, int health){
 		
