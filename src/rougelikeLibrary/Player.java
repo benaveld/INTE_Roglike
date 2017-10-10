@@ -19,9 +19,14 @@ public class Player {
 	
 	
 	
-	public void takeDamage(int damge) {
-		if(damge < 0) throw new IllegalArgumentException("Can't take negativ damge.");
-		health -= damge;
+	public void takeDamage(int damage) {
+		if(damage < 0){
+			throw new IllegalArgumentException("Can't take negative damage.");
+		}
+		health -= damage;
+		if(health < 0){
+			health = 0;
+		}
 	}
 
   
@@ -34,9 +39,5 @@ public class Player {
 	public int getHealth(){
 		
 		return health;
-	}
-	
-	public void setHealth(int health) {
-		this.health = health;
 	}
 }
