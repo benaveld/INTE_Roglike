@@ -47,18 +47,18 @@ public class LivingObjectTests {
 	public void testLivingObject0Damage() {
 		LivingObject lO = new LivingObject(0,100);
 		lO.takeDamage(0);
-		assertEquals(lO.getHealth(), 100);
+		assertEquals(100, lO.getHealth());
 	}
 	@Test(expected = IllegalArgumentException.class)
 	public void testLivingObjectNegativeDamage() {
 		LivingObject lO = new LivingObject(0,100);
 		lO.takeDamage(-10);
-		assertEquals(lO.getHealth(), 100);
+		assertEquals(100, lO.getHealth());
 	}
 	@Test
 	public void testLivingObjectNegativeHealthAfterDamage() {
 		LivingObject lO = new LivingObject(0,100);
 		lO.takeDamage(110);
-		assertEquals(lO.getHealth(), 0);
+		assertEquals(0, lO.getHealth());
 	}
 }
