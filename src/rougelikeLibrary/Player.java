@@ -11,7 +11,14 @@ public class Player {
 		if(damge < 0) throw new IllegalArgumentException("Can't take negativ damge.");
 		health -= damge;
 	}
-	
+
+  
+  public float getSpeed(){
+		
+		return 0f;
+		
+	}
+  
 	public int getHealth(){
 		
 		return health;
