@@ -17,4 +17,6 @@ public class PlayerTests {
 		assertEquals(0f, p.getSpeed(), 0.00001);
 	}
 	
+	
+	
 }
