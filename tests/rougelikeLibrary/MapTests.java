@@ -54,5 +54,4 @@ public class MapTests {
 		assertEquals(-150, map.getHeight());
 	}
 	
-	
 }
