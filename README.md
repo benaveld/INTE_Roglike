@@ -1,2 +1,2 @@
 # INTE_Roglike
-Project for skoal assignment
+Project for school assignment
