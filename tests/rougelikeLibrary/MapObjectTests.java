@@ -17,7 +17,7 @@ public class MapObjectTests {
 	public void testAddPlayerToMap()
 	{
 		Map map = new Map(50,50);
-		Player p  = new Player(1,100);
+		Player p  = new Player(1,100,0);
 		map.addPlayer(p, 30, 24);
 		assertTrue(map.getPlayer() != null);
 	}
@@ -26,7 +26,7 @@ public class MapObjectTests {
 	public void testAddPlayerOutsideMapWidth()
 	{
 		Map map = new Map(50,50);
-		Player p  = new Player(1,100);
+		Player p  = new Player(1,100,0);
 		map.addPlayer(p, 60, 24);
 		assertTrue(map.getPlayer() != null);
 	}
@@ -35,7 +35,7 @@ public class MapObjectTests {
 	public void testAddPlayerOutsideMapHeight()
 	{
 		Map map = new Map(50,50);
-		Player p  = new Player(1,100);
+		Player p  = new Player(1,100,0);
 		map.addPlayer(p, 24, 64);
 		assertTrue(map.getPlayer() != null);
 	}
@@ -44,7 +44,7 @@ public class MapObjectTests {
 	public void testCheckSpotOccupied()
 	{
 		Map map = new Map(50,50);
-		Player p = new Player(1,100);
+		Player p = new Player(1,100,0);
 		map.addPlayer(p,30,24);
 		assertTrue(!map.checkSpotEmpty(30,24));
 	}
