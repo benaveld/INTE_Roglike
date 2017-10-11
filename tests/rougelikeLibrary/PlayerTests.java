@@ -8,7 +8,7 @@ public class PlayerTests {
 	@Test
 	public void testPlayerPosistion()
 	{
-		Player p = new Player(5,5);
+		Player p = new Player(5,5,0);
 		p.setPosistion(15,25);
 		assertEquals(15,p.getPosX());
 		assertEquals(25,p.getPosY());
@@ -17,7 +17,7 @@ public class PlayerTests {
 	@Test(expected = IllegalArgumentException.class)
 	public void testPlayerPosistionInvalidX()
 	{
-		Player p = new Player(5,5);
+		Player p = new Player(5,5,0);
 		p.setPosistion(-5,25);
 		assertEquals(-5,p.getPosX());
 		assertEquals(25,p.getPosY());
@@ -26,7 +26,7 @@ public class PlayerTests {
 	@Test(expected = IllegalArgumentException.class)
 	public void testPlayerPosistionInvalidY()
 	{
-		Player p = new Player(5,5);
+		Player p = new Player(5,5,0);
 		p.setPosistion(5,-25);
 		assertEquals(5,p.getPosX());
 		assertEquals(-25,p.getPosY());
