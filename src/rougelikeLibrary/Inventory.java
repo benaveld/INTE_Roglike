@@ -11,12 +11,29 @@ public class Inventory {
 		
 		
 	}
-	
-	public void Add(Item i){
+	public void remove(Item i){
+		items.remove(i);
+		
+	}
+	public void add(Item i){
 		
 		items.add(i);
 	}
-	public String getItems(){
+	
+	public ArrayList<Item> getItems(){
+		
+		return items;
+	}
+	public Item getItem(int index){
+		
+		return items.get(index);
+	}
+	public void removeAllItems(){
+		
+		items.clear();
+	}
+	
+	public String toString(){
 		String out = "";
 		for(Item i : items){
 			
