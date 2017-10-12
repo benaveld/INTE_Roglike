@@ -1,11 +1,9 @@
 package rougelikeLibrary;
 
-public class Enemy extends LivingObject {
+public class Enemy extends Character {
 
-	public Enemy(int speed, int health){
-		super(speed, health);
-		
+	public Enemy(int speed, int health, int damage) {
+		super(speed, health, damage);
 	}
-	
-	
+
 }
