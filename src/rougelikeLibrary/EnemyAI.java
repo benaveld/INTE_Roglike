@@ -3,18 +3,28 @@ package rougelikeLibrary;
 public class EnemyAI extends IO {
 
 	private int randomDirection;
-	private static final String[] DIRECTIONS = { "n", "e", "s", "w" };
-
+	private int lastDirection = -1;
+	
 	public EnemyAI(int direction) {
 		this.randomDirection = direction;
 	}
 
 	@Override
-	public String requestMove() {
+	public Direction requestMove() {
 		return calculateNextMove();
 	}
+	
+	@Override
+	public Direction requestMoveAfterFail()
+	{
+		if (randomDirection != lastDirection)
+		{
+			return calculateNextMove();
+		}
+		return null;
+	}
 
-	private String calculateNextMove() {
-		return DIRECTIONS[randomDirection];
+	private Direction calculateNextMove() {
+		return Direction.values()[randomDirection];
 	}
 }

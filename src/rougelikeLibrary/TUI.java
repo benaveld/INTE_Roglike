@@ -1,38 +1,44 @@
 package rougelikeLibrary;
 
-import java.io.InputStream;
 import java.util.Scanner;
 
 public class TUI extends IO {
 
-	InputStream inputStream;
-
-	public TUI() {
-		this.inputStream = System.in;
-	}
-
-	public TUI(InputStream inputStream) {
-		this.inputStream = inputStream;
-	}
 
 	@Override
-	public String requestMove() {
+	public Direction requestMove() {
 		String s = getInputFromUser();
-		if (!s.equals("n") && !s.equals("e") && !s.equals("s") && !s.equals("w")) {
-			throw new IllegalArgumentException("Input needs to be single character and one of: n s e w");
+		if (s.equals("n"))
+		{
+			return Direction.NORTH;
 		}
-		return s;
+		else if (s.equals("e"))
+		{
+			return Direction.EAST;
+		}
+		else if (s.equals("s"))
+		{
+			return Direction.SOUTH;
+		}
+		else if (s.equals("w"))
+		{
+			return Direction.WEST;
+		}
+		throw new IllegalArgumentException("Input must be one of the characters: n e s w");
 	}
-
+	
+	@Override
+	public Direction requestMoveAfterFail()
+	{
+		System.out.println("Move not allowed.");
+		return requestMove();
+	}
+	
+	
 	private String getInputFromUser() {
-		Scanner scanner = new Scanner(inputStream);
+		Scanner scanner = new Scanner(System.in);
 		String s = scanner.nextLine();
 		scanner.close();
 		return s;
 	}
-
-	public InputStream getInputStream() {
-		return inputStream;
-	}
-
 }
