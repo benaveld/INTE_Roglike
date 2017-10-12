@@ -1,7 +1,7 @@
 package rougelikeLibrary;
 
 /**
- * Created by Sebastian on 2017-10-11.
+ * Main container for a room in the grid that makes up the game world
  */
 public class Room {
 }

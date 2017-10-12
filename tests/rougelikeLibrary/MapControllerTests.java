@@ -1,7 +1,9 @@
 package rougelikeLibrary;
 
+import static org.junit.Assert.*;
+import org.junit.*;
+
 /**
- * Created by Sebastian on 2017-10-11.
  */
 public class MapControllerTests {
 }
