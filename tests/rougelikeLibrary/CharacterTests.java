@@ -1,6 +1,9 @@
 package rougelikeLibrary;
 
 import static org.junit.Assert.*;
+
+import java.awt.Point;
+
 import org.junit.*;
 
 public class CharacterTests {
@@ -67,5 +70,26 @@ public class CharacterTests {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCharacterNegativeDamage() {
 		new Character(0, 0, -1);
+	}
+	@Test
+	public void testCharacterPoint() {
+		Character c = new Character(0, 0, 0, new Point(1, 2));
+		assertEquals(new Point(1, 2), c.getPoint());
+		assertEquals(1, c.getPoint().x);
+		assertEquals(2, c.getPoint().y);
+	}
+	@Test
+	public void testCharacterXY() {
+		Character c = new Character(0, 0, 0, 1, 2);
+		assertEquals(new Point(1,2), c.getPoint());
+		assertEquals(1, c.getPoint().x);
+		assertEquals(2, c.getPoint().y);
+	}
+	@Test
+	public void testCharacterPointSet() {
+		Character c = new Character(0, 0, 0, 1, 2);
+		c.setPoint(3, 4);
+		assertEquals(3, c.getPoint().x);
+		assertEquals(4, c.getPoint().y);
 	}
 }
