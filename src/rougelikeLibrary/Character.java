@@ -50,6 +50,11 @@ public class Character implements Mappable {
 	public int getDamage() {
 		return damage;
 	}
+	
+	@Override
+	public void setPoint(Point point) {
+		this.point.setLocation(point);
+	}
 
 	@Override
 	public void setPoint(int x, int y) {
@@ -60,5 +65,5 @@ public class Character implements Mappable {
 	public Point getPoint() {
 		return point;
 	}
-	
+
 }
