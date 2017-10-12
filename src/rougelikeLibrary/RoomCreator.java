@@ -1,7 +1,8 @@
 package rougelikeLibrary;
 
 /**
- * Handles logic for creating and retrieving rooms in the game world grid.
+ * Handles logic for creating and populating new rooms.
+ * Every room contains x Characters, Items and doors.
  */
 public class RoomCreator {
 }
