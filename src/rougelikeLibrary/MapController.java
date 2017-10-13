@@ -44,6 +44,28 @@ public class MapController {
 
 
     /**
+     * Sets new current room
+     * @param room the new room to be the current.
+     * @throws IllegalArgumentException if room is null.
+     */
+    public void setCurrentRoom(Room room) throws IllegalArgumentException {
+        if (room == null) {
+            throw new IllegalArgumentException("Room can't be null.");
+        }
+        currentRoom = room;
+    }
+
+
+    /**
+     * Get current room
+     * @return the current room
+     */
+    public Room getCurrentRoom() {
+        return currentRoom;
+    }
+
+
+    /**
      * Adds a room to the map with the world position from the room.
      * @param room the room to add
      * @throws IllegalArgumentException if either room is null or there already exists a room at the coordinate.
