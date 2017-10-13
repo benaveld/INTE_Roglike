@@ -3,6 +3,8 @@ package rougelikeLibrary;
 import static org.junit.Assert.*;
 import org.junit.*;
 
+import java.util.HashMap;
+
 /**
  */
 public class MapControllerTests {
@@ -14,13 +16,36 @@ public class MapControllerTests {
     private RoomCreator roomCreator;
     private Room centerRoom;
     private MapController mapController;
+    private java.util.Map<WorldPosition.CardinalDirection, WorldPosition.CardinalDirectionPermission> cardinalDirectionPermissionsAll = new HashMap<>();
+    private java.util.Map<WorldPosition.CardinalDirection, WorldPosition.CardinalDirectionPermission> cardinalDirectionPermissions = new HashMap<>();
+
+    Item [] items = {
+            new Item("fast shoes", 12, Item.Effect.SPEED),
+            new Item("deadly axe", 9, Item.Effect.DAMAGE),
+            new Item("better shoe laces", 33, Item.Effect.SPEED),
+            new Item("candy", 77, Item.Effect.HEALTH)
+    };
+
+    Character [] enemies = {
+            new Enemy(22, 33, 44),
+            new Enemy(2, 3, 44),
+            new Enemy(22, 33, 4),
+            new Enemy(2, 3, 44)
+    };
+
 
     @Before
     public void init() {
-        roomCreator = new RoomCreator(dummySeed);
-        centerRoom = roomCreator.createRoom(centerWorldPosition);
+        cardinalDirectionPermissionsAll.put(WorldPosition.CardinalDirection.North, WorldPosition.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAll.put(WorldPosition.CardinalDirection.South, WorldPosition.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAll.put(WorldPosition.CardinalDirection.West, WorldPosition.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAll.put(WorldPosition.CardinalDirection.East, WorldPosition.CardinalDirectionPermission.Optional);
+
+        roomCreator = new RoomCreator(dummySeed, new Player(1, 1, 1), items, enemies, new RoomSpace(32, 32));
+        centerRoom = roomCreator.createInitialRoom(centerWorldPosition);
         mapController = new MapController(centerRoom);
     }
+
 
     @Test
     public void testPlayRoom() {
@@ -28,9 +53,34 @@ public class MapControllerTests {
         assertNotNull(nextRoomPosition);
     }
 
+
     @Test
     public void testRoomExist() {
         assertTrue(mapController.roomExist(centerWorldPosition));
+    }
+
+
+    @Test
+    public void testSetCurrentRoom() {
+        WorldPosition beforePosition = new WorldPosition(12, 13);
+        Room room1 = roomCreator.createRoom(beforePosition, cardinalDirectionPermissionsAll);
+        MapController mapController = new MapController(room1);
+
+        assertEquals(mapController.getCurrentRoom().getPosition(), beforePosition);
+
+        WorldPosition afterPosition = new WorldPosition(22, 23);
+        Room room2 = roomCreator.createRoom(afterPosition, cardinalDirectionPermissionsAll);
+        mapController.setCurrentRoom(room2);
+
+        assertEquals(mapController.getCurrentRoom().getPosition(), afterPosition);
+    }
+
+    @Test
+    public void testGetCurrentRoom() {
+        WorldPosition initialPosition = new WorldPosition(32, 54);
+        Room room = roomCreator.createRoom(initialPosition, cardinalDirectionPermissionsAll);
+        MapController mapController = new MapController(room);
+        assertEquals(mapController.getCurrentRoom().getPosition(), initialPosition);
     }
 
 
@@ -44,15 +94,34 @@ public class MapControllerTests {
         assertFalse(mapController.roomExist(worldPosition2));
         assertFalse(mapController.roomExist(worldPosition3));
 
-        mapController.addRoom(new Room(worldPosition1));
-        mapController.addRoom(new Room(worldPosition2));
-        mapController.addRoom(new Room(worldPosition3));
+        mapController.addRoom(roomCreator.createRoom(worldPosition1, cardinalDirectionPermissionsAll));
+        mapController.addRoom(roomCreator.createRoom(worldPosition2, cardinalDirectionPermissionsAll));
+        mapController.addRoom(roomCreator.createRoom(worldPosition3, cardinalDirectionPermissionsAll));
 
         assertTrue(mapController.roomExist(worldPosition1));
         assertTrue(mapController.roomExist(worldPosition2));
         assertTrue(mapController.roomExist(worldPosition3));
     }
 
+
+    @Test
+    public void testGetRoom() {
+        WorldPosition worldPosition1 = new WorldPosition(2, 3);
+        WorldPosition worldPosition2 = new WorldPosition(12, 13);
+        WorldPosition worldPosition3 = new WorldPosition(22, 23);
+
+        assertFalse(mapController.roomExist(worldPosition1));
+        assertFalse(mapController.roomExist(worldPosition2));
+        assertFalse(mapController.roomExist(worldPosition3));
+
+        mapController.addRoom(roomCreator.createRoom(worldPosition1, cardinalDirectionPermissionsAll));
+        mapController.addRoom(roomCreator.createRoom(worldPosition2, cardinalDirectionPermissionsAll));
+        mapController.addRoom(roomCreator.createRoom(worldPosition3, cardinalDirectionPermissionsAll));
+
+        assertEquals(mapController.getRoom(worldPosition1).getPosition(), worldPosition1);
+        assertEquals(mapController.getRoom(worldPosition2).getPosition(), worldPosition2);
+        assertEquals(mapController.getRoom(worldPosition3).getPosition(), worldPosition3);
+    }
 
     /**
      * Tests a possible position for a room which direction it can have doors to.
@@ -74,10 +143,10 @@ public class MapControllerTests {
      */
     @Test
     public void testCardinalDirectionPermissionDoors() {
-        Room northRoom = new Room(new WorldPosition(0, 3));
+        Room northRoom = roomCreator.createRoom(new WorldPosition(0, 3), cardinalDirectionPermissionsAll);
         northRoom.addDoor(WorldPosition.CardinalDirection.South);
 
-        Room eastRoom = new Room(new WorldPosition(1, 4));
+        Room eastRoom = roomCreator.createRoom(new WorldPosition(1, 4), cardinalDirectionPermissionsAll);
 
         mapController.addRoom(northRoom);
         mapController.addRoom(eastRoom);
