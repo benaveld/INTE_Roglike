@@ -1,30 +1,38 @@
 package rougelikeLibrary;
 
+import java.util.Random;
+
+import rougelikeLibrary.Position.CardinalDirection;
+
 public class EnemyAI extends IO {
 
-	private int randomDirection;
-	private int lastDirection = -1;
+	private CardinalDirection lastDirection = null;
+	private Random r;
 	
-	public EnemyAI(int direction) {
-		this.randomDirection = direction;
+	public EnemyAI(int seed)
+	{
+		r = new Random(seed);
 	}
 
 	@Override
-	public Direction requestMove() {
+	public CardinalDirection requestMove() {
 		return calculateNextMove();
 	}
 	
 	@Override
-	public Direction requestMoveAfterFail()
+	public CardinalDirection requestMoveAfterFail()
 	{
-		if (randomDirection != lastDirection)
+		CardinalDirection dir = null;
+		do
 		{
-			return calculateNextMove();
-		}
-		return null;
+			dir = calculateNextMove();
+		} while (dir != lastDirection);
+		return dir;
 	}
 
-	private Direction calculateNextMove() {
-		return Direction.values()[randomDirection];
+	private CardinalDirection calculateNextMove() {
+		int i = r.nextInt(CardinalDirection.values().length);
+		System.out.println(i);
+		return CardinalDirection.values()[i];
 	}
 }

@@ -1,10 +1,11 @@
 package rougelikeLibrary;
 
+import rougelikeLibrary.Position.CardinalDirection;
+
 public abstract class IO {
 
-	enum Direction {NORTH,EAST,SOUTH,WEST};
 	
-	public abstract Direction requestMove();	
+	public abstract CardinalDirection requestMove();	
 	
-	public abstract Direction requestMoveAfterFail();
+	public abstract CardinalDirection requestMoveAfterFail();
 }
