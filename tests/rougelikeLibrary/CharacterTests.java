@@ -2,7 +2,6 @@ package rougelikeLibrary;
 
 import static org.junit.Assert.*;
 
-import java.awt.Point;
 
 import org.junit.*;
 
@@ -72,24 +71,24 @@ public class CharacterTests {
 		new Character(0, 0, -1, new TurnSystem(new EnemyAI(1)));
 	}
 	@Test
-	public void testCharacterPoint() {
-		Character c = new Character(0, 0, 0, new Point(1, 2), new TurnSystem(new EnemyAI(1)));
-		assertEquals(new Point(1, 2), c.getPoint());
-		assertEquals(1, c.getPoint().x);
-		assertEquals(2, c.getPoint().y);
+	public void testCharacterPosition() {
+		Character c = new Character(0, 0, 0, new Position(1, 2), new TurnSystem(new EnemyAI(1)));
+		assertEquals(new Position(1, 2), c.getPosition());
+		assertEquals(1, c.getPosition().getX());
+		assertEquals(2, c.getPosition().getY());
 	}
 	@Test
 	public void testCharacterXY() {
 		Character c = new Character(0, 0, 0, 1, 2, new TurnSystem(new EnemyAI(1)));
-		assertEquals(new Point(1,2), c.getPoint());
-		assertEquals(1, c.getPoint().x);
-		assertEquals(2, c.getPoint().y);
+		assertEquals(new Position(1,2), c.getPosition());
+		assertEquals(1, c.getPosition().getX());
+		assertEquals(2, c.getPosition().getY());
 	}
 	@Test
-	public void testCharacterPointSet() {
+	public void testCharacterPositionSet() {
 		Character c = new Character(0, 0, 0, 1, 2, new TurnSystem(new EnemyAI(1)));
-		c.setPoint(3, 4);
-		assertEquals(3, c.getPoint().x);
-		assertEquals(4, c.getPoint().y);
+		c.setPosition(3, 4);
+		assertEquals(3, c.getPosition().getX());
+		assertEquals(4, c.getPosition().getY());
 	}
 }
