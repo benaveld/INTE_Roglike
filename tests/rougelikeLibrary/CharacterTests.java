@@ -91,4 +91,22 @@ public class CharacterTests {
 		assertEquals(3, c.getPosition().getX());
 		assertEquals(4, c.getPosition().getY());
 	}
+	@Test
+	public void testCharacterInventory() {
+		Character c0 = new Character(0, 0, 0, new Position(1,2), new TurnSystem(new EnemyAI(1)));
+		Character c1 = new Character(0, 0, 0, new TurnSystem(new EnemyAI(1)));
+		Character c2 = new Character(0, 0, 0, 1, 2, new TurnSystem(new EnemyAI(1)));
+		assertEquals("", c0.getInventory().toString());
+		assertEquals("", c1.getInventory().toString());
+		assertEquals("", c2.getInventory().toString());
+	}
+	@Test
+	public void testCharacterAddToInventory() {
+		Character c = new Character(0, 0, 0, new Position(1,2), new TurnSystem(new EnemyAI(1)));
+		
+		Item i = new Item("test", 25, Item.Effect.SPEED);
+		c.getInventory().add(i);
+		Item itemReturned = c.getInventory().getItem(0);
+		assertEquals("test +25% speed", itemReturned.toString());
+	}
 }
