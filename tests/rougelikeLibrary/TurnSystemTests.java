@@ -45,4 +45,11 @@ public class TurnSystemTests {
 		Position p = ts.getNewLocation(c, ai.requestMove());
 		assertEquals(location, p);
 	}
+	
+	@Test
+	public void testTurnSystemEnterDoor()
+	{
+		EnemyAI ai = new EnemyAI(0);
+		TurnSystem ts = new TurnSystem(ai);
+	}
 }

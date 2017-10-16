@@ -3,7 +3,7 @@ package rougelikeLibrary;
 import java.awt.Point;
 import java.util.HashMap;
 
-import rougelikeLibrary.IO.Direction;
+import rougelikeLibrary.Position.CardinalDirection;
 
 public class TurnSystem {
 	
@@ -37,22 +37,22 @@ public class TurnSystem {
 		character.setPosition(newLocation);
 	}
 	
-	public Position getNewLocation(Character character, Direction dir) {
+	public Position getNewLocation(Character character, CardinalDirection dir) {
 		Position newLocation = character.getPosition();
 		switch (dir) {
-		case NORTH:
+		case North:
 			newLocation.translate(0, -1);
 			break;
 
-		case WEST:
+		case West:
 			newLocation.translate(-1, 0);
 			break;
 			
-		case SOUTH:
+		case South:
 			newLocation.translate(0, 1);
 			break;
 			
-		case EAST:
+		case East:
 			newLocation.translate(1, 0);
 			break;
 			
