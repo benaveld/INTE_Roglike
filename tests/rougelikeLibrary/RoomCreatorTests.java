@@ -32,42 +32,42 @@ public class RoomCreatorTests {
 
     @Test
     public void testCreateRoom() {
-        java.util.Map<WorldPosition.CardinalDirection, WorldPosition.CardinalDirectionPermission> cardinalDirectionPermissions = new HashMap<>();
-        cardinalDirectionPermissions.put(WorldPosition.CardinalDirection.North, WorldPosition.CardinalDirectionPermission.Optional);
-        cardinalDirectionPermissions.put(WorldPosition.CardinalDirection.South, WorldPosition.CardinalDirectionPermission.Disallowed);
-        cardinalDirectionPermissions.put(WorldPosition.CardinalDirection.West, WorldPosition.CardinalDirectionPermission.Mandatory);
-        cardinalDirectionPermissions.put(WorldPosition.CardinalDirection.East, WorldPosition.CardinalDirectionPermission.Disallowed);
+        java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissions = new HashMap<>();
+        cardinalDirectionPermissions.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissions.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Disallowed);
+        cardinalDirectionPermissions.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Mandatory);
+        cardinalDirectionPermissions.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Disallowed);
 
-        Room room = roomCreator.createRoom(new WorldPosition(arbitraryX, arbitraryY), cardinalDirectionPermissions);
+        Room room = roomCreator.createRoom(new Position(arbitraryX, arbitraryY), cardinalDirectionPermissions);
         assertNotNull(room);
-        assertFalse(room.existDoor(WorldPosition.CardinalDirection.South));
-        assertTrue(room.existDoor(WorldPosition.CardinalDirection.West));
-        assertFalse(room.existDoor(WorldPosition.CardinalDirection.East));
+        assertFalse(room.existDoor(Position.CardinalDirection.South));
+        assertTrue(room.existDoor(Position.CardinalDirection.West));
+        assertFalse(room.existDoor(Position.CardinalDirection.East));
 
-        cardinalDirectionPermissions.put(WorldPosition.CardinalDirection.North, WorldPosition.CardinalDirectionPermission.Disallowed);
-        cardinalDirectionPermissions.put(WorldPosition.CardinalDirection.South, WorldPosition.CardinalDirectionPermission.Mandatory);
-        cardinalDirectionPermissions.put(WorldPosition.CardinalDirection.West, WorldPosition.CardinalDirectionPermission.Disallowed);
-        cardinalDirectionPermissions.put(WorldPosition.CardinalDirection.East, WorldPosition.CardinalDirectionPermission.Mandatory);
+        cardinalDirectionPermissions.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Disallowed);
+        cardinalDirectionPermissions.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Mandatory);
+        cardinalDirectionPermissions.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Disallowed);
+        cardinalDirectionPermissions.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Mandatory);
 
-        room = roomCreator.createRoom(new WorldPosition(arbitraryX, arbitraryY), cardinalDirectionPermissions);
+        room = roomCreator.createRoom(new Position(arbitraryX, arbitraryY), cardinalDirectionPermissions);
         assertNotNull(room);
-        assertFalse(room.existDoor(WorldPosition.CardinalDirection.North));
-        assertTrue(room.existDoor(WorldPosition.CardinalDirection.South));
-        assertFalse(room.existDoor(WorldPosition.CardinalDirection.West));
-        assertTrue(room.existDoor(WorldPosition.CardinalDirection.East));
+        assertFalse(room.existDoor(Position.CardinalDirection.North));
+        assertTrue(room.existDoor(Position.CardinalDirection.South));
+        assertFalse(room.existDoor(Position.CardinalDirection.West));
+        assertTrue(room.existDoor(Position.CardinalDirection.East));
     }
 
 
     @Test
     public void testCreateInitialRoom() {
-        Room room = roomCreator.createInitialRoom(new WorldPosition(arbitraryX, arbitraryY));
+        Room room = roomCreator.createInitialRoom(new Position(arbitraryX, arbitraryY));
         assertNotNull(room);
 
         // Minimum 1 door needs to exist in first room
-        assertTrue(room.existDoor(WorldPosition.CardinalDirection.North) ||
-            room.existDoor(WorldPosition.CardinalDirection.South) ||
-            room.existDoor(WorldPosition.CardinalDirection.West) ||
-            room.existDoor(WorldPosition.CardinalDirection.East));
+        assertTrue(room.existDoor(Position.CardinalDirection.North) ||
+            room.existDoor(Position.CardinalDirection.South) ||
+            room.existDoor(Position.CardinalDirection.West) ||
+            room.existDoor(Position.CardinalDirection.East));
 
     }
 }

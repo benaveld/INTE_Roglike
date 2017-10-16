@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.junit.Test;
 
+import rougelikeLibrary.Position.CardinalDirection;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,9 +20,9 @@ public class GameTest {
 
     private final int roomCreatorSeed = 1337;
     private RoomCreator roomCreator;
-    private WorldPosition centeredPosition;
+    private Position centeredPosition;
     private MapController mapController;
-    private WorldPosition nextRoomRequest;
+    private Position nextRoomRequest;
 
 
     Item [] items = {
@@ -40,11 +42,11 @@ public class GameTest {
 
     @Before
     public void init() {
-        java.util.Map<WorldPosition.CardinalDirection, WorldPosition.CardinalDirectionPermission> cardinalDirectionPermissions = new HashMap<>();
-        cardinalDirectionPermissions.put(WorldPosition.CardinalDirection.East, WorldPosition.CardinalDirectionPermission.Optional);
+        java.util.Map<CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissions = new HashMap<>();
+        cardinalDirectionPermissions.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Optional);
 
         roomCreator = new RoomCreator(roomCreatorSeed, new Player(1, 1, 1, new TurnSystem(new EnemyAI(1))), items, enemies, new RoomSpace(32, 32));
-        centeredPosition = new WorldPosition(Integer.MAX_VALUE / 2, Integer.MAX_VALUE / 2);
+        centeredPosition = new Position(Integer.MAX_VALUE / 2, Integer.MAX_VALUE / 2);
         mapController = new MapController(roomCreator.createInitialRoom(centeredPosition));
     }
 

@@ -11,13 +11,13 @@ public class MapControllerTests {
     private final int dummySeed = 1337;
     private final int dummyCenterX = 12321;
     private final int dummyCenterY = 6423;
-    private final WorldPosition centerWorldPosition = new WorldPosition(dummyCenterX, dummyCenterY);
+    private final Position centerWorldPosition = new Position(dummyCenterX, dummyCenterY);
 
     private RoomCreator roomCreator;
     private Room centerRoom;
     private MapController mapController;
-    private java.util.Map<WorldPosition.CardinalDirection, WorldPosition.CardinalDirectionPermission> cardinalDirectionPermissionsAll = new HashMap<>();
-    private java.util.Map<WorldPosition.CardinalDirection, WorldPosition.CardinalDirectionPermission> cardinalDirectionPermissions = new HashMap<>();
+    private java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissionsAll = new HashMap<>();
+    private java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissions = new HashMap<>();
 
     Item [] items = {
             new Item("fast shoes", 12, Item.Effect.SPEED),
@@ -36,10 +36,10 @@ public class MapControllerTests {
 
     @Before
     public void init() {
-        cardinalDirectionPermissionsAll.put(WorldPosition.CardinalDirection.North, WorldPosition.CardinalDirectionPermission.Optional);
-        cardinalDirectionPermissionsAll.put(WorldPosition.CardinalDirection.South, WorldPosition.CardinalDirectionPermission.Optional);
-        cardinalDirectionPermissionsAll.put(WorldPosition.CardinalDirection.West, WorldPosition.CardinalDirectionPermission.Optional);
-        cardinalDirectionPermissionsAll.put(WorldPosition.CardinalDirection.East, WorldPosition.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Optional);
 
         roomCreator = new RoomCreator(dummySeed, new Player(1, 1, 1, new TurnSystem(new EnemyAI(1))), items, enemies, new RoomSpace(32, 32));
         centerRoom = roomCreator.createInitialRoom(centerWorldPosition);
@@ -49,7 +49,7 @@ public class MapControllerTests {
 
     @Test
     public void testPlayRoom() {
-        WorldPosition nextRoomPosition = mapController.playCurrentRoom();
+        Position nextRoomPosition = mapController.playCurrentRoom();
         assertNotNull(nextRoomPosition);
     }
 
@@ -62,13 +62,13 @@ public class MapControllerTests {
 
     @Test
     public void testSetCurrentRoom() {
-        WorldPosition beforePosition = new WorldPosition(12, 13);
+        Position beforePosition = new Position(12, 13);
         Room room1 = roomCreator.createRoom(beforePosition, cardinalDirectionPermissionsAll);
         MapController mapController = new MapController(room1);
 
         assertEquals(mapController.getCurrentRoom().getPosition(), beforePosition);
 
-        WorldPosition afterPosition = new WorldPosition(22, 23);
+        Position afterPosition = new Position(22, 23);
         Room room2 = roomCreator.createRoom(afterPosition, cardinalDirectionPermissionsAll);
         mapController.setCurrentRoom(room2);
 
@@ -77,7 +77,7 @@ public class MapControllerTests {
 
     @Test
     public void testGetCurrentRoom() {
-        WorldPosition initialPosition = new WorldPosition(32, 54);
+        Position initialPosition = new Position(32, 54);
         Room room = roomCreator.createRoom(initialPosition, cardinalDirectionPermissionsAll);
         MapController mapController = new MapController(room);
         assertEquals(mapController.getCurrentRoom().getPosition(), initialPosition);
@@ -86,9 +86,9 @@ public class MapControllerTests {
 
     @Test
     public void testAddRoom() {
-        WorldPosition worldPosition1 = new WorldPosition(2, 3);
-        WorldPosition worldPosition2 = new WorldPosition(12, 13);
-        WorldPosition worldPosition3 = new WorldPosition(22, 23);
+        Position worldPosition1 = new Position(2, 3);
+        Position worldPosition2 = new Position(12, 13);
+        Position worldPosition3 = new Position(22, 23);
 
         assertFalse(mapController.roomExist(worldPosition1));
         assertFalse(mapController.roomExist(worldPosition2));
@@ -106,9 +106,9 @@ public class MapControllerTests {
 
     @Test
     public void testGetRoom() {
-        WorldPosition worldPosition1 = new WorldPosition(2, 3);
-        WorldPosition worldPosition2 = new WorldPosition(12, 13);
-        WorldPosition worldPosition3 = new WorldPosition(22, 23);
+        Position worldPosition1 = new Position(2, 3);
+        Position worldPosition2 = new Position(12, 13);
+        Position worldPosition3 = new Position(22, 23);
 
         assertFalse(mapController.roomExist(worldPosition1));
         assertFalse(mapController.roomExist(worldPosition2));
@@ -143,20 +143,20 @@ public class MapControllerTests {
      */
     @Test
     public void testCardinalDirectionPermissionDoors() {
-        Room northRoom = roomCreator.createRoom(new WorldPosition(0, 3), cardinalDirectionPermissionsAll);
-        northRoom.addDoor(WorldPosition.CardinalDirection.South);
+        Room northRoom = roomCreator.createRoom(new Position(0, 3), cardinalDirectionPermissionsAll);
+        northRoom.addDoor(Position.CardinalDirection.South);
 
-        Room eastRoom = roomCreator.createRoom(new WorldPosition(1, 4), cardinalDirectionPermissionsAll);
+        Room eastRoom = roomCreator.createRoom(new Position(1, 4), cardinalDirectionPermissionsAll);
 
         mapController.addRoom(northRoom);
         mapController.addRoom(eastRoom);
 
-        java.util.Map<WorldPosition.CardinalDirection, WorldPosition.CardinalDirectionPermission> cardinalDirections =
-                mapController.getCardinalDirectionPermissions(new WorldPosition(0, 4));
+        java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirections =
+                mapController.getCardinalDirectionPermissions(new Position(0, 4));
 
-        assertEquals(cardinalDirections.get(WorldPosition.CardinalDirection.North), WorldPosition.CardinalDirectionPermission.Mandatory);
-        assertEquals(cardinalDirections.get(WorldPosition.CardinalDirection.South), WorldPosition.CardinalDirectionPermission.Optional);
-        assertEquals(cardinalDirections.get(WorldPosition.CardinalDirection.West), WorldPosition.CardinalDirectionPermission.Disallowed);
-        assertEquals(cardinalDirections.get(WorldPosition.CardinalDirection.East), WorldPosition.CardinalDirectionPermission.Disallowed);
+        assertEquals(cardinalDirections.get(Position.CardinalDirection.North), Position.CardinalDirectionPermission.Mandatory);
+        assertEquals(cardinalDirections.get(Position.CardinalDirection.South), Position.CardinalDirectionPermission.Optional);
+        assertEquals(cardinalDirections.get(Position.CardinalDirection.West), Position.CardinalDirectionPermission.Disallowed);
+        assertEquals(cardinalDirections.get(Position.CardinalDirection.East), Position.CardinalDirectionPermission.Disallowed);
     }
 }
