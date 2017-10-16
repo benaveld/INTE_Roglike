@@ -27,7 +27,6 @@ public class Character implements Mappable {
 			throw new IllegalArgumentException("Speed, health and damage needs to be 0 or more");
 		}
 		this.pos = Position;
-		
 	}
 	
 	public Character(int speed, int health, int damage, int x, int y, TurnSystem ts) {
@@ -35,7 +34,6 @@ public class Character implements Mappable {
 		if (speed < 0 || health < 0 || damage < 0) {
 			throw new IllegalArgumentException("Speed, health and damage needs to be 0 or more");
 		}
-		
 	}
 	
 
