@@ -75,5 +75,28 @@ public class PositionTests {
 		Position p = new Position(1, 2);
 		p.setY(-4);
 	}
-	
+	@Test
+	public void testPositionGetLocation() {
+		Position p = new Position(1,2);
+		Position pClone = p.getLocation();
+		assertFalse(p == pClone);
+		assertTrue(p.equals(pClone));
+	}
+	@Test
+	public void testPositionTranslate() {
+		Position p = new Position(1,2);
+		p.translate(3, 4);
+		assertEquals(4, p.getX());
+		assertEquals(6, p.getY());
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testPositionTranslateResultNecativeX() {
+		Position p = new Position(1, 2);
+		p.translate(-2, 0);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testPositionTranslateResultNecativeY() {
+		Position p = new Position(1, 2);
+		p.translate(0, -3);
+	}
 }

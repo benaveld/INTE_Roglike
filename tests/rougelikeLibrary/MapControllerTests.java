@@ -27,10 +27,10 @@ public class MapControllerTests {
     };
 
     Character [] enemies = {
-            new Enemy(22, 33, 44),
-            new Enemy(2, 3, 44),
-            new Enemy(22, 33, 4),
-            new Enemy(2, 3, 44)
+            new Enemy(22, 33, 44, new TurnSystem(new EnemyAI(1))),
+            new Enemy(2, 3, 44, new TurnSystem(new EnemyAI(1))),
+            new Enemy(22, 33, 4, new TurnSystem(new EnemyAI(1))),
+            new Enemy(2, 3, 44, new TurnSystem(new EnemyAI(1)))
     };
 
 
@@ -41,7 +41,7 @@ public class MapControllerTests {
         cardinalDirectionPermissionsAll.put(WorldPosition.CardinalDirection.West, WorldPosition.CardinalDirectionPermission.Optional);
         cardinalDirectionPermissionsAll.put(WorldPosition.CardinalDirection.East, WorldPosition.CardinalDirectionPermission.Optional);
 
-        roomCreator = new RoomCreator(dummySeed, new Player(1, 1, 1), items, enemies, new RoomSpace(32, 32));
+        roomCreator = new RoomCreator(dummySeed, new Player(1, 1, 1, new TurnSystem(new EnemyAI(1))), items, enemies, new RoomSpace(32, 32));
         centerRoom = roomCreator.createInitialRoom(centerWorldPosition);
         mapController = new MapController(centerRoom);
     }

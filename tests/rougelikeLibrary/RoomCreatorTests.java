@@ -18,15 +18,15 @@ public class RoomCreatorTests {
     };
 
     Character [] enemies = {
-            new Enemy(22, 33, 44),
-            new Enemy(2, 3, 44),
-            new Enemy(22, 33, 4),
-            new Enemy(2, 3, 44)
+            new Enemy(22, 33, 44, new TurnSystem(new EnemyAI(1))),
+            new Enemy(2, 3, 44, new TurnSystem(new EnemyAI(1))),
+            new Enemy(22, 33, 4, new TurnSystem(new EnemyAI(1))),
+            new Enemy(2, 3, 44, new TurnSystem(new EnemyAI(1)))
     };
 
     @Before
     public void init() {
-        roomCreator = new RoomCreator(roomCreatorSeed, new Player(1, 1, 1), items, enemies, new RoomSpace(32, 32));
+        roomCreator = new RoomCreator(roomCreatorSeed, new Player(1, 1, 1, new TurnSystem(new EnemyAI(1))), items, enemies, new RoomSpace(32, 32));
     }
 
 
