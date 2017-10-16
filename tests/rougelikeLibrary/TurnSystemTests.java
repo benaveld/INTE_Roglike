@@ -49,7 +49,7 @@ public class TurnSystemTests {
 	public void testTurnSystemEnterDoor()
 	{
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
-		Character c = new Character(5, 0, 0, 1, 1, new TurnSystem(new EnemyAI(1)));
+		Character c = new Character(5, 0, 0, 1, 1, ts);
 		Room r = new Room(new WorldPosition(0,0), new RoomSpace(2,2));
 		
 		assertTrue(c.startTurn(r));
@@ -61,5 +61,7 @@ public class TurnSystemTests {
 		Room room = new Room(new WorldPosition(0,0), new RoomSpace(1,1));
 		Character c = new Character(0, 0, 0, 5, 5, new TurnSystem(new EnemyAI(1)));
 		Room r = new Room(new WorldPosition(0,0), new RoomSpace(3,3));
+		
+		assertTrue(c.startTurn(r));
 	}
 }
