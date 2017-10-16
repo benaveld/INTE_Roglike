@@ -1,6 +1,8 @@
 package rougelikeLibrary;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Main container for a room in the grid that makes up the game world
@@ -16,6 +18,8 @@ public class Room {
     private final RoomSpace roomSpace;
     private Position playerPosition;
     private Character player;
+
+    private java.util.Map<Position, List<Mappable>> positionMappables = new HashMap<>();
 
 
     /**
@@ -183,4 +187,11 @@ public class Room {
     public int getDoorsCount() {
         return cardinalDirectionsDoors.size();
     }
+
+
+    public List<Mappable> getFromPosition(Position position) {
+        List<Mappable> mappables = positionMappables.get(position);
+        return (mappables == null) ? new ArrayList<>() : mappables;
+    }
+
 }

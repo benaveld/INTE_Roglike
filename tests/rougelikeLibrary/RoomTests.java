@@ -3,6 +3,8 @@ package rougelikeLibrary;
 import static org.junit.Assert.*;
 import org.junit.*;
 
+import java.util.List;
+
 /**
  */
 public class RoomTests {
@@ -170,4 +172,24 @@ public class RoomTests {
     public void testExistPlayer() {
         testSetPlayer();
     }
+
+
+    @Test
+    public void testGetFromPosition() {
+        /**
+         * en arraylist med mappables
+         */
+        Room room = new Room(new WorldPosition(dummyX, dummyY), new RoomSpace(32, 32));
+
+        Position position = new Position(234, 645);
+
+        List<Mappable> mappables = room.getFromPosition(position);
+        assertNotNull(mappables);
+
+        for (Mappable mappable : mappables) {
+            assertNotNull(mappable);
+        }
+    }
+
+
 }
