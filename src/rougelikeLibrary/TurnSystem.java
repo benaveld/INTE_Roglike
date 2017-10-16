@@ -13,8 +13,8 @@ public class TurnSystem {
 		this.io = io;
 	}
 	
-	public void startTurn(Character character, int moves, HashMap<Point, Object> room) {
-		Point newLocation = getNewLocation(character, io.requestMove());
+	public void startTurn(Character character, int moves, HashMap<Position, Object> room) {
+		Position newLocation = getNewLocation(character, io.requestMove());
 				
 		if(room.get(newLocation) == null) {
 			move(character, newLocation, room);
@@ -31,14 +31,14 @@ public class TurnSystem {
 		}
 	}
 	
-	public void move(Character character, Point newLocation, HashMap<Point, Object> room) {
-		room.remove(character.getPoint());
+	public void move(Character character, Position newLocation, HashMap<Position, Object> room) {
+		room.remove(character.getPosition());
 		room.put(newLocation, character);
-		character.setPoint(newLocation);
+		character.setPosition(newLocation);
 	}
 	
-	public Point getNewLocation(Character character, Direction dir) {
-		Point newLocation = character.getPoint().getLocation();
+	public Position getNewLocation(Character character, Direction dir) {
+		Position newLocation = character.getPosition();
 		switch (dir) {
 		case NORTH:
 			newLocation.translate(0, -1);
