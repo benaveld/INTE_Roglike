@@ -31,10 +31,10 @@ public class GameTest {
     };
 
     Character [] enemies = {
-            new Enemy(22, 33, 44),
-            new Enemy(2, 3, 44),
-            new Enemy(22, 33, 4),
-            new Enemy(2, 3, 44)
+            new Enemy(22, 33, 44, new TurnSystem(new EnemyAI(1))),
+            new Enemy(2, 3, 44, new TurnSystem(new EnemyAI(1))),
+            new Enemy(22, 33, 4, new TurnSystem(new EnemyAI(1))),
+            new Enemy(2, 3, 44, new TurnSystem(new EnemyAI(1)))
     };
 
 
@@ -43,7 +43,7 @@ public class GameTest {
         java.util.Map<WorldPosition.CardinalDirection, WorldPosition.CardinalDirectionPermission> cardinalDirectionPermissions = new HashMap<>();
         cardinalDirectionPermissions.put(WorldPosition.CardinalDirection.East, WorldPosition.CardinalDirectionPermission.Optional);
 
-        roomCreator = new RoomCreator(roomCreatorSeed, new Player(1, 1, 1), items, enemies, new RoomSpace(32, 32));
+        roomCreator = new RoomCreator(roomCreatorSeed, new Player(1, 1, 1, new TurnSystem(new EnemyAI(1))), items, enemies, new RoomSpace(32, 32));
         centeredPosition = new WorldPosition(Integer.MAX_VALUE / 2, Integer.MAX_VALUE / 2);
         mapController = new MapController(roomCreator.createInitialRoom(centeredPosition));
     }

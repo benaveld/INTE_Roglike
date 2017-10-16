@@ -11,7 +11,7 @@ public class TurnSystemTests {
 	@Test
 	public void testTurnSystemStartTurn() {
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
-		Character c = new Character(0, 0, 0, 5, 5);
+		Character c = new Character(0, 0, 0, 5, 5, new TurnSystem(new EnemyAI(1)));
 		HashMap<Point, Object> room = new HashMap<Point, Object>();
 		room.put(c.getPoint(), c);
 		
@@ -22,7 +22,7 @@ public class TurnSystemTests {
 	public void testTurnSystemMove() {
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
 		Point startLocation = new Point(5,5);
-		Character c = new Character(0, 0, 0, startLocation.getLocation());
+		Character c = new Character(0, 0, 0, startLocation.getLocation(), new TurnSystem(new EnemyAI(1)));
 		HashMap<Point, Object> room = new HashMap<Point, Object>();
 		room.put(c.getPoint(), c);
 		
@@ -37,7 +37,7 @@ public class TurnSystemTests {
 		EnemyAI ai = new EnemyAI(0);
 		TurnSystem ts = new TurnSystem(ai);
 		Point location = new Point(5,5);
-		Character c = new Character(0, 0, 0, location.getLocation());
+		Character c = new Character(0, 0, 0, location.getLocation(), new TurnSystem(new EnemyAI(1)));
 		HashMap<Point, Object> room = new HashMap<Point, Object>();
 		room.put(c.getPoint(), c);
 		
