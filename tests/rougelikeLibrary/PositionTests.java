@@ -75,5 +75,11 @@ public class PositionTests {
 		Position p = new Position(1, 2);
 		p.setY(-4);
 	}
-	
+	@Test
+	public void testPositionGetLocation() {
+		Position p = new Position(1,2);
+		Position pClone = p.getLocation();
+		assertFalse(p == pClone);
+		assertTrue(p.equals(pClone));
+	}
 }

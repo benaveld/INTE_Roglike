@@ -4,6 +4,7 @@ import java.util.Objects;
 
 public class Position {
 	private int x, y;
+	public enum CardinalDirection { North, East, South, West}
 
 	public Position(int x, int y) {
 		if (x < 0 || y < 0) {
@@ -53,5 +54,9 @@ public class Position {
 			throw new IllegalArgumentException("Y can't be negative.");
 		}
 		this.y = y;
+	}
+	
+	public Position getLocation() {
+		return new Position(this.x, this.y);
 	}
 }
