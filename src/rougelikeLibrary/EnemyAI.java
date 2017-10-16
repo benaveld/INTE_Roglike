@@ -26,13 +26,12 @@ public class EnemyAI extends IO {
 		do
 		{
 			dir = calculateNextMove();
-		} while (dir != lastDirection);
+		} while (dir == lastDirection);
 		return dir;
 	}
 
 	private CardinalDirection calculateNextMove() {
 		int i = r.nextInt(CardinalDirection.values().length);
-		System.out.println(i);
 		return CardinalDirection.values()[i];
 	}
 }
