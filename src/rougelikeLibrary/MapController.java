@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class MapController {
     private Room currentRoom;
 
-    private java.util.Map<WorldPosition, Room> map = new java.util.HashMap<>();
+    private java.util.Map<Position, Room> map = new java.util.HashMap<>();
 
     /**
      * Illegal to create a MapController without a room.
@@ -36,9 +36,9 @@ public class MapController {
      * Plays current room.
      * @return next entered room coordinate as WorldPosition.
      */
-    public WorldPosition playCurrentRoom() {
-        WorldPosition.CardinalDirection nextRoomDirection = currentRoom.play();
-        WorldPosition nextRoomPosition = currentRoom.getPosition().getNewFromCardinalDirection(nextRoomDirection);
+    public Position playCurrentRoom() {
+        Position.CardinalDirection nextRoomDirection = currentRoom.play();
+        Position nextRoomPosition = currentRoom.getPosition().getNewPositionFromCardinalDirection(nextRoomDirection);
         return nextRoomPosition;
     }
 
@@ -85,27 +85,27 @@ public class MapController {
 
     /**
      * Check if room exist at the soecified coordinate
-     * @param worldPosition the coordinate to check for existing room.
+     * @param position the coordinate to check for existing room.
      * @return true if the coordinate is free otherwise false if there exists a room
      */
-    public boolean roomExist(WorldPosition worldPosition) {
-        return map.get(worldPosition) != null;
+    public boolean roomExist(Position position) {
+        return map.get(position) != null;
     }
 
 
     /**
      * Gets the room at the specified world coordinate.
-     * @param worldPosition the position for the room.
+     * @param position the position for the room.
      * @return the room at the position.
      * @exception IllegalArgumentException if no room exists at the specified world coordinate.
      */
-    public Room getRoom(WorldPosition worldPosition) throws IllegalArgumentException {
-        Room room = map.get(worldPosition);
+    public Room getRoom(Position position) throws IllegalArgumentException {
+        Room room = map.get(position);
         if (room == null) {
-            throw new IllegalArgumentException("No room exists at the specified coordinate " + worldPosition);
+            throw new IllegalArgumentException("No room exists at the specified coordinate " + position);
         }
 
-        return map.get(worldPosition);
+        return map.get(position);
     }
 
 
@@ -118,27 +118,27 @@ public class MapController {
      * @return list of cardinal directions and their permission for doors.
      * @throws IllegalArgumentException if the worldPosition is not empty.
      */
-    public java.util.Map<WorldPosition.CardinalDirection, WorldPosition.CardinalDirectionPermission>
-        getCardinalDirectionPermissions(WorldPosition newRoomPosition) throws IllegalArgumentException {
+    public java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission>
+        getCardinalDirectionPermissions(Position newRoomPosition) throws IllegalArgumentException {
 
         if (roomExist(newRoomPosition)) {
             throw new IllegalArgumentException("Coordinate " + newRoomPosition + " is not empty.");
         }
 
-        java.util.Map<WorldPosition.CardinalDirection, WorldPosition.CardinalDirectionPermission>
+        java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission>
                 cardinalDirectionPermissions = new HashMap<>();
 
-        cardinalDirectionPermissions.put(WorldPosition.CardinalDirection.North,
-                getCardinalDirectionPermission(newRoomPosition, WorldPosition.CardinalDirection.North));
+        cardinalDirectionPermissions.put(Position.CardinalDirection.North,
+                getCardinalDirectionPermission(newRoomPosition, Position.CardinalDirection.North));
 
-        cardinalDirectionPermissions.put(WorldPosition.CardinalDirection.South,
-                getCardinalDirectionPermission(newRoomPosition, WorldPosition.CardinalDirection.South));
+        cardinalDirectionPermissions.put(Position.CardinalDirection.South,
+                getCardinalDirectionPermission(newRoomPosition, Position.CardinalDirection.South));
 
-        cardinalDirectionPermissions.put(WorldPosition.CardinalDirection.West,
-                getCardinalDirectionPermission(newRoomPosition, WorldPosition.CardinalDirection.West));
+        cardinalDirectionPermissions.put(Position.CardinalDirection.West,
+                getCardinalDirectionPermission(newRoomPosition, Position.CardinalDirection.West));
 
-        cardinalDirectionPermissions.put(WorldPosition.CardinalDirection.East,
-                getCardinalDirectionPermission(newRoomPosition, WorldPosition.CardinalDirection.East));
+        cardinalDirectionPermissions.put(Position.CardinalDirection.East,
+                getCardinalDirectionPermission(newRoomPosition, Position.CardinalDirection.East));
 
         return cardinalDirectionPermissions;
     }
@@ -151,26 +151,26 @@ public class MapController {
      *      I.e for a given position with cardinal direction North, the permissions is fetched for a door in the north direction in the room.
      * @return the permission for a door in the cardinal direction (Optional, Disallowed or Mandatory)
      */
-    private WorldPosition.CardinalDirectionPermission getCardinalDirectionPermission(WorldPosition newRoomPosition, WorldPosition.CardinalDirection cardinalDirection) {
-        WorldPosition roomPositionInCardinalDirection;
+    private Position.CardinalDirectionPermission getCardinalDirectionPermission(Position newRoomPosition, Position.CardinalDirection cardinalDirection) {
+        Position roomPositionInCardinalDirection;
 
         try {
-            roomPositionInCardinalDirection = newRoomPosition.getNewFromCardinalDirection(cardinalDirection);
+            roomPositionInCardinalDirection = newRoomPosition.getNewPositionFromCardinalDirection(cardinalDirection);
         } catch (IllegalArgumentException iae) {
             // World position for a room in the cardinal direction is out of bounds.
-            return WorldPosition.CardinalDirectionPermission.Disallowed;
+            return Position.CardinalDirectionPermission.Disallowed;
         }
 
         // No room exists in the cardinal direction
         if (!roomExist(roomPositionInCardinalDirection)) {
-            return WorldPosition.CardinalDirectionPermission.Optional;
+            return Position.CardinalDirectionPermission.Optional;
         }
 
         // Has door in the opposite direction
         if (getRoom(roomPositionInCardinalDirection).existDoor(getOppositeCardinalDirection(cardinalDirection))) {
-            return WorldPosition.CardinalDirectionPermission.Mandatory;
+            return Position.CardinalDirectionPermission.Mandatory;
         } else {
-            return WorldPosition.CardinalDirectionPermission.Disallowed;
+            return Position.CardinalDirectionPermission.Disallowed;
         }
     }
 
@@ -180,21 +180,21 @@ public class MapController {
      * @param cardinalDirection cardinal direction
      * @return return the opposite direction
      */
-    private WorldPosition.CardinalDirection getOppositeCardinalDirection(WorldPosition.CardinalDirection cardinalDirection) {
-        WorldPosition.CardinalDirection oppositeCardinalDirection = null;
+    private Position.CardinalDirection getOppositeCardinalDirection(Position.CardinalDirection cardinalDirection) {
+        Position.CardinalDirection oppositeCardinalDirection = null;
 
         switch (cardinalDirection) {
             case North:
-                oppositeCardinalDirection = WorldPosition.CardinalDirection.South;
+                oppositeCardinalDirection = Position.CardinalDirection.South;
                 break;
             case South:
-                oppositeCardinalDirection = WorldPosition.CardinalDirection.North;
+                oppositeCardinalDirection = Position.CardinalDirection.North;
                 break;
             case West:
-                oppositeCardinalDirection = WorldPosition.CardinalDirection.East;
+                oppositeCardinalDirection = Position.CardinalDirection.East;
                 break;
             case East:
-                oppositeCardinalDirection = WorldPosition.CardinalDirection.West;
+                oppositeCardinalDirection = Position.CardinalDirection.West;
                 break;
         }
 

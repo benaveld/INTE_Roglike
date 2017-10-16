@@ -24,26 +24,26 @@ public class RoomTests {
 
     @Test
     public void testAddDoorCardinalDirection() {
-        Room room = new Room(new WorldPosition(dummyX, dummyY), new RoomSpace(32, 32));
-        assertFalse(room.existDoor(WorldPosition.CardinalDirection.North));
-        assertFalse(room.existDoor(WorldPosition.CardinalDirection.South));
-        assertFalse(room.existDoor(WorldPosition.CardinalDirection.West));
-        assertFalse(room.existDoor(WorldPosition.CardinalDirection.East));
+        Room room = new Room(new Position(dummyX, dummyY), new RoomSpace(32, 32));
+        assertFalse(room.existDoor(Position.CardinalDirection.North));
+        assertFalse(room.existDoor(Position.CardinalDirection.South));
+        assertFalse(room.existDoor(Position.CardinalDirection.West));
+        assertFalse(room.existDoor(Position.CardinalDirection.East));
 
-        room.addDoor(WorldPosition.CardinalDirection.North);
-        room.addDoor(WorldPosition.CardinalDirection.South);
-        room.addDoor(WorldPosition.CardinalDirection.West);
-        room.addDoor(WorldPosition.CardinalDirection.East);
+        room.addDoor(Position.CardinalDirection.North);
+        room.addDoor(Position.CardinalDirection.South);
+        room.addDoor(Position.CardinalDirection.West);
+        room.addDoor(Position.CardinalDirection.East);
 
-        assertTrue(room.existDoor(WorldPosition.CardinalDirection.North));
-        assertTrue(room.existDoor(WorldPosition.CardinalDirection.South));
-        assertTrue(room.existDoor(WorldPosition.CardinalDirection.West));
-        assertTrue(room.existDoor(WorldPosition.CardinalDirection.East));
+        assertTrue(room.existDoor(Position.CardinalDirection.North));
+        assertTrue(room.existDoor(Position.CardinalDirection.South));
+        assertTrue(room.existDoor(Position.CardinalDirection.West));
+        assertTrue(room.existDoor(Position.CardinalDirection.East));
     }
 
     @Test
     public void testAddEnemy() {
-        Room room = new Room(new WorldPosition(dummyX, dummyY), new RoomSpace(32, 32));
+        Room room = new Room(new Position(dummyX, dummyY), new RoomSpace(32, 32));
         Position position = new Position(654, 223);
 
         assertFalse(room.existEnemy(position));
@@ -58,7 +58,7 @@ public class RoomTests {
 
     @Test
     public void testAddItem() {
-        Room room = new Room(new WorldPosition(dummyX, dummyY), new RoomSpace(32, 32));
+        Room room = new Room(new Position(dummyX, dummyY), new RoomSpace(32, 32));
         Position position1 = new Position(654, 223);
         Position position2 = new Position(54, 223);
         Position position3 = new Position(654, 23);
@@ -88,16 +88,16 @@ public class RoomTests {
 
     @Test
     public void testExistDoorPosition() {
-        Room room = new Room(new WorldPosition(dummyX, dummyY), new RoomSpace(33, 33));
-        assertFalse(room.existDoor(WorldPosition.CardinalDirection.North));
-        assertFalse(room.existDoor(WorldPosition.CardinalDirection.South));
-        assertFalse(room.existDoor(WorldPosition.CardinalDirection.West));
-        assertFalse(room.existDoor(WorldPosition.CardinalDirection.East));
+        Room room = new Room(new Position(dummyX, dummyY), new RoomSpace(33, 33));
+        assertFalse(room.existDoor(Position.CardinalDirection.North));
+        assertFalse(room.existDoor(Position.CardinalDirection.South));
+        assertFalse(room.existDoor(Position.CardinalDirection.West));
+        assertFalse(room.existDoor(Position.CardinalDirection.East));
 
-        room.addDoor(WorldPosition.CardinalDirection.North);
-        room.addDoor(WorldPosition.CardinalDirection.South);
-        room.addDoor(WorldPosition.CardinalDirection.West);
-        room.addDoor(WorldPosition.CardinalDirection.East);
+        room.addDoor(Position.CardinalDirection.North);
+        room.addDoor(Position.CardinalDirection.South);
+        room.addDoor(Position.CardinalDirection.West);
+        room.addDoor(Position.CardinalDirection.East);
 
         Position north = new Position(room.getRoomSpace().getWidth() / 2, 0);
         Position south = new Position(room.getRoomSpace().getWidth() / 2, room.getRoomSpace().getHeight());
@@ -113,25 +113,25 @@ public class RoomTests {
 
     @Test
     public void testDoorCount() {
-        Room room = new Room(new WorldPosition(dummyX, dummyY), new RoomSpace(33, 33));
+        Room room = new Room(new Position(dummyX, dummyY), new RoomSpace(33, 33));
         assertEquals(room.getDoorsCount(), 0);
 
-        room.addDoor(WorldPosition.CardinalDirection.North);
+        room.addDoor(Position.CardinalDirection.North);
         assertEquals(room.getDoorsCount(), 1);
 
-        room.addDoor(WorldPosition.CardinalDirection.South);
+        room.addDoor(Position.CardinalDirection.South);
         assertEquals(room.getDoorsCount(), 2);
 
-        room.addDoor(WorldPosition.CardinalDirection.West);
+        room.addDoor(Position.CardinalDirection.West);
         assertEquals(room.getDoorsCount(), 3);
 
-        room.addDoor(WorldPosition.CardinalDirection.East);
+        room.addDoor(Position.CardinalDirection.East);
         assertEquals(room.getDoorsCount(), 4);
     }
 
     @Test
     public void testRoomPosition() {
-        Room room = new Room(new WorldPosition(dummyX, dummyY), new RoomSpace(32, 32));
+        Room room = new Room(new Position(dummyX, dummyY), new RoomSpace(32, 32));
         assertNotNull(room.getPosition());
         assertEquals(room.getPosition().getX(), dummyX);
         assertEquals(room.getPosition().getY(), dummyY);
@@ -144,15 +144,15 @@ public class RoomTests {
 
     @Test
     public void testRoomPlay() {
-        Room room = new Room(new WorldPosition(dummyX, dummyY), new RoomSpace(32, 32));
-        WorldPosition.CardinalDirection cardinalDirection = room.play();
+        Room room = new Room(new Position(dummyX, dummyY), new RoomSpace(32, 32));
+        Position.CardinalDirection cardinalDirection = room.play();
         assertNotNull(cardinalDirection);
     }
 
 
     @Test
     public void testSetPlayer() {
-        Room room = new Room(new WorldPosition(dummyX, dummyY), new RoomSpace(32, 32));
+        Room room = new Room(new Position(dummyX, dummyY), new RoomSpace(32, 32));
         assertNull(room.getPlayer());
 
         Position position = new Position(2, 3);

@@ -41,7 +41,7 @@ public class RoomCreator {
      * @param worldPosition coordinate in world space for the room
      * @return Room
      */
-    public Room createRoom(WorldPosition worldPosition, java.util.Map<WorldPosition.CardinalDirection, WorldPosition.CardinalDirectionPermission> cardinalDirectionPermissions) {
+    public Room createRoom(Position worldPosition, java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissions) {
         Room room = new Room(worldPosition, roomSpace);
 
         int maxItems = random.nextInt(maxRoomItems + 1);
@@ -55,17 +55,17 @@ public class RoomCreator {
             room.addEnemy(getRandomRoomPosition(room.getRoomSpace()), enemies[random.nextInt(enemies.length)]);
         }
 
-        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(WorldPosition.CardinalDirection.North))) {
-            room.addDoor(WorldPosition.CardinalDirection.North);
+        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.North))) {
+            room.addDoor(Position.CardinalDirection.North);
         }
-        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(WorldPosition.CardinalDirection.South))) {
-            room.addDoor(WorldPosition.CardinalDirection.South);
+        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.South))) {
+            room.addDoor(Position.CardinalDirection.South);
         }
-        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(WorldPosition.CardinalDirection.West))) {
-            room.addDoor(WorldPosition.CardinalDirection.West);
+        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.West))) {
+            room.addDoor(Position.CardinalDirection.West);
         }
-        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(WorldPosition.CardinalDirection.East))) {
-            room.addDoor(WorldPosition.CardinalDirection.East);
+        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.East))) {
+            room.addDoor(Position.CardinalDirection.East);
         }
 
         return room;
@@ -78,7 +78,7 @@ public class RoomCreator {
      * @return true if permission is mandatory or if random returns true on optional permission.
      *      If a permission is missing or is null, false will be returned.
      */
-    private boolean getCardinalDirectionPermissionChoice(WorldPosition.CardinalDirectionPermission cardinalDirectionPermission) {
+    private boolean getCardinalDirectionPermissionChoice(Position.CardinalDirectionPermission cardinalDirectionPermission) {
         boolean choice = false;
 
         switch (cardinalDirectionPermission) {
@@ -100,22 +100,22 @@ public class RoomCreator {
 
     /**
      * Creates the initial room. All cardinal directions for doors is optional with a minimum of one door.
-     * @param worldPosition coordinate in world space for the room
+     * @param position coordinate in world space for the room
      */
-    public Room createInitialRoom(WorldPosition worldPosition) {
-        java.util.Map<WorldPosition.CardinalDirection, WorldPosition.CardinalDirectionPermission> cardinalDirectionPermissionsAll = new HashMap<>();
-        cardinalDirectionPermissionsAll.put(WorldPosition.CardinalDirection.North, WorldPosition.CardinalDirectionPermission.Mandatory);
-        cardinalDirectionPermissionsAll.put(WorldPosition.CardinalDirection.South, WorldPosition.CardinalDirectionPermission.Mandatory);
-        cardinalDirectionPermissionsAll.put(WorldPosition.CardinalDirection.West, WorldPosition.CardinalDirectionPermission.Mandatory);
-        cardinalDirectionPermissionsAll.put(WorldPosition.CardinalDirection.East, WorldPosition.CardinalDirectionPermission.Mandatory);
+    public Room createInitialRoom(Position position) {
+        java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissionsAll = new HashMap<>();
+        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Mandatory);
+        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Mandatory);
+        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Mandatory);
+        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Mandatory);
 
-        Room room = createRoom(worldPosition, cardinalDirectionPermissionsAll);
+        Room room = createRoom(position, cardinalDirectionPermissionsAll);
 
         room.setPlayer(getRandomRoomPosition(room.getRoomSpace()), player);
 
         // Need minimum one doors at the beginning
         if (room.getDoorsCount() < 1) {
-            room.addDoor(WorldPosition.CardinalDirection.North);
+            room.addDoor(Position.CardinalDirection.North);
         }
 
         return room;

@@ -6,10 +6,10 @@ import java.util.HashMap;
  * Main container for a room in the grid that makes up the game world
  */
 public class Room {
-    private final WorldPosition position;
+    private final Position position;
 
-    private java.util.Map<WorldPosition.CardinalDirection, Position> cardinalDirectionsDoors = new HashMap<>();
-    private java.util.Map<Position, WorldPosition.CardinalDirection> positionDoors = new HashMap<>();
+    private java.util.Map<Position.CardinalDirection, Position> cardinalDirectionsDoors = new HashMap<>();
+    private java.util.Map<Position, Position.CardinalDirection> positionDoors = new HashMap<>();
 
     private java.util.Map<Position, Item> items = new HashMap<>();
     private java.util.Map<Position, Character> enemies = new HashMap<>();
@@ -24,7 +24,7 @@ public class Room {
      * @param worldPosition position for the room
      * @param roomSpace room space for the room
      */
-    public Room(WorldPosition worldPosition, RoomSpace roomSpace) {
+    public Room(Position worldPosition, RoomSpace roomSpace) {
         position = worldPosition;
         this.roomSpace = roomSpace;
     }
@@ -34,7 +34,7 @@ public class Room {
      * Retrieves the position for this room in world space.
      * @return the WorldPosition for this room.
      */
-    public WorldPosition getPosition() {
+    public Position getPosition() {
         return position;
     }
 
@@ -118,8 +118,8 @@ public class Room {
      * Plays this room.
      * @return the new direction for next room to enter.
      */
-    public WorldPosition.CardinalDirection play() {
-        return WorldPosition.CardinalDirection.North;
+    public Position.CardinalDirection play() {
+        return Position.CardinalDirection.North;
     }
 
 
@@ -127,7 +127,7 @@ public class Room {
      * Adds a door to this room in the cardinal direction. If there already exist a door in that direction the old value is overwritten.
      * @param cardinalDirection the cardinal direction to add a door to this room
      */
-    public void addDoor(WorldPosition.CardinalDirection cardinalDirection) {
+    public void addDoor(Position.CardinalDirection cardinalDirection) {
         int x = roomSpace.getWidth();
         int y = roomSpace.getHeight();
 
@@ -161,7 +161,7 @@ public class Room {
      * @param cardinalDirection the cardinal direction to check for a door.
      * @return true if there exist a door at the cardinal direction otherwise false.
      */
-    public boolean existDoor(WorldPosition.CardinalDirection cardinalDirection) {
+    public boolean existDoor(Position.CardinalDirection cardinalDirection) {
         return cardinalDirectionsDoors.get(cardinalDirection) != null;
     }
 
