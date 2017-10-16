@@ -1,6 +1,6 @@
 package rougelikeLibrary;
 
-public class Item {
+public class Item implements Mappable{
 
 	private String name;
 	private Effect effect;
