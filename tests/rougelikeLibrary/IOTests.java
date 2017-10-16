@@ -6,29 +6,26 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.Random;
 import java.util.Scanner;
 
 import org.junit.*;
 
-import rougelikeLibrary.IO.Direction;
+import rougelikeLibrary.Position.CardinalDirection;
 
 public class IOTests {
 
 	private InputStream orgInput;
 	private PrintStream orgOutput;
-	private Random r;
-
+	
 	@Before
 	public void saveInputStream() {
 		orgInput = System.in;
 		orgOutput = new PrintStream(System.out);
-		r = new Random();
 	}
 
 	@Test
 	public void testRequstMovePlayer() {
-		Direction d = Direction.NORTH;
+		CardinalDirection d = CardinalDirection.North;
 		String s = "n";
 		InputStream stream = new ByteArrayInputStream(s.getBytes());
 		System.setIn(stream);
@@ -39,7 +36,6 @@ public class IOTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testRequstMovePlayerWrongInput() {
-		Direction d = Direction.NORTH;
 		String s = "g";
 		InputStream stream = new ByteArrayInputStream(s.getBytes());
 		System.setIn(stream);
@@ -51,7 +47,7 @@ public class IOTests {
 	@Test
 	public void testRequestNotAllowedMove()
 	{
-		Direction d = Direction.NORTH;
+		CardinalDirection d = CardinalDirection.North;
 		String s = "n";
 		String failed = "Move not allowed.";
 		InputStream iStream = new ByteArrayInputStream(s.getBytes());
@@ -73,18 +69,16 @@ public class IOTests {
 
 	@Test
 	public void testCalculateMovementAIRandom() {
-		int i = r.nextInt(4);
-		EnemyAI e = new EnemyAI(i);
-		Direction d = Direction.values()[i];
+		EnemyAI e = new EnemyAI(11037);
+		CardinalDirection d = CardinalDirection.values()[0];
 		assertEquals(d, e.requestMove());
 	}
 	
 	@Test
 	public void testCalculateMovementAINotAllowedMove()
 	{
-		int i = r.nextInt(4);
-		EnemyAI e = new EnemyAI(i);
-		Direction d = Direction.values()[i];
+		EnemyAI e = new EnemyAI(11037);
+		CardinalDirection d = CardinalDirection.values()[0];
 		assertEquals(d, e.requestMoveAfterFail());
 	}
 

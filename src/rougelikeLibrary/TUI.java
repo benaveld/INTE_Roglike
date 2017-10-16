@@ -2,33 +2,35 @@ package rougelikeLibrary;
 
 import java.util.Scanner;
 
+import rougelikeLibrary.Position.CardinalDirection;
+
 public class TUI extends IO {
 
 
 	@Override
-	public Direction requestMove() {
+	public CardinalDirection requestMove() {
 		String s = getInputFromUser();
 		if (s.equals("n"))
 		{
-			return Direction.NORTH;
+			return CardinalDirection.North;
 		}
 		else if (s.equals("e"))
 		{
-			return Direction.EAST;
+			return CardinalDirection.East;
 		}
 		else if (s.equals("s"))
 		{
-			return Direction.SOUTH;
+			return CardinalDirection.South;
 		}
 		else if (s.equals("w"))
 		{
-			return Direction.WEST;
+			return CardinalDirection.West;
 		}
 		throw new IllegalArgumentException("Input must be one of the characters: n e s w");
 	}
 	
 	@Override
-	public Direction requestMoveAfterFail()
+	public CardinalDirection requestMoveAfterFail()
 	{
 		System.out.println("Move not allowed.");
 		return requestMove();
