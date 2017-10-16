@@ -13,7 +13,7 @@ public class Inventory {
 		
 	}
 	
-	public void calculateItemPercentages(){
+	private void calculateItemPercentages(){
 		
 		ArrayList<Item> speedItems = getItemsByStat(Item.Effect.SPEED);
 		ArrayList<Item> healthItems = getItemsByStat(Item.Effect.HEALTH);
