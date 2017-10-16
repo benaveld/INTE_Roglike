@@ -56,6 +56,15 @@ public class Position {
 		this.y = y;
 	}
 	
+	public void translate(int deltaX, int deltaY) {
+		if(x + deltaX < 0 || y + deltaY < 0) {
+			throw new IllegalArgumentException("Chanage x or y to less then 0. new X: " + (x+deltaX) + " new Y: " + (y+deltaY));
+		}
+		x += deltaX;
+		y += deltaY;
+		
+	}
+	
 	public Position getLocation() {
 		return new Position(this.x, this.y);
 	}
