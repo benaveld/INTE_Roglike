@@ -19,15 +19,15 @@ public class TurnSystem {
 		if(room.get(newLocation) == null) {
 			move(character, newLocation, room);
 		} else {
-			int safteCount = 0;
+			int safetyCount = 0;
 			do {
 				newLocation = getNewLocation(character, io.requestMoveAfterFail());
 				if(room.get(newLocation) == null) {
 					move(character, newLocation, room);
 					break;
 				}
-				safteCount++;
-			} while(safteCount < 10);
+				safetyCount++;
+			} while(safetyCount < 10);
 		}
 	}
 	

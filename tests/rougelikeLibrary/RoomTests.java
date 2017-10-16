@@ -16,7 +16,7 @@ public class RoomTests {
 
     @Before
     public void init() {
-        enemy = new Enemy(12, 45, 23);
+        enemy = new Enemy(12, 45, 23, new TurnSystem(new EnemyAI(1)));
         item1 = new Item("item 1", 12, Item.Effect.DAMAGE);
         item2 = new Item("item 2", 2, Item.Effect.SPEED);
         item3 = new Item("item 3", 88, Item.Effect.HEALTH);
@@ -157,7 +157,7 @@ public class RoomTests {
 
         Position position = new Position(2, 3);
 
-        room.setPlayer(position, new Player(1, 2, 3));
+        room.setPlayer(position, new Player(1, 2, 3, new TurnSystem(new EnemyAI(1))));
         assertNotNull(room.getPlayer());
         assertEquals(room.getPlayer().getSpeed(), 1);
         assertEquals(room.getPlayer().getHealth(), 2);

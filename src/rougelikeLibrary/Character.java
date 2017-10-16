@@ -7,8 +7,9 @@ public class Character implements Mappable {
 	private int speed;
 	private int health;
 	private int damage;
+	private TurnSystem ts;
 
-	public Character(int speed, int health, int damage) {
+	public Character(int speed, int health, int damage, TurnSystem ts) {
 		if (speed < 0 || health < 0 || damage < 0) {
 			throw new IllegalArgumentException("Speed, health and damage needs to be 0 or more");
 		}
@@ -19,13 +20,19 @@ public class Character implements Mappable {
 		point = new Point();
 	}
 	
-	public Character(int speed, int health, int damage, Point point) {
-		this(speed, health, damage);
+	public Character(int speed, int health, int damage, Point point, TurnSystem ts) {
+		this(speed, health, damage, ts);
+		if (speed < 0 || health < 0 || damage < 0) {
+			throw new IllegalArgumentException("Speed, health and damage needs to be 0 or more");
+		}
 		this.point = point;
 	}
 	
-	public Character(int speed, int health, int damage, int x, int y) {
-		this(speed, health, damage, new Point(x,y));
+	public Character(int speed, int health, int damage, int x, int y, TurnSystem ts) {
+		this(speed, health, damage, new Point(x,y), ts);
+		if (speed < 0 || health < 0 || damage < 0) {
+			throw new IllegalArgumentException("Speed, health and damage needs to be 0 or more");
+		}
 	}
 
 	public void takeDamage(int damage) {
@@ -65,5 +72,6 @@ public class Character implements Mappable {
 	public Point getPoint() {
 		return point;
 	}
+	
 
 }
