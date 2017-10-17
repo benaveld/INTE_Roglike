@@ -105,7 +105,7 @@ public class Room {
      * @return true if there is otherwise false
      */
     public boolean existPlayer(Position position) {
-        return playerPosition == position;
+        return playerPosition.equals(position);
     }
 
 

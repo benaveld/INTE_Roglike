@@ -15,12 +15,12 @@ public class EnemyAI extends IO {
 	}
 
 	@Override
-	public CardinalDirection requestMove(Room room) {
+	public CardinalDirection requestMove(Room room, Character c) {
 		return calculateNextMove(room);
 	}
 	
 	@Override
-	public CardinalDirection requestMoveAfterFail(Room room)
+	public CardinalDirection requestMoveAfterFail(Room room, Character c)
 	{
 		CardinalDirection dir = null;
 		do

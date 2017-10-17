@@ -16,11 +16,11 @@ public class TurnSystem {
 	public boolean startTurn(Character character, int moves, Room room) {
 
 		RoomSpace rs = room.getRoomSpace();
-		Position newPosition = getnewPosition(character, io.requestMove(room));
+		Position newPosition = getnewPosition(character, io.requestMove(room,character));
 		if (newPosition == null || !newPosIsInsideRoomSpace(newPosition, rs)) {
 			int safetyCount = 0;
 			do {
-				newPosition = getnewPosition(character, io.requestMoveAfterFail(room));
+				newPosition = getnewPosition(character, io.requestMoveAfterFail(room,character));
 				if (newPosition != null && newPosIsInsideRoomSpace(newPosition, rs)) {
 					break;
 				} else {

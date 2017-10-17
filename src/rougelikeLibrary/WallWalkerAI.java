@@ -15,14 +15,59 @@ public class WallWalkerAI extends EnemyAI {
 	}
 	
 	@Override
-	public CardinalDirection requestMove(Room room) {
+	public CardinalDirection requestMove(Room room, Character c) {
+		CardinalDirection attackPlayer = checkPlayerAround(room, c);
+		if (attackPlayer != null)
+		{
+			return attackPlayer;
+		}
 		return lastDir;
 	}
 	
 	@Override
-	public CardinalDirection requestMoveAfterFail(Room room)
+	public CardinalDirection requestMoveAfterFail(Room room, Character c)
 	{
-		return calculateNextMove(room);
+		CardinalDirection attackPlayer = checkPlayerAround(room, c);
+		if (attackPlayer != null)
+		{
+			return attackPlayer;
+		}
+		lastDir = calculateNextMove(room);
+		return lastDir;
+	}
+	
+	private CardinalDirection checkPlayerAround(Room room, Character walker)
+	{
+		Position myPosition = walker.getPosition();
+		if (myPosition.getX() > 0)
+		{
+			if (room.existPlayer(new Position(myPosition.getX() - 1, myPosition.getY())))
+			{
+				return CardinalDirection.West;
+			}
+		}
+		if (myPosition.getX() < room.getRoomSpace().getWidth() - 1)
+		{
+			if (room.existPlayer(new Position(myPosition.getX() + 1, myPosition.getY())))
+			{
+				return CardinalDirection.East;
+			}
+		}
+		if (myPosition.getY() > 0)
+		{
+			if (room.existPlayer(new Position(myPosition.getX(), myPosition.getY() - 1)))
+			{
+				return CardinalDirection.North;
+			}
+		}
+		if (myPosition.getY() < room.getRoomSpace().getHeight() - 1)
+		{
+			if (room.existPlayer(new Position(myPosition.getX(), myPosition.getY() + 1)))
+			{
+				return CardinalDirection.South;
+			}
+		}
+		return null;
 	}
 	
 	@Override
