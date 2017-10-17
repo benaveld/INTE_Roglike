@@ -11,6 +11,7 @@ public class Character implements Mappable {
 	private int damage;
 	private TurnSystem ts;
 	private Inventory inv;
+	private boolean isDead;
 
 	public Character(int speed, int health, int damage, TurnSystem ts) {
 		if (speed < 0 || health < 0 || damage < 0) {
@@ -23,6 +24,9 @@ public class Character implements Mappable {
 		this.ts = ts;
 		pos = new Position(0,0);
 		inv = new Inventory();
+		if(health > 0) {
+			isDead = false;
+		}
 		
 	}
 	
@@ -83,5 +87,12 @@ public class Character implements Mappable {
 	}
 	public Inventory getInventory() {
 		return inv;
+	}
+	public boolean isDead() {
+		return isDead;
+	}
+	public String toString() {
+		
+		return speed + " " + health + " "+ damage;
 	}
 }

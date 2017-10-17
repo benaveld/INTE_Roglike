@@ -123,4 +123,28 @@ public class CharacterTests {
 		Room r = new Room(new Position(0,0), new RoomSpace(3, 3));
 		assertFalse(c.startTurn(r));
 	}
+	@Test
+	public void testCharacterIsDead() {
+		
+		Character c = new Character(0, 0, 0, new Position(1,2), new TurnSystem(new EnemyAI(1)));
+		
+		assertTrue(c.isDead());
+	}
+	@Test
+	public void testCharacterToString() {
+		
+		Character c = new Character(0, 0, 0, new Position(1,2), new TurnSystem(new EnemyAI(1)));
+		assertEquals("0 0 0", c.toString());
+	}
+	@Test
+	public void testEnemyDropItemOnDeath() {
+		
+		Room r = new Room(new Position(0,0), new RoomSpace(10,10));
+		r.addEnemy(new Position(2,2), new Enemy(1,1,1, new TurnSystem(new EnemyAI(2))));
+		Enemy e = null;
+		
+		assertEquals("1 1 1", e.toString());
+		
+		
+	}
 }
