@@ -2,6 +2,8 @@ package rougelikeLibrary;
 
 import static org.junit.Assert.*;
 import org.junit.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RoomCreatorTests {
@@ -26,7 +28,10 @@ public class RoomCreatorTests {
 
     @Before
     public void init() {
-        roomCreator = new RoomCreator(roomCreatorSeed, new Player(1, 1, 1, new TurnSystem(new EnemyAI(1))), items, enemies, new RoomSpace(32, 32));
+        roomCreator = new RoomCreator(roomCreatorSeed,
+                new Player(1, 1, 1, new TurnSystem(new EnemyAI(1))),
+                new ArrayList<MappableTypeWrapper>(),
+                new RoomSpace(32, 32));
     }
 
 

@@ -76,20 +76,19 @@ public class RoomCreatorBuilder {
      * @param itemClass the item class to use. Must be of type Item.
      * @param parameterTypes an array of parameter types for Item class.
      * @param parameterValues an array of parameter values for Item class.
-     * @param io the io to use for the item type
      * @param minItems minimum amount of items in room
      * @param maxItems maximum amount of items in room
      * @param probability the probability to create this item
      * @throws IllegalArgumentException if io is null or the number of parameters or value in parameterTypes or parameterValues is wrong.
      */
-    public void AddItem(Class<? extends Item> itemClass, Class<?> [] parameterTypes, Object [] parameterValues, IO io, int minItems, int maxItems, int probability)
+    public void AddItem(Class<? extends Item> itemClass, Class<?> [] parameterTypes, Object [] parameterValues, int minItems, int maxItems, int probability)
             throws IllegalArgumentException {
         if (width * height < 1) {
             throw new IllegalArgumentException("Can't add items before world dimension is set");
         }
-        testType(itemClass, parameterTypes, parameterValues, io);
+        testType(itemClass, parameterTypes, parameterValues);
         testMinMax(minItems, maxItems);
-        mappableTypes.add(new MappableTypeWrapper(itemClass, parameterTypes, parameterValues, io, minItems, maxItems, probability));
+        mappableTypes.add(new MappableTypeWrapper(itemClass, parameterTypes, parameterValues, minItems, maxItems, probability));
     }
 
 
@@ -109,7 +108,12 @@ public class RoomCreatorBuilder {
         if (width * height < 1) {
             throw new IllegalArgumentException("Can't add items before world dimension is set");
         }
-        testType(enemyClass, parameterTypes, parameterValues, io);
+
+        if (io == null) {
+            throw new IllegalArgumentException("IO can't be null.");
+        }
+
+        testType(enemyClass, parameterTypes, parameterValues);
         testMinMax(minEnemies, maxEnemies);
         mappableTypes.add(new MappableTypeWrapper(enemyClass, parameterTypes, parameterValues, io, minEnemies, maxEnemies, probability));
     }
@@ -143,11 +147,8 @@ public class RoomCreatorBuilder {
      * @param io
      * @throws IllegalArgumentException
      */
-    private void testType(Class<?> typeClass, Class<?> [] parameterTypes, Object [] parameterValues, IO io)
+    private void testType(Class<?> typeClass, Class<?> [] parameterTypes, Object [] parameterValues)
             throws IllegalArgumentException {
-        if (io == null) {
-            throw new IllegalArgumentException("IO can't be null.");
-        }
 
         // Test if parameter types and values is valid
         try {

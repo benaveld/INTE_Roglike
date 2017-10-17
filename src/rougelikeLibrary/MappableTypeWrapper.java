@@ -14,6 +14,16 @@ class MappableTypeWrapper {
     private int currentQuantity;
 
 
+    MappableTypeWrapper(Class classType, Class [] parameterTypes, Object [] parameterValues, int minQuantity, int maxQuantity, int probability) {
+        this.classType = classType;
+        this.parameterTypes = parameterTypes;
+        this.parameterValues = parameterValues;
+        this.minQuantity = minQuantity;
+        this.maxQuantity = maxQuantity;
+        this.probability = probability;
+    }
+
+
     MappableTypeWrapper(Class classType, Class [] parameterTypes, Object [] parameterValues, IO io, int minQuantity, int maxQuantity, int probability) {
         this.classType = classType;
         this.parameterTypes = parameterTypes;
