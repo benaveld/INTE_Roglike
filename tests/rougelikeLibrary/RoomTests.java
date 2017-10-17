@@ -169,12 +169,6 @@ public class RoomTests {
 
 
     @Test
-    public void testExistPlayer() {
-        testSetPlayer();
-    }
-
-
-    @Test
     public void testGetFromPosition() {
         /**
          * en arraylist med mappables

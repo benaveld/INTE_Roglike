@@ -1,36 +1,35 @@
 package rougelikeLibrary;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Main container for a room in the grid that makes up the game world
  */
 public class Room {
     private final Position position;
-
-    private java.util.Map<Position.CardinalDirection, Position> cardinalDirectionsDoors = new HashMap<>();
-    private java.util.Map<Position, Position.CardinalDirection> positionDoors = new HashMap<>();
-
-    private java.util.Map<Position, Item> items = new HashMap<>();
-    private java.util.Map<Position, Character> enemies = new HashMap<>();
     private final RoomSpace roomSpace;
+    private Map<Position, List<Mappable>> roomMap;
     private Position playerPosition;
     private Character player;
 
-    private java.util.Map<Position, List<Mappable>> positionMappables = new HashMap<>();
+
+    public Room(Position worldPosition, RoomSpace roomSpace) {
+        position = worldPosition;
+        this.roomSpace = roomSpace;
+        this.roomMap = new HashMap<>();
+    }
 
 
     /**
      * Constructor
      *
-     * @param worldPosition position for the room
-     * @param roomSpace room space for the room
+     * @param worldPosition position for the room in world space
+     * @param roomMap room map for the room
      */
-    public Room(Position worldPosition, RoomSpace roomSpace) {
+    public Room(Position worldPosition, RoomSpace roomSpace, Map<Position, List<Mappable>> roomMap) {
         position = worldPosition;
         this.roomSpace = roomSpace;
+        this.roomMap = roomMap;
     }
 
 
@@ -43,79 +42,23 @@ public class Room {
     }
 
 
+    /**
+     * @return room space
+     */
     public RoomSpace getRoomSpace() {
         return roomSpace;
     }
 
 
     /**
-     * Adds an item to the room space
-     * @param position the position for the item. If there's already an item at the position, it will be overwritten.
-     * @param item the item to add.
+     * @return room map for the room
      */
-    public void addItem(Position position, Item item) {
-        items.put(position, item);
+    public Map<Position, List<Mappable>> getRoomMap() {
+        return roomMap;
     }
 
 
-    /**
-     * Adds an enemy to the room space
-     * @param position the position for the enemy. If there's already an enemy at the position, it will be overwritten.
-     * @param enemy the item to add.
-     */
-    public void addEnemy(Position position, Character enemy) {
-        enemies.put(position, enemy);
-    }
-
-
-    /**
-     * Checks if enemy exists on position.
-     * @param position to check for
-     * @return true if there is otherwise false
-     */
-    public boolean existEnemy(Position position) {
-        return enemies.get(position) != null;
-    }
-
-
-    /**
-     * Checks if item exists on position.
-     * @param position to check for
-     * @return true if there is otherwise false
-     */
-    public boolean existItem(Position position) {
-        return items.get(position) != null;
-    }
-
-
-    /**
-     * Set the player
-     * @param position for the player
-     * @param player the player
-     */
-    public void setPlayer(Position position, Character player) {
-        playerPosition = position;
-        this.player = player;
-    }
-
-
-    /**
-     * Checks if player exists on position.
-     * @param position to check for
-     * @return true if there is otherwise false
-     */
-    public boolean existPlayer(Position position) {
-        return playerPosition.equals(position);
-    }
-
-
-    /**
-     * Get the player
-     * @return the player in the room. If there is no player, null is returned.
-     */
-    public Character getPlayer() {
-        return player;
-    }
+    // @TODO implement move(pos to pos)
 
 
     /**
@@ -125,13 +68,33 @@ public class Room {
     public Position.CardinalDirection play() {
         return Position.CardinalDirection.North;
     }
+  
+  
+    public boolean existPlayer(Position position) {
+        return playerPosition.equals(position);
 
 
     /**
-     * Adds a door to this room in the cardinal direction. If there already exist a door in that direction the old value is overwritten.
-     * @param cardinalDirection the cardinal direction to add a door to this room
+     * Get mappables for the position
+     * @param position the position to get mappables from
+     * @return a list och mappables
      */
-    public void addDoor(Position.CardinalDirection cardinalDirection) {
+    public List<Mappable> getFromPosition(Position position) {
+        List<Mappable> mappables = roomMap.get(position);
+
+        if (mappables == null) {
+            mappables = new ArrayList<>();
+            roomMap.put(position, mappables);
+        }
+        return mappables;
+    }
+
+
+    /**
+     * Returns the position for a given cardinal direction for a door.
+     * @param cardinalDirection the cardinal direction to get a position for
+     */
+    public Position getDoorPosition(Position.CardinalDirection cardinalDirection) {
         int x = roomSpace.getWidth();
         int y = roomSpace.getHeight();
 
@@ -154,9 +117,7 @@ public class Room {
                 y = y / 2;
                 break;
         }
-
-        cardinalDirectionsDoors.put(cardinalDirection, new Position(x, y));
-        positionDoors.put(new Position(x, y), cardinalDirection);
+        return new Position(x, y);
     }
 
 
@@ -166,8 +127,49 @@ public class Room {
      * @return true if there exist a door at the cardinal direction otherwise false.
      */
     public boolean existDoor(Position.CardinalDirection cardinalDirection) {
-        return cardinalDirectionsDoors.get(cardinalDirection) != null;
+        Position doorPosition = getDoorPosition(cardinalDirection);
+        return existType(roomMap.get(position), Door.class);
     }
+
+
+    /**
+     * Check if given type exists in list
+     * @param mappables the object to check for type
+     * @param typeClass type class type to check against
+     * @return true if object class type and type class match otherwise false.
+     */
+    private boolean existType(List<Mappable> mappables, Class typeClass) {
+        if (mappables == null) {
+            return false;
+        }
+
+        for (Mappable mappable : mappables) {
+            if (mappable.getClass() == typeClass) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Adds an enemy to the room space
+     * @param position the position for the enemy. If there's already an enemy at the position, it will be overwritten.
+     * @param enemy the item to add.
+     */
+    public void addEnemy(Position position, Character enemy) {
+        List<Mappable> mappables = getFromPosition(position);
+        Iterator mappablesIterator = mappables.iterator();
+
+        while (mappablesIterator.hasNext()) {
+            Mappable mappable = (Mappable) mappablesIterator.next();
+            if (mappable instanceof Enemy) {
+                mappablesIterator.remove();
+            }
+        }
+        mappables.add(enemy);
+    }
+
 
 
     /**
@@ -176,7 +178,49 @@ public class Room {
      * @return true if there exist a door at position otherwise false.
      */
     public boolean existDoor(Position position) {
-        return positionDoors.get(position) != null;
+        return existType(roomMap.get(position), Door.class);
+    }
+
+
+    /**
+     * Checks if there exist a item at the specific position in this room.
+     * @param position the position to check for a door.
+     * @return true if there exist a door at position otherwise false.
+     */
+    public boolean existItem(Position position) {
+        return existType(roomMap.get(position), Item.class);
+    }
+
+
+    /**
+     * Checks if there exist a enemy at the specific position in this room.
+     * @param position the position to check for a door.
+     * @return true if there exist a door at position otherwise false.
+     */
+    public boolean existEnemy(Position position) {
+        return existType(roomMap.get(position), Enemy.class);
+    }
+
+
+    /**
+     * Adds door to the position
+     * @param cardinalDirection the cardinal direction to add the door to.
+     */
+    public void addDoor(Position.CardinalDirection cardinalDirection) {
+        Position position = getDoorPosition(cardinalDirection);
+        List<Mappable> mappables = getFromPosition(position);
+        mappables.add(new Door());
+    }
+
+
+    /**
+     * Adds item to specific position
+     * @param position position to add the item to
+     * @param item the item to add
+     */
+    public void addItem(Position position, Item item) {
+        List<Mappable> mappables = getFromPosition(position);
+        mappables.add(item);
     }
 
 
@@ -185,13 +229,46 @@ public class Room {
      * @return number of doors.
      */
     public int getDoorsCount() {
-        return cardinalDirectionsDoors.size();
+        int doors = 0;
+
+        for(Map.Entry<Position, List<Mappable>> entrySet : roomMap.entrySet()) {
+            List<Mappable> mappables = entrySet.getValue();
+            for(Mappable mappable : mappables) {
+                if (mappable instanceof Door) {
+                    doors++;
+                }
+            }
+        }
+        return doors;
     }
 
 
-    public List<Mappable> getFromPosition(Position position) {
-        List<Mappable> mappables = positionMappables.get(position);
-        return (mappables == null) ? new ArrayList<>() : mappables;
+    /**
+     * Set the player
+     * @param position for the player
+     * @param player the player
+     */
+    public void setPlayer(Position position, Character player) {
+        playerPosition = position;
+        this.player = player;
     }
 
+
+    /**
+     * Checks if player exists on position.
+     * @param position to check for
+     * @return true if there is otherwise false
+     */
+    public boolean existPlayer(Position position) {
+        return playerPosition == position;
+    }
+
+
+    /**
+     * Get the player
+     * @return the player in the room. If there is no player, null is returned.
+     */
+    public Character getPlayer() {
+        return player;
+    }
 }
