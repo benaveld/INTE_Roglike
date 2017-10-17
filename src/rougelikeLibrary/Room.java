@@ -68,6 +68,10 @@ public class Room {
     public Position.CardinalDirection play() {
         return Position.CardinalDirection.North;
     }
+  
+  
+    public boolean existPlayer(Position position) {
+        return playerPosition.equals(position);
 
 
     /**
