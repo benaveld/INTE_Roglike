@@ -29,9 +29,28 @@ public class IOTests {
 		String s = "n";
 		InputStream stream = new ByteArrayInputStream(s.getBytes());
 		System.setIn(stream);
+		Room room = new Room(new Position(0,0),new RoomSpace(3,3));
 
 		TUI t = new TUI();
-		assertEquals(d, t.requestMove());
+		assertEquals(d, t.requestMove(room));
+	}
+	
+	@Test
+	public void testRequestMovePlayerAllDirections()
+	{
+		String[] moves = {"n","e","s","w"};
+		Room room = new Room(new Position(0,0),new RoomSpace(3,3));
+		TUI t = new TUI();
+		for (int i = 0; i < 4; i++)
+		{
+			CardinalDirection d = CardinalDirection.values()[i];
+			String s = moves[i];
+			InputStream stream = new ByteArrayInputStream(s.getBytes());
+			System.setIn(stream);
+
+			assertEquals(d, t.requestMove(room));
+		}
+		
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -39,9 +58,10 @@ public class IOTests {
 		String s = "g";
 		InputStream stream = new ByteArrayInputStream(s.getBytes());
 		System.setIn(stream);
+		Room room = new Room(new Position(0,0),new RoomSpace(3,3));
 
 		TUI t = new TUI();
-		t.requestMove();
+		t.requestMove(room);
 	}
 	
 	@Test
@@ -55,9 +75,11 @@ public class IOTests {
 		PrintStream printStream = new PrintStream(oStream);
 		System.setIn(iStream);
 		System.setOut(printStream);
+
+		Room room = new Room(new Position(0,0),new RoomSpace(3,3));
 		
 		TUI t = new TUI();
-		assertEquals(d, t.requestMoveAfterFail());
+		assertEquals(d, t.requestMoveAfterFail(room));
 		InputStream oStreamRead = new ByteArrayInputStream(oStream.toByteArray());
 
 		
@@ -68,18 +90,20 @@ public class IOTests {
 	}
 
 	@Test
-	public void testCalculateMovementAIRandom() {
+	public void testCalculateMovementBasicAIRandom() {
 		EnemyAI e = new EnemyAI(11037);
 		CardinalDirection d = CardinalDirection.values()[0];
-		assertEquals(d, e.requestMove());
+		Room room = new Room(new Position(0,0),new RoomSpace(3,3));
+		assertEquals(d, e.requestMove(room));
 	}
 	
 	@Test
-	public void testCalculateMovementAINotAllowedMove()
+	public void testCalculateMovementBasicAINotAllowedMove()
 	{
 		EnemyAI e = new EnemyAI(11037);
 		CardinalDirection d = CardinalDirection.values()[0];
-		assertEquals(d, e.requestMoveAfterFail());
+		Room room = new Room(new Position(0,0),new RoomSpace(3,3));
+		assertEquals(d, e.requestMoveAfterFail(room));
 	}
 
 	@After

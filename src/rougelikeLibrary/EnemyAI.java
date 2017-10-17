@@ -15,22 +15,23 @@ public class EnemyAI extends IO {
 	}
 
 	@Override
-	public CardinalDirection requestMove() {
-		return calculateNextMove();
+	public CardinalDirection requestMove(Room room) {
+		return calculateNextMove(room);
 	}
 	
 	@Override
-	public CardinalDirection requestMoveAfterFail()
+	public CardinalDirection requestMoveAfterFail(Room room)
 	{
 		CardinalDirection dir = null;
 		do
 		{
-			dir = calculateNextMove();
+			dir = calculateNextMove(room);
 		} while (dir == lastDirection);
+		lastDirection = dir;
 		return dir;
 	}
 
-	private CardinalDirection calculateNextMove() {
+	protected CardinalDirection calculateNextMove(Room room) {
 		int i = r.nextInt(CardinalDirection.values().length);
 		return CardinalDirection.values()[i];
 	}

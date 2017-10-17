@@ -8,7 +8,7 @@ public class TUI extends IO {
 
 
 	@Override
-	public CardinalDirection requestMove() {
+	public CardinalDirection requestMove(Room room) {
 		String s = getInputFromUser();
 		if (s.equals("n"))
 		{
@@ -30,10 +30,10 @@ public class TUI extends IO {
 	}
 	
 	@Override
-	public CardinalDirection requestMoveAfterFail()
+	public CardinalDirection requestMoveAfterFail(Room room)
 	{
 		System.out.println("Move not allowed.");
-		return requestMove();
+		return requestMove(room);
 	}
 	
 	
