@@ -3,6 +3,7 @@ package rougelikeLibrary;
 import static org.junit.Assert.*;
 import org.junit.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -41,7 +42,10 @@ public class MapControllerTests {
         cardinalDirectionPermissionsAll.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Optional);
         cardinalDirectionPermissionsAll.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Optional);
 
-        roomCreator = new RoomCreator(dummySeed, new Player(1, 1, 1, new TurnSystem(new EnemyAI(1))), items, enemies, new RoomSpace(32, 32));
+        roomCreator = new RoomCreator(dummySeed,
+                new Player(1, 1, 1, new TurnSystem(new EnemyAI(1))),
+                new ArrayList<MappableTypeWrapper>(),
+                new RoomSpace(32, 32));
         centerRoom = roomCreator.createInitialRoom(centerWorldPosition);
         mapController = new MapController(centerRoom);
     }

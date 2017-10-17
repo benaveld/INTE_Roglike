@@ -29,9 +29,32 @@ public class IOTests {
 		String s = "n";
 		InputStream stream = new ByteArrayInputStream(s.getBytes());
 		System.setIn(stream);
+		Room room = new Room(new Position(0,0),new RoomSpace(3,3));
 
 		TUI t = new TUI();
-		assertEquals(d, t.requestMove());
+		TurnSystem ts = new TurnSystem(t);
+		Character c = new Character(0, 0, 0, ts);
+		assertEquals(d, t.requestMove(room,c));
+	}
+	
+	@Test
+	public void testRequestMovePlayerAllDirections()
+	{
+		String[] moves = {"n","e","s","w"};
+		Room room = new Room(new Position(0,0),new RoomSpace(3,3));
+		TUI t = new TUI();
+		TurnSystem ts = new TurnSystem(t);
+		Character c = new Character(0, 0, 0, ts);
+		for (int i = 0; i < 4; i++)
+		{
+			CardinalDirection d = CardinalDirection.values()[i];
+			String s = moves[i];
+			InputStream stream = new ByteArrayInputStream(s.getBytes());
+			System.setIn(stream);
+
+			assertEquals(d, t.requestMove(room,c));
+		}
+		
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -39,9 +62,12 @@ public class IOTests {
 		String s = "g";
 		InputStream stream = new ByteArrayInputStream(s.getBytes());
 		System.setIn(stream);
+		Room room = new Room(new Position(0,0),new RoomSpace(3,3));
 
 		TUI t = new TUI();
-		t.requestMove();
+		TurnSystem ts = new TurnSystem(t);
+		Character c = new Character(0, 0, 0, ts);
+		t.requestMove(room,c);
 	}
 	
 	@Test
@@ -55,9 +81,13 @@ public class IOTests {
 		PrintStream printStream = new PrintStream(oStream);
 		System.setIn(iStream);
 		System.setOut(printStream);
+
+		Room room = new Room(new Position(0,0),new RoomSpace(3,3));
 		
 		TUI t = new TUI();
-		assertEquals(d, t.requestMoveAfterFail());
+		TurnSystem ts = new TurnSystem(t);
+		Character c = new Character(0, 0, 0, ts);
+		assertEquals(d, t.requestMoveAfterFail(room,c));
 		InputStream oStreamRead = new ByteArrayInputStream(oStream.toByteArray());
 
 		
@@ -68,18 +98,24 @@ public class IOTests {
 	}
 
 	@Test
-	public void testCalculateMovementAIRandom() {
+	public void testCalculateMovementBasicAIRandom() {
 		EnemyAI e = new EnemyAI(11037);
 		CardinalDirection d = CardinalDirection.values()[0];
-		assertEquals(d, e.requestMove());
+		Room room = new Room(new Position(0,0),new RoomSpace(3,3));
+		TurnSystem ts = new TurnSystem(e);
+		Character c = new Character(0, 0, 0, ts);
+		assertEquals(d, e.requestMove(room,c));
 	}
 	
 	@Test
-	public void testCalculateMovementAINotAllowedMove()
+	public void testCalculateMovementBasicAINotAllowedMove()
 	{
 		EnemyAI e = new EnemyAI(11037);
 		CardinalDirection d = CardinalDirection.values()[0];
-		assertEquals(d, e.requestMoveAfterFail());
+		TurnSystem ts = new TurnSystem(e);
+		Character c = new Character(0, 0, 0, ts);
+		Room room = new Room(new Position(0,0),new RoomSpace(3,3));
+		assertEquals(d, e.requestMoveAfterFail(room,c));
 	}
 
 	@After
