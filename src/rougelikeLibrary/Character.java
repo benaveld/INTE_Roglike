@@ -1,6 +1,9 @@
 package rougelikeLibrary;
 
 
+import java.util.HashMap;
+import java.util.List;
+
 public class Character implements Mappable {
 	private Position pos;
 	private int speed;
@@ -17,8 +20,10 @@ public class Character implements Mappable {
 		this.speed = speed;
 		this.health = health;
 		this.damage = damage;
+		this.ts = ts;
 		pos = new Position(0,0);
 		inv = new Inventory();
+		
 	}
 	
 	public Character(int speed, int health, int damage, Position Position, TurnSystem ts) {
@@ -38,6 +43,10 @@ public class Character implements Mappable {
 		
 	}
 	
+	public boolean startTurn(Room room)
+	{
+		return ts.startTurn(this, speed, room);
+	}
 
 	public void takeDamage(int damage) {
 		if (damage < 0) {
