@@ -113,14 +113,14 @@ public class CharacterTests {
 	public void testCharacterStartTurnReturnTrue()
 	{
 		Character c = new Character(5, 0, 0, new Position(1,2), new TurnSystem(new EnemyAI(1)));
-		Room r = new Room(new WorldPosition(0,0), new RoomSpace(3, 3));
+		Room r = new Room(new Position(0,0), new RoomSpace(3, 3));
 		assertTrue(c.startTurn(r));
 	}
 	@Test
 	public void testCharacterStartTurnReturnFalse()
 	{
 		Character c = new Character(5, 0, 0, new Position(1,2), new TurnSystem(new EnemyAI(1)));
-		Room r = new Room(new WorldPosition(0,0), new RoomSpace(3, 3));
+		Room r = new Room(new Position(0,0), new RoomSpace(3, 3));
 		assertFalse(c.startTurn(r));
 	}
 }

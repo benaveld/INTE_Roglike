@@ -11,7 +11,7 @@ public class TurnSystemTests {
 	public void testTurnCharacterPlacedInMap() {
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
 		Character c = new Character(0, 0, 0, 5, 5, new TurnSystem(new EnemyAI(1)));
-		Room r = new Room(new WorldPosition(0,0), new RoomSpace(3,3));
+		Room r = new Room(new Position(0,0), new RoomSpace(3,3));
 		r.addEnemy(new Position(5,5), c);
 		
 		assertTrue(r.getFromPosition(new Position(5,5)).size() > 0);
@@ -50,7 +50,7 @@ public class TurnSystemTests {
 	{
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
 		Character c = new Character(5, 0, 0, 1, 1, ts);
-		Room r = new Room(new WorldPosition(0,0), new RoomSpace(2,2));
+		Room r = new Room(new Position(0,0), new RoomSpace(2,2));
 		
 		assertTrue(c.startTurn(r));
 	}
@@ -58,9 +58,9 @@ public class TurnSystemTests {
 	@Test
 	public void testTurnWrongOriginalInput()
 	{
-		Room room = new Room(new WorldPosition(0,0), new RoomSpace(1,1));
+		Room room = new Room(new Position(0,0), new RoomSpace(1,1));
 		Character c = new Character(0, 0, 0, 5, 5, new TurnSystem(new EnemyAI(1)));
-		Room r = new Room(new WorldPosition(0,0), new RoomSpace(3,3));
+		Room r = new Room(new Position(0,0), new RoomSpace(3,3));
 		
 		assertTrue(c.startTurn(r));
 	}
