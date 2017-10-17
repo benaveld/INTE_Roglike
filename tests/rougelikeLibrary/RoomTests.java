@@ -179,7 +179,7 @@ public class RoomTests {
         /**
          * en arraylist med mappables
          */
-        Room room = new Room(new WorldPosition(dummyX, dummyY), new RoomSpace(32, 32));
+        Room room = new Room(new Position(dummyX, dummyY), new RoomSpace(32, 32));
 
         Position position = new Position(234, 645);
 
