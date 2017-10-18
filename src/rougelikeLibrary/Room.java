@@ -178,10 +178,13 @@ public class Room {
      * @param position the position for the enemy. If there's already an enemy at the position, it will be overwritten.
      * @param enemy the item to add.
      */
-    public void addEnemy(Position position, Character enemy) {
+    public void addEnemy(Position position, Enemy enemy) {
         List<Mappable> mappables = getFromPosition(position);
         Iterator mappablesIterator = mappables.iterator();
 
+        enemy.setPosition(position);
+        enemy.setRoom(this);
+        
         while (mappablesIterator.hasNext()) {
             Mappable mappable = (Mappable) mappablesIterator.next();
             if (mappable instanceof Enemy) {

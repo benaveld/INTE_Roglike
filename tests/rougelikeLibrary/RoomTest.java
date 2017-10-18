@@ -267,7 +267,7 @@ public class RoomTest {
     public void getEnemy() throws Exception {
         assertFalse(stdRoom.existEnemy(stdPosition));
         stdRoom.addEnemy(stdPosition, stdEnemy);
-        stdRoom.addEnemy(new Position(321, 432), stdPlayer);
+        //stdRoom.addEnemy(new Position(321, 432), stdPlayer);
         assertEquals(stdRoom.getEnemy(stdPosition), stdEnemy);
         assertNull(stdRoom.getEnemy(new Position(321, 432)));
         assertNull(stdRoom.getEnemy(null));
@@ -463,7 +463,7 @@ public class RoomTest {
 
     @Test
     public void getCharacter() throws Exception {
-        stdRoom.addEnemy(stdPosition, stdPlayer);
+        //stdRoom.addEnemy(stdPosition, stdPlayer);
         assertEquals(stdRoom.getCharacter(stdPosition), stdPlayer);
         stdRoom.addItem(new Position(123, 123), item1);
         stdRoom.addItem(new Position(13, 1), item2);

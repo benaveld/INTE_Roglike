@@ -10,9 +10,9 @@ public class TurnSystemTests {
 	@Test
 	public void testTurnCharacterPlacedInMap() {
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
-		Character c = new Character(0, 0, 0, 5, 5, new TurnSystem(new EnemyAI(1)));
+		Enemy e = new Enemy(0, 0, 0, 5, 5, new TurnSystem(new EnemyAI(1)));
 		Room r = new Room(new Position(0,0), new RoomSpace(3,3));
-		r.addEnemy(new Position(5,5), c);
+		r.addEnemy(new Position(5,5), e);
 		
 		assertTrue(r.getFromPosition(new Position(5,5)).size() > 0);
 	}
