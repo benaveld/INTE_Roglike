@@ -18,7 +18,8 @@ public class MapController {
     /**
      * Illegal to create a MapController without a room.
      */
-    private MapController() {}
+    @SuppressWarnings("unused")
+	private MapController() {}
 
 
     /**

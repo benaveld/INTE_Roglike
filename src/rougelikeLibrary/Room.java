@@ -70,10 +70,6 @@ public class Room {
     }
   
   
-    public boolean existPlayer(Position position) {
-        return playerPosition.equals(position);
-
-
     /**
      * Get mappables for the position
      * @param position the position to get mappables from
@@ -127,7 +123,6 @@ public class Room {
      * @return true if there exist a door at the cardinal direction otherwise false.
      */
     public boolean existDoor(Position.CardinalDirection cardinalDirection) {
-        Position doorPosition = getDoorPosition(cardinalDirection);
         return existType(roomMap.get(position), Door.class);
     }
 

@@ -1,10 +1,12 @@
 package rougelikeLibrary;
 
 import static org.junit.Assert.*;
+import static rougelikeLibrary.Position.CardinalDirection;
 import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  */
@@ -17,8 +19,8 @@ public class MapControllerTests {
     private RoomCreator roomCreator;
     private Room centerRoom;
     private MapController mapController;
-    private java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissionsAll = new HashMap<>();
-    private java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissions = new HashMap<>();
+    private Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissionsAll = new HashMap<>();
+    private Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissions = new HashMap<>();
 
     Item [] items = {
             new Item("fast shoes", 12, Item.Effect.SPEED),
@@ -37,10 +39,10 @@ public class MapControllerTests {
 
     @Before
     public void init() {
-        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Optional);
-        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Optional);
-        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Optional);
-        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAll.put(CardinalDirection.North, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAll.put(CardinalDirection.South, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAll.put(CardinalDirection.West, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAll.put(CardinalDirection.East, Position.CardinalDirectionPermission.Optional);
 
         roomCreator = new RoomCreator(dummySeed,
                 new Player(1, 1, 1, new TurnSystem(new EnemyAI(1))),
@@ -158,9 +160,9 @@ public class MapControllerTests {
         java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirections =
                 mapController.getCardinalDirectionPermissions(new Position(0, 4));
 
-        assertEquals(cardinalDirections.get(Position.CardinalDirection.North), Position.CardinalDirectionPermission.Mandatory);
-        assertEquals(cardinalDirections.get(Position.CardinalDirection.South), Position.CardinalDirectionPermission.Optional);
-        assertEquals(cardinalDirections.get(Position.CardinalDirection.West), Position.CardinalDirectionPermission.Disallowed);
-        assertEquals(cardinalDirections.get(Position.CardinalDirection.East), Position.CardinalDirectionPermission.Disallowed);
+        assertEquals(cardinalDirections.get(CardinalDirection.North), Position.CardinalDirectionPermission.Mandatory);
+        assertEquals(cardinalDirections.get(CardinalDirection.South), Position.CardinalDirectionPermission.Optional);
+        assertEquals(cardinalDirections.get(CardinalDirection.West), Position.CardinalDirectionPermission.Disallowed);
+        assertEquals(cardinalDirections.get(CardinalDirection.East), Position.CardinalDirectionPermission.Disallowed);
     }
 }
