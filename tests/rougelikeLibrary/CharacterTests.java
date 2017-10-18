@@ -137,14 +137,11 @@ public class CharacterTests {
 		assertEquals("0 0 0", c.toString());
 	}
 	@Test
-	public void testEnemyDropItemOnDeath() {
+	public void testCharacterDeath() {
 		
-		Room r = new Room(new Position(0,0), new RoomSpace(10,10));
-		r.addEnemy(new Position(2,2), new Enemy(1,1,1, new TurnSystem(new EnemyAI(2))));
-		Enemy e = null;
-		
-		assertEquals("1 1 1", e.toString());
-		
-		
+		Character c = new Character(1, 1, 1, new Position(1,2), new TurnSystem(new EnemyAI(1)));
+		c.takeDamage(1);
+		assertTrue(c.isDead());
 	}
+	
 }

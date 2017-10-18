@@ -11,7 +11,7 @@ public class Character implements Mappable {
 	private int damage;
 	private TurnSystem ts;
 	private Inventory inv;
-	private boolean isDead;
+	private boolean isDead = true;
 
 	public Character(int speed, int health, int damage, TurnSystem ts) {
 		if (speed < 0 || health < 0 || damage < 0) {
@@ -57,8 +57,9 @@ public class Character implements Mappable {
 			throw new IllegalArgumentException("Can't take negative damage.");
 		}
 		health -= damage;
-		if (health < 0) {
+		if (health <= 0) {
 			health = 0;
+			isDead = true;
 		}
 	}
 
@@ -69,7 +70,9 @@ public class Character implements Mappable {
 	public int getHealth() {
 		return health;
 	}
-
+	public void setHealth(int h) {
+		health = h;
+	}
 	public int getDamage() {
 		return damage;
 	}
@@ -90,6 +93,10 @@ public class Character implements Mappable {
 	}
 	public boolean isDead() {
 		return isDead;
+	}
+	public void kill() {
+		isDead = true;
+		health = 0;
 	}
 	public String toString() {
 		
