@@ -25,7 +25,6 @@ public class EnemyTests {
 		assertEquals("1 0 1", e.toString());
 		assertTrue(e.isDead());
 		List<Mappable> items = r.getFromPosition(new Position(2,2));
-		System.out.println(items);
 		Inventory inv = new Inventory();
 		for(Mappable m : items) {
 			
@@ -34,8 +33,7 @@ public class EnemyTests {
 				inv.add(i);
 			}
 		}
-		assertEquals("test +100% damage\n", inv.toString());
-		
+		assertEquals("test +100% damage\n", inv.toString());		
 	}
 	@Test
 	public void testEnemyDropsNoItemsOnDeath() {
