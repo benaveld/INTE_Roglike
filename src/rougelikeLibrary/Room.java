@@ -176,7 +176,7 @@ public class Room {
     /**
      * Adds an enemy to the room space
      * @param position the position for the enemy. If there's already an enemy at the position, it will be overwritten.
-     * @param enemy the item to add.
+     * @param enemy the enemy to add.
      */
     public void addEnemy(Position position, Character enemy) {
         List<Mappable> mappables = getFromPosition(position);
@@ -189,6 +189,7 @@ public class Room {
             }
         }
         mappables.add(enemy);
+        enemy.setPosition(position);
     }
 
 
@@ -286,6 +287,7 @@ public class Room {
         Position playerPosition = getPlayerPosition();
         if (playerPosition == null) {
             getFromPosition(position).add(player);
+            player.setPosition(position);
         } else {
             moveCharacter(playerPosition, position);
         }
@@ -357,6 +359,8 @@ public class Room {
             if (mappable instanceof Character) {
                 mappablesTo.add(mappable);
                 fromIterator.remove();
+
+                ((Character) mappable).setPosition(toPosition);
 
                 roomMap.put(fromPosition, mappablesFrom);
                 roomMap.put(toPosition, mappablesTo);

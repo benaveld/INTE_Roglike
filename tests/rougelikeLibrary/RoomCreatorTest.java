@@ -113,7 +113,10 @@ public class RoomCreatorTest {
         Room room = new Room(stdWorldPosition, new RoomSpace(32, 32), roomMap);
         assertTrue(room.getRoomMap().isEmpty());
 
+        assertEquals(((Character) mappable).getPosition(), new Position(0, 0));
         roomCreator.addToRoom(roomMap, stdPosition, mappable);
+        assertEquals(room.getCharacter(stdPosition).getPosition(), stdPosition);
+
         List<Mappable> mappables = room.getFromPosition(stdPosition);
         room.existType(mappables, Enemy.class);
     }

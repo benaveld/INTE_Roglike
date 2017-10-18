@@ -461,6 +461,29 @@ public class RoomTest {
         stdRoom.moveCharacter(toPosition2, fromPosition3);
     }
 
+
+    @Test
+    public void moveCharacterUpdatePosition() throws Exception {
+        Position position1 = new Position(234, 234);
+        Position position2 = new Position(34, 23);
+        Position position3 = new Position(24, 24);
+        Position position4 = new Position(23, 34);
+
+        stdRoom.setPlayer(position1, stdPlayer);
+        // Character at position1 has internally its position set to position1
+        assertEquals(stdRoom.getCharacter(position1).getPosition(), position1);
+
+        stdRoom.addEnemy(position3, stdEnemy);
+        assertEquals(stdRoom.getCharacter(position3).getPosition(), position3);
+
+        stdRoom.moveCharacter(position3, position4);
+        assertEquals(stdRoom.getCharacter(position4).getPosition(), position4);
+
+        stdRoom.moveCharacter(position1, position2);
+        assertEquals(stdRoom.getCharacter(position2).getPosition(), position2);
+    }
+
+
     @Test
     public void getCharacter() throws Exception {
         stdRoom.addEnemy(stdPosition, stdPlayer);

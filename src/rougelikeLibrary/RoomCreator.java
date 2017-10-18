@@ -55,6 +55,7 @@ public class RoomCreator {
         // Player can't be placed on enemies at start
         roomMap.remove(playerPosition);
         room.setPlayer(playerPosition, player);
+        player.setPosition(playerPosition);
 
         addToRoom(roomMap, playerPosition, player);
 
@@ -154,6 +155,10 @@ public class RoomCreator {
             roomMap.put(position, mappableList);
         }
         mappableList.add(mappableType);
+
+        if (mappableType instanceof Character) {
+            ((Character) mappableType).setPosition(position);
+        }
     }
 
 
