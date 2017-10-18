@@ -60,9 +60,6 @@ public class Room {
     }
 
 
-    // @TODO implement move(pos to pos)
-
-
     /**
      * Plays this room.
      * @return the new direction for next room to enter.
@@ -71,10 +68,6 @@ public class Room {
         return Position.CardinalDirection.North;
     }
   
-  
-    public boolean existPlayer(Position position) {
-        return playerPosition.equals(position);
-
 
     /**
      * Get mappables for the position
