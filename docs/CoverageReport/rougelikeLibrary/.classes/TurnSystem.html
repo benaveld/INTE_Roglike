@@ -1,0 +1,218 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TurnSystem</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">rougelikeLibrary</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TurnSystem (rougelikeLibrary)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TurnSystem</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (5/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    70,7%
+  </span>
+  <span class="absValue">
+    (41/ 58)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TurnSystem$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    85,7%
+  </span>
+  <span class="absValue">
+    (6/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71,2%
+  </span>
+  <span class="absValue">
+    (42/ 59)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package rougelikeLibrary;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.util.HashMap;
+<i>4</i>&nbsp;import java.util.List;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import rougelikeLibrary.Position.CardinalDirection;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;public class TurnSystem {
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;	private IO io;
+<i>11</i>&nbsp;
+<b class="fc"><i>12</i>&nbsp;	public TurnSystem(IO io) {</b>
+<b class="fc"><i>13</i>&nbsp;		this.io = io;</b>
+<b class="fc"><i>14</i>&nbsp;	}</b>
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;	public boolean startTurn(Character character, int moves, Room room) {
+<i>17</i>&nbsp;
+<b class="fc"><i>18</i>&nbsp;		RoomSpace rs = room.getRoomSpace();</b>
+<b class="fc"><i>19</i>&nbsp;		Position newPosition = getnewPosition(character, io.requestMove(room,character));</b>
+<b class="fc"><i>20</i>&nbsp;		if (newPosition == null || !newPosIsInsideRoomSpace(newPosition, rs)) {</b>
+<b class="fc"><i>21</i>&nbsp;			int safetyCount = 0;</b>
+<i>22</i>&nbsp;			do {
+<b class="fc"><i>23</i>&nbsp;				newPosition = getnewPosition(character, io.requestMoveAfterFail(room,character));</b>
+<b class="fc"><i>24</i>&nbsp;				if (newPosition != null &amp;&amp; newPosIsInsideRoomSpace(newPosition, rs)) {</b>
+<b class="fc"><i>25</i>&nbsp;					break;</b>
+<i>26</i>&nbsp;				} else {
+<b class="fc"><i>27</i>&nbsp;					safetyCount++;</b>
+<i>28</i>&nbsp;				}
+<b class="fc"><i>29</i>&nbsp;			} while (safetyCount &lt; 20);</b>
+<b class="fc"><i>30</i>&nbsp;			if (safetyCount &gt;= 20) {</b>
+<b class="fc"><i>31</i>&nbsp;				return false;</b>
+<i>32</i>&nbsp;			}
+<i>33</i>&nbsp;		}
+<b class="fc"><i>34</i>&nbsp;		if (room.getFromPosition(newPosition).size() == 0) {</b>
+<i>35</i>&nbsp;			// Room.Move(character.getPos(),newPosition)
+<b class="nc"><i>36</i>&nbsp;		} else if (doorIsInMappable(character, room.getFromPosition(newPosition), newPosition)) {</b>
+<b class="nc"><i>37</i>&nbsp;			return true;</b>
+<i>38</i>&nbsp;		}
+<b class="fc"><i>39</i>&nbsp;		if (moves &gt; 0) {</b>
+<b class="fc"><i>40</i>&nbsp;			moves--;</b>
+<b class="fc"><i>41</i>&nbsp;			return startTurn(character, moves, room);</b>
+<i>42</i>&nbsp;		}
+<b class="fc"><i>43</i>&nbsp;		return false;</b>
+<i>44</i>&nbsp;	}
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;	private boolean newPosIsInsideRoomSpace(Position pos, RoomSpace rs) {
+<b class="fc"><i>47</i>&nbsp;		if (pos.getX() &lt; rs.getWidth() &amp;&amp; pos.getX() &gt;= 0 &amp;&amp; pos.getY() &lt; rs.getHeight() &amp;&amp; pos.getY() &gt;= 0) {</b>
+<b class="fc"><i>48</i>&nbsp;			return true;</b>
+<i>49</i>&nbsp;		}
+<b class="fc"><i>50</i>&nbsp;		return false;</b>
+<i>51</i>&nbsp;	}
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;	private boolean doorIsInMappable(Character character, List&lt;Mappable&gt; list, Position newPosition) {
+<b class="nc"><i>54</i>&nbsp;		boolean foundDoor = false;</b>
+<b class="nc"><i>55</i>&nbsp;		boolean moveToNewSpot = false;</b>
+<b class="nc"><i>56</i>&nbsp;		for (Mappable m : list) {</b>
+<b class="nc"><i>57</i>&nbsp;			if (m instanceof Item) {</b>
+<b class="nc"><i>58</i>&nbsp;				character.getInventory().add((Item) m);</b>
+<b class="nc"><i>59</i>&nbsp;			} else if (m instanceof Character) {</b>
+<b class="nc"><i>60</i>&nbsp;				Character enemy = (Character) m;</b>
+<b class="nc"><i>61</i>&nbsp;				enemy.takeDamage(character.getDamage());</b>
+<b class="nc"><i>62</i>&nbsp;				moveToNewSpot = false;</b>
+<b class="nc"><i>63</i>&nbsp;			} else if (m instanceof Door) {</b>
+<b class="nc"><i>64</i>&nbsp;				foundDoor = true;</b>
+<i>65</i>&nbsp;			}
+<b class="nc"><i>66</i>&nbsp;		}</b>
+<b class="nc"><i>67</i>&nbsp;		if (moveToNewSpot) {</b>
+<i>68</i>&nbsp;			// Room.Move(character.getPos(),newPosition)
+<i>69</i>&nbsp;		}
+<b class="nc"><i>70</i>&nbsp;		return foundDoor;</b>
+<i>71</i>&nbsp;	}
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;	public void move(Character character, Position newPosition, HashMap&lt;Position, Object&gt; room) {
+<b class="fc"><i>74</i>&nbsp;		room.remove(character.getPosition());</b>
+<b class="fc"><i>75</i>&nbsp;		room.put(newPosition, character);</b>
+<b class="fc"><i>76</i>&nbsp;		character.setPosition(newPosition);</b>
+<b class="fc"><i>77</i>&nbsp;	}</b>
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;	private Position getnewPosition(Character character, CardinalDirection dir) {
+<b class="fc"><i>80</i>&nbsp;		Position newPosition = character.getPosition();</b>
+<i>81</i>&nbsp;		try {
+<b class="fc"><i>82</i>&nbsp;			switch (dir) {</b>
+<i>83</i>&nbsp;			case North:
+<b class="fc"><i>84</i>&nbsp;				newPosition.translate(0, -1);</b>
+<b class="fc"><i>85</i>&nbsp;				break;</b>
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;			case West:
+<b class="fc"><i>88</i>&nbsp;				newPosition.translate(-1, 0);</b>
+<b class="fc"><i>89</i>&nbsp;				break;</b>
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;			case South:
+<b class="fc"><i>92</i>&nbsp;				newPosition.translate(0, 1);</b>
+<b class="fc"><i>93</i>&nbsp;				break;</b>
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;			case East:
+<b class="fc"><i>96</i>&nbsp;				newPosition.translate(1, 0);</b>
+<b class="fc"><i>97</i>&nbsp;				break;</b>
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;			default:
+<b class="nc"><i>100</i>&nbsp;				throw new RuntimeException(&quot;IO return a invalid direction.&quot;);</b>
+<i>101</i>&nbsp;			}
+<b class="fc"><i>102</i>&nbsp;		} catch (Exception e) {</b>
+<b class="fc"><i>103</i>&nbsp;			System.out.println(e);</b>
+<b class="fc"><i>104</i>&nbsp;			return null;</b>
+<b class="fc"><i>105</i>&nbsp;		}</b>
+<b class="fc"><i>106</i>&nbsp;		return newPosition;</b>
+<i>107</i>&nbsp;	}
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-10-18 17:06</div>
+</div>
+</body>
+</html>
