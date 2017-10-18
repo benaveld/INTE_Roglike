@@ -1,9 +1,6 @@
 package rougelikeLibrary;
 
 
-import java.util.HashMap;
-import java.util.List;
-
 public class Character implements Mappable {
 	private Position pos;
 	private int speed;
