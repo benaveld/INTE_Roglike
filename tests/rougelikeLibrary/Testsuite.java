@@ -5,20 +5,23 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	CharacterTests.class,
-	EnemyTests.class,
-	GameControllerTests.class,
-	GameTest.class,
-	InventoryItemTests.class,
-	IOTests.class,
-	MapControllerTests.class,
-	PlayerTests.class,
-	PositionTests.class,
-	RoomCreatorTests.class,
-	RoomSpaceTests.class,
-	RoomTests.class,
-	TurnSystemTests.class
+		CharacterTests.class,
+		EnemyTests.class,
+		GameTest.class,
+		InventoryItemTests.class,
+		IOTests.class,
+		PlayerTests.class,
+		PositionTests.class,
+		TurnSystemTests.class,
+		RoomTest.class,
+		RoomSpaceTests.class,
+		MapControllerTest.class,
+		RoomCreatorTest.class,
+		MappableTypeWrapperTest.class,
+		RoomCreatorBuilderTest.class
 })
 public class Testsuite {
 
 }
+
+
