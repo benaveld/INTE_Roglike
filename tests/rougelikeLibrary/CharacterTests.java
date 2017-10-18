@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
+import rougelikeLibrary.Position.CardinalDirection;
+
 public class CharacterTests {
 	
 	@Test
@@ -112,8 +114,11 @@ public class CharacterTests {
 	@Test
 	public void testCharacterStartTurnReturnTrue()
 	{
-		Character c = new Character(5, 0, 0, new Position(1,2), new TurnSystem(new EnemyAI(1)));
+		Character c = new Character(5, 0, 0, new Position(0,0), new TurnSystem(new EnemyAI(1)));
 		Room r = new Room(new Position(0,0), new RoomSpace(3, 3));
+		r.setPlayer(c.getPosition(), c);
+		r.addDoor(CardinalDirection.North);
+		r.addDoor(CardinalDirection.West);
 		assertTrue(c.startTurn(r));
 	}
 	@Test

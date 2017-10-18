@@ -10,15 +10,16 @@ import org.junit.runners.Suite;
 		GameTest.class,
 		InventoryItemTests.class,
 		IOTests.class,
+		MapControllerTest.class,
+		MappableTypeWrapperTest.class,
 		PlayerTests.class,
 		PositionTests.class,
-		TurnSystemTests.class,
-		RoomTest.class,
-		RoomSpaceTests.class,
-		MapControllerTest.class,
+		RoomCreatorBuilderTest.class,
 		RoomCreatorTest.class,
-		MappableTypeWrapperTest.class,
-		RoomCreatorBuilderTest.class
+		RoomSpaceTests.class,
+		RoomTest.class,
+		TurnSystemTests.class,
+		WallWalkerAITests.class
 })
 public class Testsuite {
 
