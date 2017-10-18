@@ -3,12 +3,14 @@ package rougelikeLibrary;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Handles logic for creating and populating new rooms.
  * Every room contains x Characters, Items and doors.
  */
 public class RoomCreator {
+    private static final Logger log = Logger.getLogger(Room.class.getName());
     private final long seed;
     private final Character player;
     private final RoomSpace roomSpace;
@@ -86,12 +88,13 @@ public class RoomCreator {
     }
 
 
+    // @TODO private
     /**
      * Adds type to a position in room based on probability, minimum quantity and not exceeding maximum quantity
      * @param mappableTypeWrapper information needed to create a type
      * @param roomMap the room
      */
-    private void addTypeToRoom(MappableTypeWrapper mappableTypeWrapper, Map<Position, List<Mappable>> roomMap) {
+    public void addTypeToRoom(MappableTypeWrapper mappableTypeWrapper, Map<Position, List<Mappable>> roomMap) {
         // Loop until given min and max quantity of type is completed.
         while (true) {
             // Iterate all positions in a room
@@ -102,23 +105,30 @@ public class RoomCreator {
                         addToRoom(roomMap, new Position(x, y), createType(mappableTypeWrapper));
                         mappableTypeWrapper.addQuantity();
 
-                        if (mappableTypeWrapper.isMinQuantity() && !mappableTypeWrapper.isMaxQuantity()) {
+                        log.info("probability create room x: " + x + ", y: " + y + ". mappqnty: " + mappableTypeWrapper.currentQuantity);
+
+                        if (mappableTypeWrapper.isMaxQuantity()) {
                             return;
                         }
                     }
                 }
             }
+            log.info("room looped");
+            if (mappableTypeWrapper.isMinQuantity()) {
+                return;
+            }
         }
     }
 
 
+    // @TODO private
     /**
      * Creates a mappable type
      * @param mappableTypeWrapper the wrapper that holds information necessary to create a mappable type
      * @return a mappable type
      * @throws IllegalArgumentException if arguments is illegal
      */
-    private Mappable createType(MappableTypeWrapper mappableTypeWrapper) throws IllegalArgumentException {
+    public Mappable createType(MappableTypeWrapper mappableTypeWrapper) throws IllegalArgumentException {
         try {
             Constructor<?> constructor = mappableTypeWrapper.classType.getConstructor(mappableTypeWrapper.parameterTypes);
             return (Mappable) constructor.newInstance(mappableTypeWrapper.parameterValues);
@@ -129,13 +139,14 @@ public class RoomCreator {
     }
 
 
+    // @TODO private
     /**
      * Adds a mappable type to a position in room map
      * @param roomMap the map that contains all lists of mappables per position
      * @param position the position in map
      * @param mappableType the mappable type to add to the position
      */
-    private void addToRoom(Map<Position, List<Mappable>> roomMap, Position position, Mappable mappableType) {
+    public void addToRoom(Map<Position, List<Mappable>> roomMap, Position position, Mappable mappableType) {
         List<Mappable> mappableList = roomMap.get(position);
 
         if (mappableList == null) {
@@ -146,7 +157,15 @@ public class RoomCreator {
     }
 
 
-    private void addDoors(Room room, java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissions) {
+    // @TODO private
+    /**
+     * Adds a door in a specific cardinal direction based on cardinal direction permissions.
+     * The permissions dictate if it is mandatory, optional or disallowed.
+     * If it's optional it's probability based if the door is created.
+     * @param room the room to add doors to
+     * @param cardinalDirectionPermissions the permissions that dictates optional (i.e. probability based), mandatory or disallowed.
+     */
+    public void addDoors(Room room, java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissions) {
         Map<Position, List<Mappable>> roomMap = room.getRoomMap();
 
         if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.North))) {
@@ -164,13 +183,14 @@ public class RoomCreator {
     }
 
 
+    // @TODO private
     /**
-     * Calculates the choice based on the permissions.
+     * Calculates the choice based on the permissions. Optional is roughly 50% probability for either true/false.
      * @param cardinalDirectionPermission the permissions to calculate from.
      * @return true if permission is mandatory or if random returns true on optional permission.
-     *      If a permission is missing or is null, false will be returned.
+     * If a permission is missing or is null, false will be returned.
      */
-    private boolean getCardinalDirectionPermissionChoice(Position.CardinalDirectionPermission cardinalDirectionPermission) {
+    public boolean getCardinalDirectionPermissionChoice(Position.CardinalDirectionPermission cardinalDirectionPermission) {
         boolean choice = false;
 
         switch (cardinalDirectionPermission) {
@@ -192,15 +212,15 @@ public class RoomCreator {
 
     /**
      * Returns a boolean value based on the probability given as argument to get a random number in the span.
-     * @param percentProbability the probability in percent. Between 0 and 100 exclusive.
+     * @param percentProbability the probability in percent. 0 < probability <= 100.
      * @return a boolean value based on the probability
-     * @throws IllegalArgumentException if probability is not between 0 and 100 exclusive.
+     * @throws IllegalArgumentException if probability is not 0 < probability <= 100.
      */
-    private boolean getProbabilityBoolean(int percentProbability) throws IllegalArgumentException {
-        if (percentProbability < 1 || percentProbability > 99) {
+    public boolean getProbabilityBoolean(int percentProbability) throws IllegalArgumentException {
+        if (percentProbability < 1 || percentProbability > 100) {
             throw new IllegalArgumentException("Probability must be between 0 and 100 exclusive.");
         }
-        return random.nextDouble() <= (percentProbability / 100);
+        return random.nextDouble() <= (percentProbability / 100d);
     }
 
 
@@ -208,9 +228,9 @@ public class RoomCreator {
      * Get a random position in roomSpace
      * @return random position
      */
-    private Position getRandomRoomPosition() {
-        int x = random.nextInt(roomSpace.getWidth() + 1);
-        int y = random.nextInt(roomSpace.getHeight() + 1);
+    public Position getRandomRoomPosition() {
+        int x = random.nextInt(roomSpace.getWidth());
+        int y = random.nextInt(roomSpace.getHeight());
         return new Position(x, y);
     }
 }
