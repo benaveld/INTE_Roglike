@@ -184,6 +184,16 @@ public class RoomTests {
             assertNotNull(mappable);
         }
     }
+    @Test
+    public void testRoomEquals() {
+    	
+    	Room r0 = new Room(new Position(dummyX, dummyY), new RoomSpace(64,32));
+    	Room r1 = new Room(new Position(dummyX, dummyY), new RoomSpace(32,64));
+    	Room r2 = new Room(new Position(dummyX, dummyY), new RoomSpace(32,32));
+    	Room r3 = new Room(new Position(dummyX, dummyY), new RoomSpace(32,32));
+    	
+    	assertTrue(r0.equals(r1));
+    }
 
 
 }

@@ -72,7 +72,7 @@ public class Room {
   
     public boolean existPlayer(Position position) {
         return playerPosition.equals(position);
-
+    }
 
     /**
      * Get mappables for the position
@@ -157,17 +157,21 @@ public class Room {
      * @param position the position for the enemy. If there's already an enemy at the position, it will be overwritten.
      * @param enemy the item to add.
      */
-    public void addEnemy(Position position, Character enemy) {
+    public void addEnemy(Position position, Enemy enemy) {
         List<Mappable> mappables = getFromPosition(position);
         Iterator mappablesIterator = mappables.iterator();
-
-        while (mappablesIterator.hasNext()) {
-            Mappable mappable = (Mappable) mappablesIterator.next();
+        enemy.setPosition(position);
+        enemy.setRoom(this);	
+      
+    	while (mappablesIterator.hasNext()) {
+    		Mappable mappable = (Mappable) mappablesIterator.next();
             if (mappable instanceof Enemy) {
-                mappablesIterator.remove();
+            	mappablesIterator.remove();
             }
-        }
-        mappables.add(enemy);
+    	}
+    	mappables.add(enemy);
+        
+        	
     }
 
 
@@ -259,10 +263,7 @@ public class Room {
      * @param position to check for
      * @return true if there is otherwise false
      */
-    public boolean existPlayer(Position position) {
-        return playerPosition == position;
-    }
-
+    
 
     /**
      * Get the player
@@ -270,5 +271,17 @@ public class Room {
      */
     public Character getPlayer() {
         return player;
+    }
+    public boolean equals(Object o) {
+    	if(o instanceof Room) {
+    		Room other = (Room)o;
+    		if(other.position.equals(this.position)) {
+    			return true;
+    		}
+    		return false;
+    	}
+    	else {
+    	return false;
+    	}
     }
 }
