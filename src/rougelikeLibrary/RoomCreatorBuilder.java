@@ -9,8 +9,7 @@ import java.util.stream.Stream;
 public class RoomCreatorBuilder {
     private long seed;
     private Character player;
-    private int width;
-    private int height;
+    private RoomSpace roomSpace;
 
     private List<MappableTypeWrapper> mappableTypes = new ArrayList<>();
 
@@ -42,18 +41,17 @@ public class RoomCreatorBuilder {
 
 
     /**
-     * Sets the world dimension
-     * @param width the width of the world
-     * @param height the height of the world
+     * Sets the dimension for all rooms
+     * @param width the width of the room
+     * @param height the height of the room
      * @return reference to this RoomCreatorBuilder
      * @throws IllegalArgumentException if world size is not greater than zero on width and height.
      */
-    public RoomCreatorBuilder setWorldDimension(int width, int height) throws IllegalArgumentException {
+    public RoomCreatorBuilder setRoomSpace(int width, int height) throws IllegalArgumentException {
         if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException("Width and height must be greater than zero.");
         }
-        this.width = width;
-        this.height = height;
+        roomSpace = new RoomSpace(width, height);
         return this;
     }
 
@@ -64,10 +62,10 @@ public class RoomCreatorBuilder {
      * @throws IllegalAccessError if not all of the mandatory parameters is set.
      */
     public RoomCreator build() throws IllegalAccessError {
-        if (Stream.of(seed, player, width, height).anyMatch(argument -> argument == null)) {
-            throw new IllegalAccessError("Mandatory fields: seed, player, width and height is not set.");
+        if (Stream.of(seed, player, roomSpace).anyMatch(argument -> argument == null)) {
+            throw new IllegalAccessError("Mandatory fields: seed, player, roomSpace is not set.");
         }
-        return new RoomCreator(seed, player, mappableTypes, new RoomSpace(width, height));
+        return new RoomCreator(seed, player, mappableTypes, roomSpace);
     }
 
 
@@ -79,11 +77,11 @@ public class RoomCreatorBuilder {
      * @param minItems minimum amount of items in room
      * @param maxItems maximum amount of items in room
      * @param probability the probability to create this item
-     * @throws IllegalArgumentException if io is null or the number of parameters or value in parameterTypes or parameterValues is wrong.
+     * @throws IllegalArgumentException if roomspaace is invalid or the number of parameters or value in parameterTypes or parameterValues is wrong.
      */
-    public void AddItem(Class<? extends Item> itemClass, Class<?> [] parameterTypes, Object [] parameterValues, int minItems, int maxItems, int probability)
+    public void addItem(Class<? extends Item> itemClass, Class<?> [] parameterTypes, Object [] parameterValues, int minItems, int maxItems, int probability)
             throws IllegalArgumentException {
-        if (width * height < 1) {
+        if (roomSpace == null || roomSpace.getWidth() < 1 || roomSpace.getHeight() < 1) {
             throw new IllegalArgumentException("Can't add items before world dimension is set");
         }
         testType(itemClass, parameterTypes, parameterValues);
@@ -103,10 +101,10 @@ public class RoomCreatorBuilder {
      * @param probability the probability to create this enemy
      * @throws IllegalArgumentException if io is null or the number of parameters or value in parameterTypes or parameterValues is wrong.
      */
-    public void AddEnemy(Class<? extends Character> enemyClass, Class<?> [] parameterTypes, Object [] parameterValues, IO io, int minEnemies, int maxEnemies, int probability)
+    public void addEnemy(Class<? extends Character> enemyClass, Class<?> [] parameterTypes, Object [] parameterValues, IO io, int minEnemies, int maxEnemies, int probability)
             throws IllegalArgumentException {
-        if (width * height < 1) {
-            throw new IllegalArgumentException("Can't add items before world dimension is set");
+        if (roomSpace == null || roomSpace.getWidth() < 1 || roomSpace.getHeight() < 1) {
+            throw new IllegalArgumentException("Can't add enemies before world dimension is set");
         }
 
         if (io == null) {
@@ -128,12 +126,12 @@ public class RoomCreatorBuilder {
     private void testMinMax(int min, int max) throws IllegalArgumentException {
         if ((min < 0) ||
             (min > max) ||
-            (min > (width * height))) {
+            (min > (roomSpace.getWidth() * roomSpace.getHeight()))) {
             throw new IllegalArgumentException("Illegal min value for enemies.");
         }
         if ((max < 0) ||
             (max < min) ||
-            (max > (width * height))) {
+            (max > (roomSpace.getWidth() * roomSpace.getHeight()))) {
             throw new IllegalArgumentException("Illegal max value for enemies.");
         }
     }

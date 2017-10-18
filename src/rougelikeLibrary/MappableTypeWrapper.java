@@ -11,7 +11,7 @@ class MappableTypeWrapper {
     int minQuantity;
     int maxQuantity;
     int probability;
-    private int currentQuantity;
+    int currentQuantity;
 
 
     MappableTypeWrapper(Class classType, Class [] parameterTypes, Object [] parameterValues, int minQuantity, int maxQuantity, int probability) {

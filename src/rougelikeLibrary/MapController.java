@@ -36,7 +36,11 @@ public class MapController {
      * Plays current room.
      * @return next entered room coordinate as WorldPosition.
      */
-    public Position playCurrentRoom() {
+    public Position playCurrentRoom() throws IllegalArgumentException {
+        if (currentRoom == null) {
+            throw new IllegalArgumentException("No current room available.");
+        }
+
         Position.CardinalDirection nextRoomDirection = currentRoom.play();
         Position nextRoomPosition = currentRoom.getPosition().getNewPositionFromCardinalDirection(nextRoomDirection);
         return nextRoomPosition;

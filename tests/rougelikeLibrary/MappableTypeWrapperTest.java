@@ -1,10 +1,10 @@
 package rougelikeLibrary;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
-public class MappableTypeWrapperTests {
+import static org.junit.Assert.*;
+
+public class MappableTypeWrapperTest {
 
     @Test
     public void testQuantityItem() {
