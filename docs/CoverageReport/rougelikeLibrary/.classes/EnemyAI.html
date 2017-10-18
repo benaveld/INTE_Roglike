@@ -1,0 +1,121 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: EnemyAI</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">rougelikeLibrary</a> ]
+</div>
+
+<h1>Coverage Summary for Class: EnemyAI (rougelikeLibrary)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EnemyAI</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/ 12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package rougelikeLibrary;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.util.Random;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import rougelikeLibrary.Position.CardinalDirection;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;public class EnemyAI extends IO {
+<i>8</i>&nbsp;
+<b class="fc"><i>9</i>&nbsp;	private CardinalDirection lastDirection = null;</b>
+<i>10</i>&nbsp;	private Random r;
+<i>11</i>&nbsp;	
+<i>12</i>&nbsp;	public EnemyAI(int seed)
+<b class="fc"><i>13</i>&nbsp;	{</b>
+<b class="fc"><i>14</i>&nbsp;		r = new Random(seed);</b>
+<b class="fc"><i>15</i>&nbsp;	}</b>
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;	@Override
+<i>18</i>&nbsp;	public CardinalDirection requestMove(Room room, Character c) {
+<b class="fc"><i>19</i>&nbsp;		return calculateNextMove(room);</b>
+<i>20</i>&nbsp;	}
+<i>21</i>&nbsp;	
+<i>22</i>&nbsp;	@Override
+<i>23</i>&nbsp;	public CardinalDirection requestMoveAfterFail(Room room, Character c)
+<i>24</i>&nbsp;	{
+<b class="fc"><i>25</i>&nbsp;		CardinalDirection dir = null;</b>
+<i>26</i>&nbsp;		do
+<i>27</i>&nbsp;		{
+<b class="fc"><i>28</i>&nbsp;			dir = calculateNextMove(room);</b>
+<b class="fc"><i>29</i>&nbsp;		} while (dir == lastDirection);</b>
+<b class="fc"><i>30</i>&nbsp;		lastDirection = dir;</b>
+<b class="fc"><i>31</i>&nbsp;		return dir;</b>
+<i>32</i>&nbsp;	}
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;	protected CardinalDirection calculateNextMove(Room room) {
+<b class="fc"><i>35</i>&nbsp;		int i = r.nextInt(CardinalDirection.values().length);</b>
+<b class="fc"><i>36</i>&nbsp;		return CardinalDirection.values()[i];</b>
+<i>37</i>&nbsp;	}
+<i>38</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-10-18 17:06</div>
+</div>
+</body>
+</html>
