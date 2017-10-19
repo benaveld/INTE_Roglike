@@ -43,7 +43,10 @@ public class GameTest {
     @Before
     public void init() {
         java.util.Map<CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissions = new HashMap<>();
-        cardinalDirectionPermissions.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissions.put(CardinalDirection.North, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissions.put(CardinalDirection.South, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissions.put(CardinalDirection.East, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissions.put(CardinalDirection.West, Position.CardinalDirectionPermission.Optional);
 
         roomCreator = new RoomCreator(
                 roomCreatorSeed,
@@ -52,7 +55,7 @@ public class GameTest {
                 new RoomSpace(32, 32));
 
         centeredPosition = new Position(Integer.MAX_VALUE / 2, Integer.MAX_VALUE / 2);
-        mapController = new MapController(roomCreator.createInitialRoom(centeredPosition));
+        mapController = new MapController(roomCreator.createInitialRoom(centeredPosition, cardinalDirectionPermissions));
     }
 
 

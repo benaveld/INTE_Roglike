@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import javafx.geometry.Pos;
 import org.junit.*;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class MapControllerTest {
     private MapController mapController;
     private java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissionsAll = new HashMap<>();
     private java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissions = new HashMap<>();
+    private Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissionsAllOptional = new HashMap<>();
 
     Item [] items = {
             new Item("fast shoes", 12, Item.Effect.SPEED),
@@ -39,6 +41,11 @@ public class MapControllerTest {
     };
 
 
+
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
+
+
     @Before
     public void init() {
         cardinalDirectionPermissionsAll.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Optional);
@@ -50,10 +57,20 @@ public class MapControllerTest {
                 new Player(1, 1, 1, new TurnSystem(new EnemyAI(1))),
                 new ArrayList<MappableTypeWrapper>(),
                 new RoomSpace(32, 32));
-        centerRoom = roomCreator.createInitialRoom(centerWorldPosition);
+
+        cardinalDirectionPermissionsAllOptional.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAllOptional.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAllOptional.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAllOptional.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Optional);
+
+        centerRoom = roomCreator.createInitialRoom(centerWorldPosition, cardinalDirectionPermissionsAllOptional);
         mapController = new MapController(centerRoom);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void constructor() {
+        new MapController(null);
+    }
 
     @Test
     public void playCurrentRoom() throws Exception {
@@ -65,6 +82,11 @@ public class MapControllerTest {
         Room room = new Room(new Position(34, 34), new RoomSpace(12, 12), new HashMap<Position, List<Mappable>>());
         mapController.setCurrentRoom(room);
         assertEquals(mapController.getCurrentRoom(), room);
+
+        try {
+            mapController.setCurrentRoom(null);
+            fail("Expected IllegalArgumentException: current room is null.");
+        } catch (IllegalArgumentException iae) {assertTrue(true); }
     }
 
     @Test
@@ -79,6 +101,9 @@ public class MapControllerTest {
         Room room = new Room(worldPosition, new RoomSpace(32, 32), roomMap);
         mapController.addRoom(room);
         assertEquals(mapController.getRoom(worldPosition), room);
+
+        exception.expect(IllegalArgumentException.class);
+        mapController.addRoom(null);
     }
 
     @Test
@@ -91,9 +116,9 @@ public class MapControllerTest {
     }
 
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void getRoom() throws Exception {
-        addRoom();
+        mapController.getRoom(new Position(0, 0));
     }
 
     @Test
@@ -103,8 +128,12 @@ public class MapControllerTest {
         MapController mapController = new MapController(cRoom);
         Position newPosition = new Position(centerWorldPosition.getX() - 1, centerWorldPosition.getY());
 
-        Map<Position.CardinalDirection, Position.CardinalDirectionPermission> getCardinalDirectionPermissions = mapController.getCardinalDirectionPermissions(newPosition);
-        assertEquals(getCardinalDirectionPermissions.get(Position.CardinalDirection.East), Position.CardinalDirectionPermission.Mandatory);
+        Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissions = mapController.getCardinalDirectionPermissions(newPosition);
+        assertEquals(cardinalDirectionPermissions.get(Position.CardinalDirection.East), Position.CardinalDirectionPermission.Mandatory);
+
+
+        exception.expect(IllegalArgumentException.class);
+        mapController.getCardinalDirectionPermissions(centerWorldPosition);
     }
 
     @Test
@@ -219,4 +248,15 @@ public class MapControllerTest {
         assertEquals(cardinalDirections.get(Position.CardinalDirection.West), Position.CardinalDirectionPermission.Disallowed);
         assertEquals(cardinalDirections.get(Position.CardinalDirection.East), Position.CardinalDirectionPermission.Disallowed);
     }
+
+
+    @Test
+    public void getOppositeCardinalDirection() {
+        assertEquals(mapController.getOppositeCardinalDirection(Position.CardinalDirection.North), Position.CardinalDirection.South);
+        assertEquals(mapController.getOppositeCardinalDirection(Position.CardinalDirection.South), Position.CardinalDirection.North);
+        assertEquals(mapController.getOppositeCardinalDirection(Position.CardinalDirection.West), Position.CardinalDirection.East);
+        assertEquals(mapController.getOppositeCardinalDirection(Position.CardinalDirection.East), Position.CardinalDirection.West);
+    }
+
+
 }
