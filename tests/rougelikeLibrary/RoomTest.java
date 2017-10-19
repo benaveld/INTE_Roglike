@@ -503,6 +503,7 @@ public class RoomTest {
     public void getCharacter() throws Exception {
         stdRoom.addItem(stdPosition, item1);
         assertEquals(stdRoom.getCharacter(stdPosition), null);
+
         stdRoom.addEnemy(stdPosition, stdEnemy);
         assertEquals(stdRoom.getCharacter(stdPosition), stdEnemy);
         stdRoom.addItem(new Position(123, 123), item1);

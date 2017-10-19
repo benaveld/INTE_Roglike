@@ -257,4 +257,5 @@ public class MapControllerTest {
         assertEquals(mapController.getOppositeCardinalDirection(Position.CardinalDirection.West), Position.CardinalDirection.East);
         assertEquals(mapController.getOppositeCardinalDirection(Position.CardinalDirection.East), Position.CardinalDirection.West);
     }
+
 }
