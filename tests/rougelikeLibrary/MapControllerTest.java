@@ -139,7 +139,7 @@ public class MapControllerTest {
     @Test
     public void testPlayRoom() {
         Position nextRoomPosition = mapController.playCurrentRoom();
-        assertNotNull(nextRoomPosition);
+        assertNull(nextRoomPosition);
     }
 
 
