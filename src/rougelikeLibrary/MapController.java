@@ -1,6 +1,7 @@
 package rougelikeLibrary;
 
 import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -12,13 +13,7 @@ import java.util.HashMap;
  */
 public class MapController {
     private Room currentRoom;
-
-    private java.util.Map<Position, Room> map = new java.util.HashMap<>();
-
-    /**
-     * Illegal to create a MapController without a room.
-     */
-    private MapController() {}
+    private Map<Position, Room> map = new java.util.HashMap<>();
 
 
     /**
@@ -27,6 +22,9 @@ public class MapController {
      * @param centerRoom the initial room. Preferably in the middle.
      */
     public MapController(Room centerRoom) {
+        if (centerRoom == null) {
+            throw new IllegalArgumentException("No current room available.");
+        }
         currentRoom = centerRoom;
         map.put(currentRoom.getPosition(), currentRoom);
     }
@@ -183,7 +181,7 @@ public class MapController {
      * @param cardinalDirection cardinal direction
      * @return return the opposite direction
      */
-    private Position.CardinalDirection getOppositeCardinalDirection(Position.CardinalDirection cardinalDirection) {
+    public Position.CardinalDirection getOppositeCardinalDirection(Position.CardinalDirection cardinalDirection) {
         Position.CardinalDirection oppositeCardinalDirection = null;
 
         switch (cardinalDirection) {

@@ -47,10 +47,10 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    95,2%
+    98,4%
   </span>
   <span class="absValue">
-    (118/ 124)
+    (124/ 126)
   </span>
 </td>
 </tr>
@@ -85,10 +85,10 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    95,2%
+    98,4%
   </span>
   <span class="absValue">
-    (119/ 125)
+    (125/ 127)
   </span>
 </td>
 </tr>
@@ -160,345 +160,340 @@
 <i>60</i>&nbsp;    }
 <i>61</i>&nbsp;
 <i>62</i>&nbsp;
-<i>63</i>&nbsp;    // @TODO implement move(pos to pos)
-<i>64</i>&nbsp;
-<i>65</i>&nbsp;
-<i>66</i>&nbsp;    /**
-<i>67</i>&nbsp;     * Plays this room.
-<i>68</i>&nbsp;     * @return the new direction for next room to enter.
-<i>69</i>&nbsp;     */
-<i>70</i>&nbsp;    public Position.CardinalDirection play() {
-<b class="fc"><i>71</i>&nbsp;        return Position.CardinalDirection.North;</b>
-<i>72</i>&nbsp;    }
-<i>73</i>&nbsp;  
-<i>74</i>&nbsp;//
-<i>75</i>&nbsp;//    public boolean existPlayer(Position position) {
-<i>76</i>&nbsp;//        return playerPosition.equals(position);
-<i>77</i>&nbsp;
-<i>78</i>&nbsp;
-<i>79</i>&nbsp;    /**
-<i>80</i>&nbsp;     * Get mappables for the position
-<i>81</i>&nbsp;     * @param position the position to get mappables from
-<i>82</i>&nbsp;     * @return a list och mappables
-<i>83</i>&nbsp;     */
-<i>84</i>&nbsp;    public List&lt;Mappable&gt; getFromPosition(Position position) {
-<b class="fc"><i>85</i>&nbsp;        List&lt;Mappable&gt; mappables = roomMap.get(position);</b>
+<i>63</i>&nbsp;    /**
+<i>64</i>&nbsp;     * Plays this room.
+<i>65</i>&nbsp;     * @return the new direction for next room to enter.
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public Position.CardinalDirection play() {
+<b class="fc"><i>68</i>&nbsp;        return Position.CardinalDirection.North;</b>
+<i>69</i>&nbsp;    }
+<i>70</i>&nbsp;  
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /**
+<i>73</i>&nbsp;     * Get mappables for the position
+<i>74</i>&nbsp;     * @param position the position to get mappables from
+<i>75</i>&nbsp;     * @return a list och mappables
+<i>76</i>&nbsp;     */
+<i>77</i>&nbsp;    public List&lt;Mappable&gt; getFromPosition(Position position) {
+<b class="fc"><i>78</i>&nbsp;        List&lt;Mappable&gt; mappables = roomMap.get(position);</b>
+<i>79</i>&nbsp;
+<b class="fc"><i>80</i>&nbsp;        if (mappables == null) {</b>
+<b class="fc"><i>81</i>&nbsp;            mappables = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>82</i>&nbsp;            roomMap.put(position, mappables);</b>
+<i>83</i>&nbsp;        }
+<b class="fc"><i>84</i>&nbsp;        return mappables;</b>
+<i>85</i>&nbsp;    }
 <i>86</i>&nbsp;
-<b class="fc"><i>87</i>&nbsp;        if (mappables == null) {</b>
-<b class="fc"><i>88</i>&nbsp;            mappables = new ArrayList&lt;&gt;();</b>
-<b class="fc"><i>89</i>&nbsp;            roomMap.put(position, mappables);</b>
-<i>90</i>&nbsp;        }
-<b class="fc"><i>91</i>&nbsp;        return mappables;</b>
-<i>92</i>&nbsp;    }
-<i>93</i>&nbsp;
-<i>94</i>&nbsp;
-<i>95</i>&nbsp;    /**
-<i>96</i>&nbsp;     * Adds door to the position
-<i>97</i>&nbsp;     * @param cardinalDirection the cardinal direction to add the door to.
-<i>98</i>&nbsp;     */
-<i>99</i>&nbsp;    public void addDoor(Position.CardinalDirection cardinalDirection) {
-<b class="fc"><i>100</i>&nbsp;        Position position = getDoorPosition(cardinalDirection);</b>
-<b class="fc"><i>101</i>&nbsp;        List&lt;Mappable&gt; mappables = getFromPosition(position);</b>
-<b class="fc"><i>102</i>&nbsp;        mappables.add(new Door());</b>
-<b class="fc"><i>103</i>&nbsp;    }</b>
-<i>104</i>&nbsp;
-<i>105</i>&nbsp;
-<i>106</i>&nbsp;    /**
-<i>107</i>&nbsp;     * Returns the position for a given cardinal direction for a door.
-<i>108</i>&nbsp;     * @param cardinalDirection the cardinal direction to get a position for
-<i>109</i>&nbsp;     */
-<i>110</i>&nbsp;    public Position getDoorPosition(Position.CardinalDirection cardinalDirection) {
-<i>111</i>&nbsp;        // width: 24
-<i>112</i>&nbsp;        // cx: 23
-<i>113</i>&nbsp;        // center_x: 11,5 = 11
-<i>114</i>&nbsp;
-<b class="fc"><i>115</i>&nbsp;        int x = roomSpace.getWidth() - 1;</b>
-<b class="fc"><i>116</i>&nbsp;        int y = roomSpace.getHeight() - 1;</b>
-<i>117</i>&nbsp;
-<b class="fc"><i>118</i>&nbsp;        switch (cardinalDirection) {</b>
-<i>119</i>&nbsp;            case North:
-<b class="fc"><i>120</i>&nbsp;                x = x / 2;</b>
-<b class="fc"><i>121</i>&nbsp;                y = 0;</b>
-<b class="fc"><i>122</i>&nbsp;                break;</b>
-<i>123</i>&nbsp;
-<i>124</i>&nbsp;            case South:
-<b class="fc"><i>125</i>&nbsp;                x = x / 2;</b>
-<b class="fc"><i>126</i>&nbsp;                break;</b>
-<i>127</i>&nbsp;
-<i>128</i>&nbsp;            case West:
-<b class="fc"><i>129</i>&nbsp;                x = 0;</b>
-<b class="fc"><i>130</i>&nbsp;                y = y / 2;</b>
-<b class="fc"><i>131</i>&nbsp;                break;</b>
-<i>132</i>&nbsp;
-<i>133</i>&nbsp;            case East:
-<b class="fc"><i>134</i>&nbsp;                y = y / 2;</b>
-<i>135</i>&nbsp;                break;
-<i>136</i>&nbsp;        }
-<i>137</i>&nbsp;
-<b class="fc"><i>138</i>&nbsp;        return new Position(x, y);</b>
-<i>139</i>&nbsp;    }
-<i>140</i>&nbsp;
-<i>141</i>&nbsp;
-<i>142</i>&nbsp;    /**
-<i>143</i>&nbsp;     * Checks if there exist a door in this room at the cardinal direction.
-<i>144</i>&nbsp;     * @param cardinalDirection the cardinal direction to check for a door.
-<i>145</i>&nbsp;     * @return true if there exist a door at the cardinal direction otherwise false.
-<i>146</i>&nbsp;     */
-<i>147</i>&nbsp;    public boolean existDoor(Position.CardinalDirection cardinalDirection) {
-<b class="fc"><i>148</i>&nbsp;        Position position = getDoorPosition(cardinalDirection);</b>
-<b class="fc"><i>149</i>&nbsp;        return existType(roomMap.get(position), Door.class);</b>
-<i>150</i>&nbsp;    }
-<i>151</i>&nbsp;
-<i>152</i>&nbsp;
-<i>153</i>&nbsp;    /**
-<i>154</i>&nbsp;     * Checks if there exist a door at the specific position in this room.
-<i>155</i>&nbsp;     * @param position the position to check for a door.
-<i>156</i>&nbsp;     * @return true if there exist a door at position otherwise false.
-<i>157</i>&nbsp;     */
-<i>158</i>&nbsp;    public boolean existDoor(Position position) {
-<b class="fc"><i>159</i>&nbsp;        return existType(roomMap.get(position), Door.class);</b>
-<i>160</i>&nbsp;    }
-<i>161</i>&nbsp;
-<i>162</i>&nbsp;
-<i>163</i>&nbsp;    /**
-<i>164</i>&nbsp;     * Check if given exact class type exists in list
-<i>165</i>&nbsp;     * @param mappables the object to check for type
-<i>166</i>&nbsp;     * @param typeClass type class type to check against
-<i>167</i>&nbsp;     * @return true if object class type and type class match otherwise false.
-<i>168</i>&nbsp;     */
-<i>169</i>&nbsp;    public boolean existType(List&lt;Mappable&gt; mappables, Class typeClass) {
-<b class="fc"><i>170</i>&nbsp;        if (mappables == null) {</b>
-<b class="fc"><i>171</i>&nbsp;            return false;</b>
-<i>172</i>&nbsp;        }
-<i>173</i>&nbsp;
-<b class="fc"><i>174</i>&nbsp;        for (Mappable mappable : mappables) {</b>
-<b class="fc"><i>175</i>&nbsp;            if (mappable.getClass() == typeClass) {</b>
-<b class="fc"><i>176</i>&nbsp;                return true;</b>
-<i>177</i>&nbsp;            }
-<b class="fc"><i>178</i>&nbsp;        }</b>
-<b class="fc"><i>179</i>&nbsp;        return false;</b>
-<i>180</i>&nbsp;    }
-<i>181</i>&nbsp;
-<i>182</i>&nbsp;
-<i>183</i>&nbsp;    /**
-<i>184</i>&nbsp;     * Adds an enemy to the room space
-<i>185</i>&nbsp;     * @param position the position for the enemy. If there&#39;s already an enemy at the position, it will be overwritten.
-<i>186</i>&nbsp;     * @param enemy the item to add.
-<i>187</i>&nbsp;     */
-<i>188</i>&nbsp;    public void addEnemy(Position position, Character enemy) {
-<b class="fc"><i>189</i>&nbsp;        List&lt;Mappable&gt; mappables = getFromPosition(position);</b>
-<b class="fc"><i>190</i>&nbsp;        Iterator mappablesIterator = mappables.iterator();</b>
-<i>191</i>&nbsp;
-<b class="fc"><i>192</i>&nbsp;        while (mappablesIterator.hasNext()) {</b>
-<b class="fc"><i>193</i>&nbsp;            Mappable mappable = (Mappable) mappablesIterator.next();</b>
-<b class="fc"><i>194</i>&nbsp;            if (mappable instanceof Enemy) {</b>
-<b class="fc"><i>195</i>&nbsp;                mappablesIterator.remove();</b>
-<i>196</i>&nbsp;            }
-<b class="fc"><i>197</i>&nbsp;        }</b>
-<b class="fc"><i>198</i>&nbsp;        mappables.add(enemy);</b>
-<b class="fc"><i>199</i>&nbsp;    }</b>
-<i>200</i>&nbsp;
-<i>201</i>&nbsp;
-<i>202</i>&nbsp;    /**
-<i>203</i>&nbsp;     * Gets the enemy at the given position.
-<i>204</i>&nbsp;     * @param position the position to retrieve the enemy from.
-<i>205</i>&nbsp;     * @return an enemy object or null if there&#39;s no on the position.
-<i>206</i>&nbsp;     */
-<i>207</i>&nbsp;    public Character getEnemy(Position position) {
-<b class="fc"><i>208</i>&nbsp;        Character character = getCharacter(position);</b>
-<b class="fc"><i>209</i>&nbsp;        return ((character != null) &amp;&amp; (character instanceof Enemy)) ? character : null;</b>
-<i>210</i>&nbsp;    }
-<i>211</i>&nbsp;
-<i>212</i>&nbsp;    /**
-<i>213</i>&nbsp;     * Checks if there exist a item at the specific position in this room.
-<i>214</i>&nbsp;     * @param position the position to check for a door.
-<i>215</i>&nbsp;     * @return true if there exist a door at position otherwise false.
-<i>216</i>&nbsp;     */
-<i>217</i>&nbsp;    public boolean existItem(Position position) {
-<b class="fc"><i>218</i>&nbsp;        return existType(roomMap.get(position), Item.class);</b>
-<i>219</i>&nbsp;    }
-<i>220</i>&nbsp;
-<i>221</i>&nbsp;
-<i>222</i>&nbsp;    /**
-<i>223</i>&nbsp;     * Checks if there exist a enemy at the specific position in this room.
-<i>224</i>&nbsp;     * @param position the position to check for a door.
-<i>225</i>&nbsp;     * @return true if there exist a door at position otherwise false.
-<i>226</i>&nbsp;     */
-<i>227</i>&nbsp;    public boolean existEnemy(Position position) {
-<b class="fc"><i>228</i>&nbsp;        return existType(roomMap.get(position), Enemy.class);</b>
-<i>229</i>&nbsp;    }
-<i>230</i>&nbsp;
-<i>231</i>&nbsp;
-<i>232</i>&nbsp;    /**
-<i>233</i>&nbsp;     * Verifies if list of mappables contains a object that inherits from character.
-<i>234</i>&nbsp;     * @param mappables the list of mappable objects.
-<i>235</i>&nbsp;     * @return true if mappable inheriting from character is found otherwise false.
-<i>236</i>&nbsp;     */
-<i>237</i>&nbsp;    public boolean existCharacter(List&lt;Mappable&gt; mappables) {
-<b class="fc"><i>238</i>&nbsp;        if (mappables == null) {</b>
-<b class="fc"><i>239</i>&nbsp;            return false;</b>
-<i>240</i>&nbsp;        }
-<i>241</i>&nbsp;
-<b class="fc"><i>242</i>&nbsp;        for (Mappable mappable : mappables) {</b>
-<b class="fc"><i>243</i>&nbsp;            if (mappable instanceof Character) {</b>
-<b class="fc"><i>244</i>&nbsp;                return true;</b>
-<i>245</i>&nbsp;            }
-<b class="fc"><i>246</i>&nbsp;        }</b>
-<b class="fc"><i>247</i>&nbsp;        return false;</b>
-<i>248</i>&nbsp;    }
-<i>249</i>&nbsp;
-<i>250</i>&nbsp;
-<i>251</i>&nbsp;    /**
-<i>252</i>&nbsp;     * Adds item to specific position
-<i>253</i>&nbsp;     * @param position position to add the item to
-<i>254</i>&nbsp;     * @param item the item to add
-<i>255</i>&nbsp;     */
-<i>256</i>&nbsp;    public void addItem(Position position, Item item) {
-<b class="fc"><i>257</i>&nbsp;        List&lt;Mappable&gt; mappables = getFromPosition(position);</b>
-<b class="fc"><i>258</i>&nbsp;        mappables.add(item);</b>
-<b class="fc"><i>259</i>&nbsp;    }</b>
-<i>260</i>&nbsp;
-<i>261</i>&nbsp;
-<i>262</i>&nbsp;    /**
-<i>263</i>&nbsp;     * Get the number of doors in the room.
-<i>264</i>&nbsp;     * @return number of doors.
-<i>265</i>&nbsp;     */
-<i>266</i>&nbsp;    public int getDoorsCount() {
-<b class="fc"><i>267</i>&nbsp;        int doors = 0;</b>
-<i>268</i>&nbsp;
-<b class="fc"><i>269</i>&nbsp;        for(Map.Entry&lt;Position, List&lt;Mappable&gt;&gt; entrySet : roomMap.entrySet()) {</b>
-<b class="fc"><i>270</i>&nbsp;            List&lt;Mappable&gt; mappables = entrySet.getValue();</b>
-<b class="fc"><i>271</i>&nbsp;            for(Mappable mappable : mappables) {</b>
-<b class="fc"><i>272</i>&nbsp;                if (mappable instanceof Door) {</b>
-<b class="fc"><i>273</i>&nbsp;                    doors++;</b>
-<i>274</i>&nbsp;                }
-<b class="fc"><i>275</i>&nbsp;            }</b>
-<b class="fc"><i>276</i>&nbsp;        }</b>
-<b class="fc"><i>277</i>&nbsp;        return doors;</b>
-<i>278</i>&nbsp;    }
-<i>279</i>&nbsp;
-<i>280</i>&nbsp;
-<i>281</i>&nbsp;    /**
-<i>282</i>&nbsp;     * If player not currently exist in room, set the player object at specified position.
-<i>283</i>&nbsp;     * Otherwise if player exists, the existing player object is moved to the new position.
-<i>284</i>&nbsp;     * @param position for the player
-<i>285</i>&nbsp;     * @param player the player object
-<i>286</i>&nbsp;     * @throws IllegalAccessError if there already exist a character at the position
-<i>287</i>&nbsp;     */
-<i>288</i>&nbsp;    public void setPlayer(Position position, Character player) throws IllegalArgumentException {
-<b class="fc"><i>289</i>&nbsp;        if (existCharacter(getFromPosition(position))) {</b>
-<b class="fc"><i>290</i>&nbsp;            throw new IllegalArgumentException(&quot;Position already contains a character&quot;);</b>
-<i>291</i>&nbsp;        }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    /**
+<i>89</i>&nbsp;     * Adds door to the position
+<i>90</i>&nbsp;     * @param cardinalDirection the cardinal direction to add the door to.
+<i>91</i>&nbsp;     */
+<i>92</i>&nbsp;    public void addDoor(Position.CardinalDirection cardinalDirection) {
+<b class="fc"><i>93</i>&nbsp;        Position position = getDoorPosition(cardinalDirection);</b>
+<b class="fc"><i>94</i>&nbsp;        List&lt;Mappable&gt; mappables = getFromPosition(position);</b>
+<b class="fc"><i>95</i>&nbsp;        mappables.add(new Door());</b>
+<b class="fc"><i>96</i>&nbsp;    }</b>
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    /**
+<i>100</i>&nbsp;     * Returns the position for a given cardinal direction for a door.
+<i>101</i>&nbsp;     * @param cardinalDirection the cardinal direction to get a position for
+<i>102</i>&nbsp;     */
+<i>103</i>&nbsp;    public Position getDoorPosition(Position.CardinalDirection cardinalDirection) {
+<i>104</i>&nbsp;        // width: 24
+<i>105</i>&nbsp;        // cx: 23
+<i>106</i>&nbsp;        // center_x: 11,5 = 11
+<i>107</i>&nbsp;
+<b class="fc"><i>108</i>&nbsp;        int x = roomSpace.getWidth() - 1;</b>
+<b class="fc"><i>109</i>&nbsp;        int y = roomSpace.getHeight() - 1;</b>
+<i>110</i>&nbsp;
+<b class="fc"><i>111</i>&nbsp;        switch (cardinalDirection) {</b>
+<i>112</i>&nbsp;            case North:
+<b class="fc"><i>113</i>&nbsp;                x = x / 2;</b>
+<b class="fc"><i>114</i>&nbsp;                y = 0;</b>
+<b class="fc"><i>115</i>&nbsp;                break;</b>
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;            case South:
+<b class="fc"><i>118</i>&nbsp;                x = x / 2;</b>
+<b class="fc"><i>119</i>&nbsp;                break;</b>
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;            case West:
+<b class="fc"><i>122</i>&nbsp;                x = 0;</b>
+<b class="fc"><i>123</i>&nbsp;                y = y / 2;</b>
+<b class="fc"><i>124</i>&nbsp;                break;</b>
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;            case East:
+<b class="fc"><i>127</i>&nbsp;                y = y / 2;</b>
+<i>128</i>&nbsp;                break;
+<i>129</i>&nbsp;        }
+<i>130</i>&nbsp;
+<b class="fc"><i>131</i>&nbsp;        return new Position(x, y);</b>
+<i>132</i>&nbsp;    }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /**
+<i>136</i>&nbsp;     * Checks if there exist a door in this room at the cardinal direction.
+<i>137</i>&nbsp;     * @param cardinalDirection the cardinal direction to check for a door.
+<i>138</i>&nbsp;     * @return true if there exist a door at the cardinal direction otherwise false.
+<i>139</i>&nbsp;     */
+<i>140</i>&nbsp;    public boolean existDoor(Position.CardinalDirection cardinalDirection) {
+<b class="fc"><i>141</i>&nbsp;        Position position = getDoorPosition(cardinalDirection);</b>
+<b class="fc"><i>142</i>&nbsp;        return existType(roomMap.get(position), Door.class);</b>
+<i>143</i>&nbsp;    }
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;    /**
+<i>147</i>&nbsp;     * Checks if there exist a door at the specific position in this room.
+<i>148</i>&nbsp;     * @param position the position to check for a door.
+<i>149</i>&nbsp;     * @return true if there exist a door at position otherwise false.
+<i>150</i>&nbsp;     */
+<i>151</i>&nbsp;    public boolean existDoor(Position position) {
+<b class="fc"><i>152</i>&nbsp;        return existType(roomMap.get(position), Door.class);</b>
+<i>153</i>&nbsp;    }
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;    /**
+<i>157</i>&nbsp;     * Check if given exact class type exists in list
+<i>158</i>&nbsp;     * @param mappables the object to check for type
+<i>159</i>&nbsp;     * @param typeClass type class type to check against
+<i>160</i>&nbsp;     * @return true if object class type and type class match otherwise false.
+<i>161</i>&nbsp;     */
+<i>162</i>&nbsp;    public boolean existType(List&lt;Mappable&gt; mappables, Class typeClass) {
+<b class="fc"><i>163</i>&nbsp;        if (mappables == null) {</b>
+<b class="fc"><i>164</i>&nbsp;            return false;</b>
+<i>165</i>&nbsp;        }
+<i>166</i>&nbsp;
+<b class="fc"><i>167</i>&nbsp;        for (Mappable mappable : mappables) {</b>
+<b class="fc"><i>168</i>&nbsp;            if (mappable.getClass() == typeClass) {</b>
+<b class="fc"><i>169</i>&nbsp;                return true;</b>
+<i>170</i>&nbsp;            }
+<b class="fc"><i>171</i>&nbsp;        }</b>
+<b class="fc"><i>172</i>&nbsp;        return false;</b>
+<i>173</i>&nbsp;    }
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;    /**
+<i>177</i>&nbsp;     * Adds an enemy to the room space
+<i>178</i>&nbsp;     * @param position the position for the enemy. If there&#39;s already an enemy at the position, it will be overwritten.
+<i>179</i>&nbsp;     * @param enemy the enemy to add.
+<i>180</i>&nbsp;     */
+<i>181</i>&nbsp;    public void addEnemy(Position position, Enemy enemy) {
+<b class="fc"><i>182</i>&nbsp;        List&lt;Mappable&gt; mappables = getFromPosition(position);</b>
+<b class="fc"><i>183</i>&nbsp;        Iterator mappablesIterator = mappables.iterator();</b>
+<i>184</i>&nbsp;
+<b class="fc"><i>185</i>&nbsp;        enemy.setPosition(position);</b>
+<b class="fc"><i>186</i>&nbsp;        enemy.setRoom(this);</b>
+<i>187</i>&nbsp;        
+<b class="fc"><i>188</i>&nbsp;        while (mappablesIterator.hasNext()) {</b>
+<b class="fc"><i>189</i>&nbsp;            Mappable mappable = (Mappable) mappablesIterator.next();</b>
+<b class="fc"><i>190</i>&nbsp;            if (mappable instanceof Enemy) {</b>
+<b class="fc"><i>191</i>&nbsp;                mappablesIterator.remove();</b>
+<i>192</i>&nbsp;            }
+<b class="fc"><i>193</i>&nbsp;        }</b>
+<b class="fc"><i>194</i>&nbsp;        mappables.add(enemy);</b>
+<b class="fc"><i>195</i>&nbsp;        enemy.setPosition(position);</b>
+<b class="fc"><i>196</i>&nbsp;    }</b>
+<i>197</i>&nbsp;
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;    /**
+<i>200</i>&nbsp;     * Gets the enemy at the given position.
+<i>201</i>&nbsp;     * @param position the position to retrieve the enemy from.
+<i>202</i>&nbsp;     * @return an enemy object or null if there&#39;s no on the position.
+<i>203</i>&nbsp;     */
+<i>204</i>&nbsp;    public Character getEnemy(Position position) {
+<b class="fc"><i>205</i>&nbsp;        Character character = getCharacter(position);</b>
+<b class="fc"><i>206</i>&nbsp;        return ((character != null) &amp;&amp; (character instanceof Enemy)) ? character : null;</b>
+<i>207</i>&nbsp;    }
+<i>208</i>&nbsp;
+<i>209</i>&nbsp;    /**
+<i>210</i>&nbsp;     * Checks if there exist a item at the specific position in this room.
+<i>211</i>&nbsp;     * @param position the position to check for a door.
+<i>212</i>&nbsp;     * @return true if there exist a door at position otherwise false.
+<i>213</i>&nbsp;     */
+<i>214</i>&nbsp;    public boolean existItem(Position position) {
+<b class="fc"><i>215</i>&nbsp;        return existType(roomMap.get(position), Item.class);</b>
+<i>216</i>&nbsp;    }
+<i>217</i>&nbsp;
+<i>218</i>&nbsp;
+<i>219</i>&nbsp;    /**
+<i>220</i>&nbsp;     * Checks if there exist a enemy at the specific position in this room.
+<i>221</i>&nbsp;     * @param position the position to check for a door.
+<i>222</i>&nbsp;     * @return true if there exist a door at position otherwise false.
+<i>223</i>&nbsp;     */
+<i>224</i>&nbsp;    public boolean existEnemy(Position position) {
+<b class="fc"><i>225</i>&nbsp;        return existType(roomMap.get(position), Enemy.class);</b>
+<i>226</i>&nbsp;    }
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;    /**
+<i>230</i>&nbsp;     * Verifies if list of mappables contains a object that inherits from character.
+<i>231</i>&nbsp;     * @param mappables the list of mappable objects.
+<i>232</i>&nbsp;     * @return true if mappable inheriting from character is found otherwise false.
+<i>233</i>&nbsp;     */
+<i>234</i>&nbsp;    public boolean existCharacter(List&lt;Mappable&gt; mappables) {
+<b class="fc"><i>235</i>&nbsp;        if (mappables == null) {</b>
+<b class="fc"><i>236</i>&nbsp;            return false;</b>
+<i>237</i>&nbsp;        }
+<i>238</i>&nbsp;
+<b class="fc"><i>239</i>&nbsp;        for (Mappable mappable : mappables) {</b>
+<b class="fc"><i>240</i>&nbsp;            if (mappable instanceof Character) {</b>
+<b class="fc"><i>241</i>&nbsp;                return true;</b>
+<i>242</i>&nbsp;            }
+<b class="fc"><i>243</i>&nbsp;        }</b>
+<b class="fc"><i>244</i>&nbsp;        return false;</b>
+<i>245</i>&nbsp;    }
+<i>246</i>&nbsp;
+<i>247</i>&nbsp;
+<i>248</i>&nbsp;    /**
+<i>249</i>&nbsp;     * Adds item to specific position
+<i>250</i>&nbsp;     * @param position position to add the item to
+<i>251</i>&nbsp;     * @param item the item to add
+<i>252</i>&nbsp;     */
+<i>253</i>&nbsp;    public void addItem(Position position, Item item) {
+<b class="fc"><i>254</i>&nbsp;        List&lt;Mappable&gt; mappables = getFromPosition(position);</b>
+<b class="fc"><i>255</i>&nbsp;        mappables.add(item);</b>
+<b class="fc"><i>256</i>&nbsp;    }</b>
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;
+<i>259</i>&nbsp;    /**
+<i>260</i>&nbsp;     * Get the number of doors in the room.
+<i>261</i>&nbsp;     * @return number of doors.
+<i>262</i>&nbsp;     */
+<i>263</i>&nbsp;    public int getDoorsCount() {
+<b class="fc"><i>264</i>&nbsp;        int doors = 0;</b>
+<i>265</i>&nbsp;
+<b class="fc"><i>266</i>&nbsp;        for(Map.Entry&lt;Position, List&lt;Mappable&gt;&gt; entrySet : roomMap.entrySet()) {</b>
+<b class="fc"><i>267</i>&nbsp;            List&lt;Mappable&gt; mappables = entrySet.getValue();</b>
+<b class="fc"><i>268</i>&nbsp;            for(Mappable mappable : mappables) {</b>
+<b class="fc"><i>269</i>&nbsp;                if (mappable instanceof Door) {</b>
+<b class="fc"><i>270</i>&nbsp;                    doors++;</b>
+<i>271</i>&nbsp;                }
+<b class="fc"><i>272</i>&nbsp;            }</b>
+<b class="fc"><i>273</i>&nbsp;        }</b>
+<b class="fc"><i>274</i>&nbsp;        return doors;</b>
+<i>275</i>&nbsp;    }
+<i>276</i>&nbsp;
+<i>277</i>&nbsp;
+<i>278</i>&nbsp;    /**
+<i>279</i>&nbsp;     * Set the player object at specified position.
+<i>280</i>&nbsp;     * @param position for the player
+<i>281</i>&nbsp;     * @param player the player object
+<i>282</i>&nbsp;     * @throws IllegalAccessError if there already exist a character at the position
+<i>283</i>&nbsp;     */
+<i>284</i>&nbsp;    public void setPlayer(Position position, Character player) throws IllegalArgumentException {
+<b class="fc"><i>285</i>&nbsp;        if (existCharacter(getFromPosition(position))) {</b>
+<b class="fc"><i>286</i>&nbsp;            throw new IllegalArgumentException(&quot;Position already contains a character&quot;);</b>
+<i>287</i>&nbsp;        }
+<i>288</i>&nbsp;
+<b class="fc"><i>289</i>&nbsp;        getFromPosition(position).add(player);</b>
+<b class="fc"><i>290</i>&nbsp;        player.setPosition(position);</b>
+<b class="fc"><i>291</i>&nbsp;    }</b>
 <i>292</i>&nbsp;
-<b class="fc"><i>293</i>&nbsp;        Position playerPosition = getPlayerPosition();</b>
-<b class="fc"><i>294</i>&nbsp;        if (playerPosition == null) {</b>
-<b class="fc"><i>295</i>&nbsp;            getFromPosition(position).add(player);</b>
-<i>296</i>&nbsp;        } else {
-<b class="nc"><i>297</i>&nbsp;            moveCharacter(playerPosition, position);</b>
-<i>298</i>&nbsp;        }
-<b class="fc"><i>299</i>&nbsp;    }</b>
-<i>300</i>&nbsp;
-<i>301</i>&nbsp;
-<i>302</i>&nbsp;    /**
-<i>303</i>&nbsp;     * @return null if no player is found, otherwise a position for the player
-<i>304</i>&nbsp;     */
-<i>305</i>&nbsp;    public Position getPlayerPosition() {
-<b class="fc"><i>306</i>&nbsp;        for(Map.Entry&lt;Position, List&lt;Mappable&gt;&gt; entrySet : roomMap.entrySet()) {</b>
-<b class="fc"><i>307</i>&nbsp;            List&lt;Mappable&gt; mappables = entrySet.getValue();</b>
-<b class="fc"><i>308</i>&nbsp;            for(Mappable mappable : mappables) {</b>
-<b class="fc"><i>309</i>&nbsp;                if (mappable instanceof Player) {</b>
-<b class="fc"><i>310</i>&nbsp;                    return entrySet.getKey();</b>
-<i>311</i>&nbsp;                }
-<b class="fc"><i>312</i>&nbsp;            }</b>
-<b class="fc"><i>313</i>&nbsp;        }</b>
-<b class="fc"><i>314</i>&nbsp;        return null;</b>
-<i>315</i>&nbsp;    }
-<i>316</i>&nbsp;
-<i>317</i>&nbsp;
-<i>318</i>&nbsp;    /**
-<i>319</i>&nbsp;     * Checks if player exists on position.
-<i>320</i>&nbsp;     * @param position to check for
-<i>321</i>&nbsp;     * @return true if there is otherwise false
-<i>322</i>&nbsp;     */
-<i>323</i>&nbsp;    public boolean existPlayer(Position position) {
-<b class="fc"><i>324</i>&nbsp;        Position playerPosition = getPlayerPosition();</b>
-<b class="fc"><i>325</i>&nbsp;        return (playerPosition != null) &amp;&amp; playerPosition.equals(position);</b>
-<i>326</i>&nbsp;    }
-<i>327</i>&nbsp;
-<i>328</i>&nbsp;
-<i>329</i>&nbsp;    /**
-<i>330</i>&nbsp;     * Get the player
-<i>331</i>&nbsp;     * @return the player in the room. If there is no player, null is returned.
-<i>332</i>&nbsp;     */
-<i>333</i>&nbsp;    public Character getPlayer() {
-<b class="fc"><i>334</i>&nbsp;        return getCharacter(getPlayerPosition());</b>
-<i>335</i>&nbsp;    }
-<i>336</i>&nbsp;
-<i>337</i>&nbsp;
-<i>338</i>&nbsp;    /**
-<i>339</i>&nbsp;     * Move character from one position to an other.
-<i>340</i>&nbsp;     * If there is no character in from position method returns.
-<i>341</i>&nbsp;     * @param fromPosition
-<i>342</i>&nbsp;     * @param toPosition
-<i>343</i>&nbsp;     * @throws IllegalAccessError if there&#39;s already a character in to position.
-<i>344</i>&nbsp;     * There can only be one character per position.
-<i>345</i>&nbsp;     */
-<i>346</i>&nbsp;    public void moveCharacter(Position fromPosition, Position toPosition) throws IllegalArgumentException {
-<b class="fc"><i>347</i>&nbsp;        if (fromPosition.equals(toPosition)) {</b>
-<b class="nc"><i>348</i>&nbsp;            return;</b>
+<i>293</i>&nbsp;
+<i>294</i>&nbsp;    /**
+<i>295</i>&nbsp;     * Returns the position for the player.
+<i>296</i>&nbsp;     * @return null if no player is found, otherwise a position for the player
+<i>297</i>&nbsp;     */
+<i>298</i>&nbsp;    public Position getPlayerPosition() {
+<b class="fc"><i>299</i>&nbsp;        for(Map.Entry&lt;Position, List&lt;Mappable&gt;&gt; entrySet : roomMap.entrySet()) {</b>
+<b class="fc"><i>300</i>&nbsp;            List&lt;Mappable&gt; mappables = entrySet.getValue();</b>
+<b class="fc"><i>301</i>&nbsp;            for(Mappable mappable : mappables) {</b>
+<b class="fc"><i>302</i>&nbsp;                if (mappable instanceof Player) {</b>
+<b class="fc"><i>303</i>&nbsp;                    return entrySet.getKey();</b>
+<i>304</i>&nbsp;                }
+<b class="fc"><i>305</i>&nbsp;            }</b>
+<b class="fc"><i>306</i>&nbsp;        }</b>
+<b class="fc"><i>307</i>&nbsp;        return null;</b>
+<i>308</i>&nbsp;    }
+<i>309</i>&nbsp;
+<i>310</i>&nbsp;
+<i>311</i>&nbsp;    /**
+<i>312</i>&nbsp;     * Checks if player exists on position.
+<i>313</i>&nbsp;     * @param position to check for
+<i>314</i>&nbsp;     * @return true if there is otherwise false
+<i>315</i>&nbsp;     */
+<i>316</i>&nbsp;    public boolean existPlayer(Position position) {
+<b class="fc"><i>317</i>&nbsp;        Position playerPosition = getPlayerPosition();</b>
+<b class="fc"><i>318</i>&nbsp;        return (playerPosition != null) &amp;&amp; playerPosition.equals(position);</b>
+<i>319</i>&nbsp;    }
+<i>320</i>&nbsp;
+<i>321</i>&nbsp;
+<i>322</i>&nbsp;    /**
+<i>323</i>&nbsp;     * Get the player
+<i>324</i>&nbsp;     * @return the player in the room. If there is no player, null is returned.
+<i>325</i>&nbsp;     */
+<i>326</i>&nbsp;    public Character getPlayer() {
+<b class="fc"><i>327</i>&nbsp;        return getCharacter(getPlayerPosition());</b>
+<i>328</i>&nbsp;    }
+<i>329</i>&nbsp;
+<i>330</i>&nbsp;
+<i>331</i>&nbsp;    /**
+<i>332</i>&nbsp;     * Move character from one position to an other.
+<i>333</i>&nbsp;     * If there is no character in from position method returns.
+<i>334</i>&nbsp;     * @param fromPosition
+<i>335</i>&nbsp;     * @param toPosition
+<i>336</i>&nbsp;     * @throws IllegalAccessError if there&#39;s already a character in to position or from and to position is same.
+<i>337</i>&nbsp;     * There can only be one character per position.
+<i>338</i>&nbsp;     */
+<i>339</i>&nbsp;    public void moveCharacter(Position fromPosition, Position toPosition) throws IllegalArgumentException {
+<b class="fc"><i>340</i>&nbsp;        if (fromPosition.equals(toPosition)) {</b>
+<b class="fc"><i>341</i>&nbsp;            throw new IllegalArgumentException(&quot;From position can&#39;t be same as to position.&quot;);</b>
+<i>342</i>&nbsp;        }
+<i>343</i>&nbsp;
+<b class="fc"><i>344</i>&nbsp;        List&lt;Mappable&gt; mappablesFrom = getFromPosition(fromPosition);</b>
+<b class="fc"><i>345</i>&nbsp;        List&lt;Mappable&gt; mappablesTo = getFromPosition(toPosition);</b>
+<i>346</i>&nbsp;
+<b class="fc"><i>347</i>&nbsp;        if (!existCharacter(mappablesFrom)) {</b>
+<b class="fc"><i>348</i>&nbsp;            throw new IllegalArgumentException(&quot;Character at from position is missing.&quot;);</b>
 <i>349</i>&nbsp;        }
-<i>350</i>&nbsp;
-<b class="fc"><i>351</i>&nbsp;        List&lt;Mappable&gt; mappablesFrom = getFromPosition(fromPosition);</b>
-<b class="fc"><i>352</i>&nbsp;        List&lt;Mappable&gt; mappablesTo = getFromPosition(toPosition);</b>
+<b class="fc"><i>350</i>&nbsp;        if (existCharacter(mappablesTo)) {</b>
+<b class="fc"><i>351</i>&nbsp;            throw new IllegalArgumentException(&quot;To position already contains a character.&quot;);</b>
+<i>352</i>&nbsp;        }
 <i>353</i>&nbsp;
-<b class="fc"><i>354</i>&nbsp;        if (!existCharacter(mappablesFrom)) {</b>
-<b class="nc"><i>355</i>&nbsp;            return;</b>
-<i>356</i>&nbsp;        }
-<b class="fc"><i>357</i>&nbsp;        if (existCharacter(mappablesTo)) {</b>
-<b class="fc"><i>358</i>&nbsp;            throw new IllegalArgumentException(&quot;To position already contains a character.&quot;);</b>
-<i>359</i>&nbsp;        }
+<b class="fc"><i>354</i>&nbsp;        Iterator fromIterator = mappablesFrom.iterator();</b>
+<b class="fc"><i>355</i>&nbsp;        while (fromIterator.hasNext()) {</b>
+<b class="fc"><i>356</i>&nbsp;            Mappable mappable = (Mappable) fromIterator.next();</b>
+<b class="fc"><i>357</i>&nbsp;            if (mappable instanceof Character) {</b>
+<b class="fc"><i>358</i>&nbsp;                mappablesTo.add(mappable);</b>
+<b class="fc"><i>359</i>&nbsp;                fromIterator.remove();</b>
 <i>360</i>&nbsp;
-<b class="fc"><i>361</i>&nbsp;        Iterator fromIterator = mappablesFrom.iterator();</b>
-<b class="fc"><i>362</i>&nbsp;        while (fromIterator.hasNext()) {</b>
-<b class="fc"><i>363</i>&nbsp;            Mappable mappable = (Mappable) fromIterator.next();</b>
-<b class="fc"><i>364</i>&nbsp;            if (mappable instanceof Character) {</b>
-<b class="fc"><i>365</i>&nbsp;                mappablesTo.add(mappable);</b>
-<b class="fc"><i>366</i>&nbsp;                fromIterator.remove();</b>
-<i>367</i>&nbsp;
-<b class="fc"><i>368</i>&nbsp;                roomMap.put(fromPosition, mappablesFrom);</b>
-<b class="fc"><i>369</i>&nbsp;                roomMap.put(toPosition, mappablesTo);</b>
-<b class="fc"><i>370</i>&nbsp;                return;</b>
-<i>371</i>&nbsp;            }
-<b class="nc"><i>372</i>&nbsp;        }</b>
-<b class="nc"><i>373</i>&nbsp;    }</b>
-<i>374</i>&nbsp;
-<i>375</i>&nbsp;
-<i>376</i>&nbsp;    /**
-<i>377</i>&nbsp;     * Gets the character at the position
-<i>378</i>&nbsp;     * @param position the position
-<i>379</i>&nbsp;     * @return a character if there&#39;s one otherwise null.
-<i>380</i>&nbsp;     */
-<i>381</i>&nbsp;    public Character getCharacter(Position position) {
-<b class="fc"><i>382</i>&nbsp;        if (position != null) {</b>
-<b class="fc"><i>383</i>&nbsp;            List&lt;Mappable&gt; mappables = roomMap.get(position);</b>
-<b class="fc"><i>384</i>&nbsp;            if (mappables != null) {</b>
-<b class="fc"><i>385</i>&nbsp;                for (Mappable mappable : mappables) {</b>
-<b class="fc"><i>386</i>&nbsp;                    if (mappable instanceof Character) {</b>
-<b class="fc"><i>387</i>&nbsp;                        return (Character) mappable;</b>
-<i>388</i>&nbsp;                    }
-<b class="nc"><i>389</i>&nbsp;                }</b>
-<i>390</i>&nbsp;            }
-<i>391</i>&nbsp;        }
-<b class="fc"><i>392</i>&nbsp;        return null;</b>
-<i>393</i>&nbsp;    }
-<i>394</i>&nbsp;
-<i>395</i>&nbsp;}
+<b class="fc"><i>361</i>&nbsp;                ((Character) mappable).setPosition(toPosition);</b>
+<i>362</i>&nbsp;
+<b class="fc"><i>363</i>&nbsp;                roomMap.put(fromPosition, mappablesFrom);</b>
+<b class="fc"><i>364</i>&nbsp;                roomMap.put(toPosition, mappablesTo);</b>
+<b class="fc"><i>365</i>&nbsp;                return;</b>
+<i>366</i>&nbsp;            }
+<b class="nc"><i>367</i>&nbsp;        }</b>
+<b class="nc"><i>368</i>&nbsp;    }</b>
+<i>369</i>&nbsp;
+<i>370</i>&nbsp;
+<i>371</i>&nbsp;    /**
+<i>372</i>&nbsp;     * Gets the character at the position
+<i>373</i>&nbsp;     * @param position the position
+<i>374</i>&nbsp;     * @return a character if there&#39;s one otherwise null.
+<i>375</i>&nbsp;     */
+<i>376</i>&nbsp;    public Character getCharacter(Position position) {
+<b class="fc"><i>377</i>&nbsp;        if (position != null) {</b>
+<b class="fc"><i>378</i>&nbsp;            List&lt;Mappable&gt; mappables = roomMap.get(position);</b>
+<b class="fc"><i>379</i>&nbsp;            if (mappables != null) {</b>
+<b class="fc"><i>380</i>&nbsp;                for (Mappable mappable : mappables) {</b>
+<b class="fc"><i>381</i>&nbsp;                    if (mappable instanceof Character) {</b>
+<b class="fc"><i>382</i>&nbsp;                        return (Character) mappable;</b>
+<i>383</i>&nbsp;                    }
+<b class="fc"><i>384</i>&nbsp;                }</b>
+<i>385</i>&nbsp;            }
+<i>386</i>&nbsp;        }
+<b class="fc"><i>387</i>&nbsp;        return null;</b>
+<i>388</i>&nbsp;    }
+<i>389</i>&nbsp;
+<i>390</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2017-10-18 17:06</div>
+    <div style="float:right;">generated on 2017-10-19 02:27</div>
 </div>
 </body>
 </html>
