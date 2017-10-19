@@ -238,4 +238,39 @@ public class RoomCreator {
         int y = random.nextInt(roomSpace.getHeight());
         return new Position(x, y);
     }
+
+
+    /**
+     * Gets the position in the room for a given cardinal direction
+     * @param room the room for which the position is related to
+     * @param cardinalDirection the direction in room to get a position for
+     * @return the position in room that corresponds to the cardinal direction
+     */
+    public Position getPositionCardinalDirection(Room room, Position.CardinalDirection cardinalDirection) throws IllegalArgumentException {
+        if (cardinalDirection == null) {
+            throw new IllegalArgumentException("Cardinal direction can not be null.");
+        }
+
+        Position north = new Position((room.getRoomSpace().getWidth() - 1) / 2, 0);
+        Position south = new Position((room.getRoomSpace().getWidth() - 1) / 2, room.getRoomSpace().getHeight() - 1);
+        Position west = new Position(0, (room.getRoomSpace().getHeight() - 1) / 2);
+        Position east = new Position(room.getRoomSpace().getWidth() - 1, (room.getRoomSpace().getWidth() - 1) / 2);
+
+        Position cardinalDirectionPosition = null;
+        switch (cardinalDirection) {
+            case North:
+                cardinalDirectionPosition = north;
+                break;
+            case South:
+                cardinalDirectionPosition = south;
+                break;
+            case West:
+                cardinalDirectionPosition = west;
+                break;
+            case East:
+                cardinalDirectionPosition = east;
+                break;
+        }
+        return cardinalDirectionPosition;
+    }
 }

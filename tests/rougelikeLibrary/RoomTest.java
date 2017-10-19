@@ -74,7 +74,7 @@ public class RoomTest {
     @Test
     public void play() throws Exception {
         Position.CardinalDirection cardinalDirection = stdRoom.play();
-        assertNotNull(cardinalDirection);
+        assertNull(cardinalDirection);
     }
 
 
@@ -486,9 +486,35 @@ public class RoomTest {
 
     @Test
     public void getCharacter() throws Exception {
-        //stdRoom.addEnemy(stdPosition, stdPlayer);
-        assertEquals(stdRoom.getCharacter(stdPosition), stdPlayer);
+        stdRoom.addEnemy(stdPosition, stdEnemy);
+        assertEquals(stdRoom.getCharacter(stdPosition), stdEnemy);
         stdRoom.addItem(new Position(123, 123), item1);
         stdRoom.addItem(new Position(13, 1), item2);
+    }
+
+
+    @Test
+    public void getCardinalDirection() {
+        RoomSpace thisRoomSpace = new RoomSpace(32, 32);
+        Position positionNorth = new Position((thisRoomSpace.getWidth() - 1) / 2, 0);
+        Position positionSouth = new Position((thisRoomSpace.getWidth() - 1) / 2, thisRoomSpace.getHeight() - 1);
+        Position positionWest = new Position(0, (thisRoomSpace.getHeight() - 1) / 2);
+        Position positionEast = new Position(thisRoomSpace.getWidth() - 1, (thisRoomSpace.getHeight() - 1) / 2);
+
+        Room room = new Room(stdPosition, thisRoomSpace, roomMap);
+        assertEquals(room.getCardinalDirection(positionNorth), Position.CardinalDirection.North);
+        assertEquals(room.getCardinalDirection(positionSouth), Position.CardinalDirection.South);
+        assertEquals(room.getCardinalDirection(positionWest), Position.CardinalDirection.West);
+        assertEquals(room.getCardinalDirection(positionEast), Position.CardinalDirection.East);
+
+        try {
+            room.getCardinalDirection(null);
+            fail("Expected IllegalArgumentException: Position can not be null.");
+        } catch (IllegalArgumentException iae) { assertTrue(true); }
+
+        try {
+            room.getCardinalDirection(new Position(room.getRoomSpace().getWidth() / 2, room.getRoomSpace().getHeight() / 2));
+            fail("Expected IllegalArgumentException: Invalid position for cardinal direction translation.");
+        } catch (IllegalArgumentException iae) { assertTrue(true); }
     }
 }

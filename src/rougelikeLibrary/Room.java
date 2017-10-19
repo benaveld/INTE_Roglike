@@ -1,6 +1,8 @@
 package rougelikeLibrary;
 
 
+import javafx.geometry.Pos;
+
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,7 +28,7 @@ public class Room {
      * Constructor
      *
      * @param worldPosition position for the room in world space
-     * @param roomMap room map for the room
+     * @param roomMap       room map for the room
      */
     public Room(Position worldPosition, RoomSpace roomSpace, Map<Position, List<Mappable>> roomMap) {
         position = worldPosition;
@@ -37,6 +39,7 @@ public class Room {
 
     /**
      * Retrieves the position for this room in world space.
+     *
      * @return the WorldPosition for this room.
      */
     public Position getPosition() {
@@ -62,15 +65,42 @@ public class Room {
 
     /**
      * Plays this room.
-     * @return the new direction for next room to enter.
+     * Each play starts with the player if it exist. If player activates a door this method exists.
+     * If player doesn't activate a door the the rest of the characters in the room is played.
+     *
+     * If character doesn't activate a door null is returned.
+     *
+     * @return if player activates a door the new direction for next room to enter.
+     * if no door is activated null is returned.
      */
     public Position.CardinalDirection play() {
-        return Position.CardinalDirection.North;
+        Character character = getPlayer();
+        if (character != null) {
+
+            // Character activated a door
+            if (character.startTurn(this)) {
+                return getCardinalDirection(character.getPosition());
+            }
+        }
+
+        //Iterate through all positions in room and play all other characters than player.
+        for (Map.Entry<Position, List<Mappable>> entrySet : roomMap.entrySet()) {
+            List<Mappable> mappables = entrySet.getValue();
+
+            for (Mappable mappable : mappables) {
+                if (mappable instanceof Character && !(mappable instanceof Player)) {
+                    ((Character) mappable).startTurn(this);
+                }
+            }
+        }
+
+        return null;
     }
-  
+
 
     /**
      * Get mappables for the position
+     *
      * @param position the position to get mappables from
      * @return a list och mappables
      */
@@ -87,6 +117,7 @@ public class Room {
 
     /**
      * Adds door to the position
+     *
      * @param cardinalDirection the cardinal direction to add the door to.
      */
     public void addDoor(Position.CardinalDirection cardinalDirection) {
@@ -98,6 +129,7 @@ public class Room {
 
     /**
      * Returns the position for a given cardinal direction for a door.
+     *
      * @param cardinalDirection the cardinal direction to get a position for
      */
     public Position getDoorPosition(Position.CardinalDirection cardinalDirection) {
@@ -134,6 +166,7 @@ public class Room {
 
     /**
      * Checks if there exist a door in this room at the cardinal direction.
+     *
      * @param cardinalDirection the cardinal direction to check for a door.
      * @return true if there exist a door at the cardinal direction otherwise false.
      */
@@ -145,6 +178,7 @@ public class Room {
 
     /**
      * Checks if there exist a door at the specific position in this room.
+     *
      * @param position the position to check for a door.
      * @return true if there exist a door at position otherwise false.
      */
@@ -155,6 +189,7 @@ public class Room {
 
     /**
      * Check if given exact class type exists in list
+     *
      * @param mappables the object to check for type
      * @param typeClass type class type to check against
      * @return true if object class type and type class match otherwise false.
@@ -175,8 +210,9 @@ public class Room {
 
     /**
      * Adds an enemy to the room space
+     *
      * @param position the position for the enemy. If there's already an enemy at the position, it will be overwritten.
-     * @param enemy the enemy to add.
+     * @param enemy    the enemy to add.
      */
     public void addEnemy(Position position, Enemy enemy) {
         List<Mappable> mappables = getFromPosition(position);
@@ -184,7 +220,7 @@ public class Room {
 
         enemy.setPosition(position);
         enemy.setRoom(this);
-        
+
         while (mappablesIterator.hasNext()) {
             Mappable mappable = (Mappable) mappablesIterator.next();
             if (mappable instanceof Enemy) {
@@ -198,6 +234,7 @@ public class Room {
 
     /**
      * Gets the enemy at the given position.
+     *
      * @param position the position to retrieve the enemy from.
      * @return an enemy object or null if there's no on the position.
      */
@@ -208,6 +245,7 @@ public class Room {
 
     /**
      * Checks if there exist a item at the specific position in this room.
+     *
      * @param position the position to check for a door.
      * @return true if there exist a door at position otherwise false.
      */
@@ -218,6 +256,7 @@ public class Room {
 
     /**
      * Checks if there exist a enemy at the specific position in this room.
+     *
      * @param position the position to check for a door.
      * @return true if there exist a door at position otherwise false.
      */
@@ -228,6 +267,7 @@ public class Room {
 
     /**
      * Verifies if list of mappables contains a object that inherits from character.
+     *
      * @param mappables the list of mappable objects.
      * @return true if mappable inheriting from character is found otherwise false.
      */
@@ -247,8 +287,9 @@ public class Room {
 
     /**
      * Adds item to specific position
+     *
      * @param position position to add the item to
-     * @param item the item to add
+     * @param item     the item to add
      */
     public void addItem(Position position, Item item) {
         List<Mappable> mappables = getFromPosition(position);
@@ -258,14 +299,15 @@ public class Room {
 
     /**
      * Get the number of doors in the room.
+     *
      * @return number of doors.
      */
     public int getDoorsCount() {
         int doors = 0;
 
-        for(Map.Entry<Position, List<Mappable>> entrySet : roomMap.entrySet()) {
+        for (Map.Entry<Position, List<Mappable>> entrySet : roomMap.entrySet()) {
             List<Mappable> mappables = entrySet.getValue();
-            for(Mappable mappable : mappables) {
+            for (Mappable mappable : mappables) {
                 if (mappable instanceof Door) {
                     doors++;
                 }
@@ -278,8 +320,9 @@ public class Room {
     /**
      * If player not currently exist in room, set the player object at specified position.
      * Otherwise if player exists, the existing player object is moved to the new position.
+     *
      * @param position for the player
-     * @param player the player object
+     * @param player   the player object
      * @throws IllegalAccessError if there already exist a character at the position
      */
     public void setPlayer(Position position, Character player) throws IllegalArgumentException {
@@ -301,9 +344,9 @@ public class Room {
      * @return null if no player is found, otherwise a position for the player
      */
     public Position getPlayerPosition() {
-        for(Map.Entry<Position, List<Mappable>> entrySet : roomMap.entrySet()) {
+        for (Map.Entry<Position, List<Mappable>> entrySet : roomMap.entrySet()) {
             List<Mappable> mappables = entrySet.getValue();
-            for(Mappable mappable : mappables) {
+            for (Mappable mappable : mappables) {
                 if (mappable instanceof Player) {
                     return entrySet.getKey();
                 }
@@ -315,6 +358,7 @@ public class Room {
 
     /**
      * Checks if player exists on position.
+     *
      * @param position to check for
      * @return true if there is otherwise false
      */
@@ -326,6 +370,7 @@ public class Room {
 
     /**
      * Get the player
+     *
      * @return the player in the room. If there is no player, null is returned.
      */
     public Character getPlayer() {
@@ -336,10 +381,11 @@ public class Room {
     /**
      * Move character from one position to an other.
      * If there is no character in from position method returns.
+     *
      * @param fromPosition
      * @param toPosition
      * @throws IllegalAccessError if there's already a character in to position.
-     * There can only be one character per position.
+     *                            There can only be one character per position.
      */
     public void moveCharacter(Position fromPosition, Position toPosition) throws IllegalArgumentException {
         if (fromPosition.equals(toPosition)) {
@@ -375,6 +421,7 @@ public class Room {
 
     /**
      * Gets the character at the position
+     *
      * @param position the position
      * @return a character if there's one otherwise null.
      */
@@ -392,4 +439,33 @@ public class Room {
         return null;
     }
 
+
+    /**
+     * Translates a position at the borders of a room into the corresponding cardinal direction.
+     * @param position the position at the borders of a room.
+     * @return a cardinal direction that corresponds to the position
+     * @throws IllegalArgumentException of there is no valid translation from position to cardinal direction or if position is null.
+     */
+    public Position.CardinalDirection getCardinalDirection(Position position) throws IllegalArgumentException {
+        if (position == null) {
+            throw new IllegalArgumentException("Position can not be null.");
+        }
+
+        Position positionNorth = new Position((roomSpace.getWidth() - 1) / 2, 0);
+        Position positionSouth = new Position((roomSpace.getWidth() - 1) / 2, roomSpace.getHeight() - 1);
+        Position positionWest = new Position(0, (roomSpace.getHeight() - 1) / 2);
+        Position positionEast = new Position(roomSpace.getWidth() - 1, (roomSpace.getHeight() - 1) / 2);
+
+        if (position.equals(positionNorth)) {
+            return Position.CardinalDirection.North;
+        } else if (position.equals(positionSouth)) {
+            return Position.CardinalDirection.South;
+        } else if (position.equals(positionWest)) {
+            return Position.CardinalDirection.West;
+        } else if (position.equals(positionEast)) {
+            return Position.CardinalDirection.East;
+        }
+
+        throw new IllegalArgumentException("Position is not at the borders of the room and can not be translated to a cardinal direction.");
+    }
 }

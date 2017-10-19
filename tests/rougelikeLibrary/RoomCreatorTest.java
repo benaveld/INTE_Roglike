@@ -232,4 +232,25 @@ public class RoomCreatorTest {
         assertFalse(room.existDoor(Position.CardinalDirection.West));
         assertTrue(room.existDoor(Position.CardinalDirection.East));
     }
+
+    @Test
+    public void getPositionCardinalDirection() {
+        RoomSpace thisRoomSpace = new RoomSpace(32, 32);
+        Position positionNorth = new Position((thisRoomSpace.getWidth() - 1) / 2, 0);
+        Position positionSouth = new Position((thisRoomSpace.getWidth() - 1) / 2, thisRoomSpace.getHeight() - 1);
+        Position positionWest = new Position(0, (thisRoomSpace.getHeight() - 1) / 2);
+        Position positionEast = new Position(thisRoomSpace.getWidth() - 1, (thisRoomSpace.getHeight() - 1) / 2);
+
+        Room room = new Room(stdWorldPosition, thisRoomSpace, roomMap);
+
+        assertEquals(roomCreator.getPositionCardinalDirection(room, Position.CardinalDirection.North), positionNorth);
+        assertEquals(roomCreator.getPositionCardinalDirection(room, Position.CardinalDirection.South), positionSouth);
+        assertEquals(roomCreator.getPositionCardinalDirection(room, Position.CardinalDirection.West), positionWest);
+        assertEquals(roomCreator.getPositionCardinalDirection(room, Position.CardinalDirection.East), positionEast);
+
+        try {
+            roomCreator.getPositionCardinalDirection(room, null);
+            fail("Expected IllegalArgementException: cardinal direction can not be null.");
+        } catch (IllegalArgumentException iae) { assertTrue(true); }
+    }
 }

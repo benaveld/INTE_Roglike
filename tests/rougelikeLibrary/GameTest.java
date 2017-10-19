@@ -58,19 +58,20 @@ public class GameTest {
 
     @Test
     public void playRooms() {
-        for (int i = 0; i < numberOfRoomsToPlay; i++)
-        {
-           // System.out.println("Coordinate: " + mapController.getCurrentRoom().getPosition());
+        for (int i = 0; i < numberOfRoomsToPlay; i++) {
+            // System.out.println("Coordinate: " + mapController.getCurrentRoom().getPosition());
 
             nextRoomRequest = mapController.playCurrentRoom();
-
-            if (mapController.roomExist(nextRoomRequest)) {
-                mapController.setCurrentRoom(mapController.getRoom(nextRoomRequest));
-            } else {
-                mapController.setCurrentRoom(roomCreator.createRoom(nextRoomRequest, mapController.getCardinalDirectionPermissions(nextRoomRequest)));
+            if (nextRoomRequest != null) {
+                if (mapController.roomExist(nextRoomRequest)) {
+                    mapController.setCurrentRoom(mapController.getRoom(nextRoomRequest));
+                } else {
+                    mapController.setCurrentRoom(roomCreator.createRoom(nextRoomRequest, mapController.getCardinalDirectionPermissions(nextRoomRequest)));
+                }
             }
         }
     }
+
 
     @Test
     public void testProbability() {
