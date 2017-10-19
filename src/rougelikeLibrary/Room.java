@@ -2,7 +2,6 @@ package rougelikeLibrary;
 
 
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -101,10 +100,6 @@ public class Room {
      * @param cardinalDirection the cardinal direction to get a position for
      */
     public Position getDoorPosition(Position.CardinalDirection cardinalDirection) {
-        // width: 24
-        // cx: 23
-        // center_x: 11,5 = 11
-
         int x = roomSpace.getWidth() - 1;
         int y = roomSpace.getHeight() - 1;
 

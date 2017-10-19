@@ -2,12 +2,11 @@ package rougelikeLibrary;
 
 
 import static org.junit.Assert.*;
-
 import org.junit.*;
 import org.junit.rules.ExpectedException;
-
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class RoomCreatorBuilderTest {
     private RoomCreatorBuilder roomCreatorBuilder;

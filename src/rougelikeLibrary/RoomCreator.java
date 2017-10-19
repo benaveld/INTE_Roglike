@@ -112,7 +112,6 @@ public class RoomCreator {
     }
 
 
-    // @TODO private
     /**
      * Creates a mappable type
      * @param mappableTypeWrapper the wrapper that holds information necessary to create a mappable type
@@ -130,7 +129,6 @@ public class RoomCreator {
     }
 
 
-    // @TODO private
     /**
      * Adds a mappable type to a position in room map
      * @param roomMap the map that contains all lists of mappables per position
@@ -152,7 +150,6 @@ public class RoomCreator {
     }
 
 
-    // @TODO private
     /**
      * Adds a door in a specific cardinal direction based on cardinal direction permissions.
      * The permissions dictate if it is mandatory, optional or disallowed.
@@ -178,7 +175,6 @@ public class RoomCreator {
     }
 
 
-    // @TODO private
     /**
      * Calculates the choice based on the permissions. Optional is roughly 50% probability for either true/false.
      * @param cardinalDirectionPermission the permissions to calculate from.

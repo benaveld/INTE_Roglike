@@ -13,8 +13,7 @@ import java.util.Map;
  */
 public class MapController {
     private Room currentRoom;
-
-    Map<Position, Room> map = new java.util.HashMap<>();
+    private Map<Position, Room> map = new java.util.HashMap<>();
 
 
     /**

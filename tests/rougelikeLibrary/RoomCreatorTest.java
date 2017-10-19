@@ -1,14 +1,13 @@
 package rougelikeLibrary;
 
 import static org.junit.Assert.*;
-
 import org.junit.*;
 import org.junit.rules.ExpectedException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class RoomCreatorTest {
     private final int arbitraryX = 1337;
