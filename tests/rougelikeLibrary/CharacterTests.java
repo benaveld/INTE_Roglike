@@ -21,6 +21,19 @@ public class CharacterTests {
 		assertEquals(0, c.getHealth());
 		
 	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testNegativeCharacterSpeed(){
+		Character c = new Character(-1,0,0, new Position(1,1), new TurnSystem(new EnemyAI(1)));
+		assertEquals(0, c.getSpeed());
+		
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testNegativeCharacterDamage(){
+		Character c = new Character(0,0,-1, 1,1, new TurnSystem(new EnemyAI(1)));
+		assertEquals(0, c.getSpeed());
+		
+	}
+	
 	@Test
 	public void testCharacterSpeed(){
 		
