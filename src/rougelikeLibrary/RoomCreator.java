@@ -40,15 +40,8 @@ public class RoomCreator {
      * Creates the initial room. All cardinal directions for doors is optional with a minimum of one door.
      * @param position coordinate in world space for the room
      */
-    public Room createInitialRoom(Position position) {
-        java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissionsAll = new HashMap<>();
-
-        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Mandatory);
-        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Mandatory);
-        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Mandatory);
-        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Mandatory);
-
-        Room room = createRoom(position, cardinalDirectionPermissionsAll);
+    public Room createInitialRoom(Position position, Map<Position.CardinalDirection, Position.CardinalDirectionPermission> doorCardinalDirectionPermissions) {
+        Room room = createRoom(position, doorCardinalDirectionPermissions);
         Map<Position, List<Mappable>> roomMap = room.getRoomMap();
         Position playerPosition = getRandomRoomPosition();
 
@@ -106,15 +99,12 @@ public class RoomCreator {
                         addToRoom(roomMap, new Position(x, y), createType(mappableTypeWrapper));
                         mappableTypeWrapper.addQuantity();
 
-                        log.info("probability create room x: " + x + ", y: " + y + ". mappqnty: " + mappableTypeWrapper.currentQuantity);
-
                         if (mappableTypeWrapper.isMaxQuantity()) {
                             return;
                         }
                     }
                 }
             }
-            log.info("room looped");
             if (mappableTypeWrapper.isMinQuantity()) {
                 return;
             }
@@ -122,7 +112,6 @@ public class RoomCreator {
     }
 
 
-    // @TODO private
     /**
      * Creates a mappable type
      * @param mappableTypeWrapper the wrapper that holds information necessary to create a mappable type
@@ -140,7 +129,6 @@ public class RoomCreator {
     }
 
 
-    // @TODO private
     /**
      * Adds a mappable type to a position in room map
      * @param roomMap the map that contains all lists of mappables per position
@@ -162,7 +150,6 @@ public class RoomCreator {
     }
 
 
-    // @TODO private
     /**
      * Adds a door in a specific cardinal direction based on cardinal direction permissions.
      * The permissions dictate if it is mandatory, optional or disallowed.
@@ -188,7 +175,6 @@ public class RoomCreator {
     }
 
 
-    // @TODO private
     /**
      * Calculates the choice based on the permissions. Optional is roughly 50% probability for either true/false.
      * @param cardinalDirectionPermission the permissions to calculate from.

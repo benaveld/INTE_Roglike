@@ -4,13 +4,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import static org.junit.Assert.*;
+
 
 public class RoomTest {
     private final int dummyX = 523223;
@@ -387,6 +386,8 @@ public class RoomTest {
 
         exception.expect(IllegalArgumentException.class);
         stdRoom.setPlayer(stdPosition, stdPlayer);
+
+
     }
 
 
@@ -457,8 +458,22 @@ public class RoomTest {
         assertTrue(stdRoom.existPlayer(toPosition2));
 
         stdRoom.addEnemy(fromPosition3, stdEnemy);
-        exception.expect(IllegalArgumentException.class);
-        stdRoom.moveCharacter(toPosition2, fromPosition3);
+        try {
+            stdRoom.moveCharacter(toPosition2, fromPosition3);
+            fail("Expected IllegalArgumentException: position already contains character.");
+        } catch (IllegalArgumentException iae) {assertTrue(true); }
+
+        try {
+            stdRoom.moveCharacter(fromPosition3, fromPosition3);
+            fail("Expected IllegalArgumentException: from position is same as to position.");
+        } catch (IllegalArgumentException iae) {assertTrue(true); }
+
+        try {
+            stdRoom.moveCharacter(fromPosition4, fromPosition3);
+            fail("Expected IllegalArgumentException: character at from position is missing.");
+        } catch (IllegalArgumentException iae) {assertTrue(true); }
+
+
     }
 
 
@@ -486,8 +501,11 @@ public class RoomTest {
 
     @Test
     public void getCharacter() throws Exception {
-        //stdRoom.addEnemy(stdPosition, stdPlayer);
-        assertEquals(stdRoom.getCharacter(stdPosition), stdPlayer);
+        stdRoom.addItem(stdPosition, item1);
+        assertEquals(stdRoom.getCharacter(stdPosition), null);
+
+        stdRoom.addEnemy(stdPosition, stdEnemy);
+        assertEquals(stdRoom.getCharacter(stdPosition), stdEnemy);
         stdRoom.addItem(new Position(123, 123), item1);
         stdRoom.addItem(new Position(13, 1), item2);
     }

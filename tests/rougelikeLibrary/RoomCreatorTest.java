@@ -1,13 +1,13 @@
 package rougelikeLibrary;
 
 import static org.junit.Assert.*;
-
 import org.junit.*;
-
+import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class RoomCreatorTest {
     private final int arbitraryX = 1337;
@@ -20,6 +20,10 @@ public class RoomCreatorTest {
     private final int dummyY = 219219129;
     private Map<Position.CardinalDirection, Position.CardinalDirectionPermission> stdCardinalPermissions = new HashMap<>();
     private Map<Position, List<Mappable>> roomMap;
+    private Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissionsAllOptional = new HashMap<>();
+    private Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissionAllDisallowed = new HashMap<>();
+    private Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissionAllMandatory = new HashMap<>();
+
 
     Item [] items = {
             new Item("fast shoes", 12, Item.Effect.SPEED),
@@ -36,6 +40,10 @@ public class RoomCreatorTest {
     };
 
 
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
+
+
     @Before
     public void init() {
         roomCreator = new RoomCreator(roomCreatorSeed,
@@ -49,8 +57,22 @@ public class RoomCreatorTest {
         stdCardinalPermissions.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Disallowed);
         stdCardinalPermissions.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Optional);
         stdCardinalPermissions.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Optional);
-    }
 
+        cardinalDirectionPermissionsAllOptional.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAllOptional.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAllOptional.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Optional);
+        cardinalDirectionPermissionsAllOptional.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Optional);
+
+        cardinalDirectionPermissionAllDisallowed.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Disallowed);
+        cardinalDirectionPermissionAllDisallowed.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Disallowed);
+        cardinalDirectionPermissionAllDisallowed.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Disallowed);
+        cardinalDirectionPermissionAllDisallowed.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Disallowed);
+
+        cardinalDirectionPermissionAllMandatory.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Mandatory);
+        cardinalDirectionPermissionAllMandatory.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Mandatory);
+        cardinalDirectionPermissionAllMandatory.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Mandatory);
+        cardinalDirectionPermissionAllMandatory.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Mandatory);
+    }
 
 
     @Test
@@ -93,8 +115,10 @@ public class RoomCreatorTest {
 
     @Test
     public void createType() throws Exception {
+        Class [] parameterTypesEnemyInvalid = {String.class, int.class, int.class, TurnSystem.class};
         Class [] parameterTypesEnemy = {int.class, int.class, int.class, TurnSystem.class};
         Object [] parameterValuesEnemy = {34, 87, 22, new TurnSystem(new EnemyAI(43))};
+
         MappableTypeWrapper enemyType = new MappableTypeWrapper(Enemy.class, parameterTypesEnemy, parameterValuesEnemy,
                 new EnemyAI(2143), 1, 2, 30);
 
@@ -104,6 +128,10 @@ public class RoomCreatorTest {
         assertEquals(enemy.getSpeed(), 34);
         assertEquals(enemy.getHealth(), 87);
         assertEquals(enemy.getDamage(), 22);
+
+        exception.expect(IllegalArgumentException.class);
+        roomCreator.createType(new MappableTypeWrapper(Enemy.class, parameterTypesEnemyInvalid, parameterValuesEnemy,
+                new EnemyAI(2143), 1, 2, 30));
     }
 
 
@@ -124,45 +152,28 @@ public class RoomCreatorTest {
 
     @Test
     public void addDoors() throws Exception {
-        stdCardinalPermissions.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Mandatory);
-        stdCardinalPermissions.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Mandatory);
-        stdCardinalPermissions.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Mandatory);
-        stdCardinalPermissions.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Mandatory);
-
         // 4 doors
-        roomMap = new HashMap<>();
-        Room room = new Room(stdWorldPosition, new RoomSpace(32, 32), roomMap);
+        Room room = new Room(stdWorldPosition, new RoomSpace(32, 32), new HashMap<>());
         assertEquals(room.getDoorsCount(), 0);
-        roomCreator.addDoors(room, stdCardinalPermissions);
+        roomCreator.addDoors(room, cardinalDirectionPermissionAllMandatory);
         assertEquals(room.getDoorsCount(), 4);
 
         // 0 doors
-        roomMap = new HashMap<>();
-        room = new Room(stdWorldPosition, new RoomSpace(32, 32), roomMap);
-        assertEquals(room.getDoorsCount(), 0);
-        stdCardinalPermissions.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Disallowed);
-        stdCardinalPermissions.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Disallowed);
-        stdCardinalPermissions.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Disallowed);
-        stdCardinalPermissions.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Disallowed);
-        roomCreator.addDoors(room, stdCardinalPermissions);
+        room = new Room(stdWorldPosition, new RoomSpace(32, 32), new HashMap<>());
+
         assertEquals(room.getDoorsCount(), 0);
 
-        // Probability based
-        stdCardinalPermissions.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Optional);
-        stdCardinalPermissions.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Optional);
-        stdCardinalPermissions.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Optional);
-        stdCardinalPermissions.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Optional);
+        roomCreator.addDoors(room, cardinalDirectionPermissionAllDisallowed);
+        assertEquals(room.getDoorsCount(), 0);
 
         for (int i = 0; i < 1000; i++) {
             if (room.getDoorsCount() >= 2) {
                 break;
             }
-            roomMap = new HashMap<>();
-            room = new Room(stdWorldPosition, new RoomSpace(32, 32), roomMap);
-            roomCreator.addDoors(room, stdCardinalPermissions);
+            room = new Room(stdWorldPosition, new RoomSpace(32, 32), new HashMap<>());
+            roomCreator.addDoors(room, cardinalDirectionPermissionsAllOptional);
         }
         assertTrue(room.getDoorsCount() >= 2);
-
     }
 
 
@@ -183,8 +194,10 @@ public class RoomCreatorTest {
             }
         }
         assertTrue(generatedTrue >= 200000);
-    }
 
+        exception.expect(IllegalArgumentException.class);
+        roomCreator.getProbabilityBoolean(0);
+    }
 
     @Test
     public void getRandomRoomPosition() throws Exception {
@@ -195,7 +208,7 @@ public class RoomCreatorTest {
 
     @Test
     public void createInitialRoom() throws Exception {
-        Room room = roomCreator.createInitialRoom(new Position(arbitraryX, arbitraryY));
+        Room room = roomCreator.createInitialRoom(new Position(arbitraryX, arbitraryY), cardinalDirectionPermissionAllDisallowed);
         assertNotNull(room);
 
         // Minimum 1 door needs to exist in first room
@@ -225,7 +238,19 @@ public class RoomCreatorTest {
         cardinalDirectionPermissions.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Disallowed);
         cardinalDirectionPermissions.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Mandatory);
 
-        room = roomCreator.createRoom(new Position(arbitraryX, arbitraryY), cardinalDirectionPermissions);
+
+        Class [] parameterTypesItem = {String.class, int.class, Item.Effect.class};
+        Class [] parameterTypesItem2 = {String.class, int.class, Item.Effect.class};
+        Object [] parameterValuesItem = {"item 1", 43, Item.Effect.DAMAGE};
+        Object [] parameterValuesItem2 = {"item 2", 89, Item.Effect.HEALTH};
+
+        List<MappableTypeWrapper> mappableTypes = new ArrayList<>();
+        mappableTypes.add(new MappableTypeWrapper(Item.class, parameterTypesItem, parameterValuesItem, 1, 90, 1));
+        mappableTypes.add(new MappableTypeWrapper(Item.class, parameterTypesItem2, parameterValuesItem2, 11, 90, 1));
+
+        RoomCreator roomCreatorNew = new RoomCreator(123, new Player(1, 2, 3, new TurnSystem(new EnemyAI(213))), mappableTypes, new RoomSpace(32, 32));
+
+        room = roomCreatorNew.createRoom(new Position(arbitraryX, arbitraryY), cardinalDirectionPermissions);
         assertNotNull(room);
         assertFalse(room.existDoor(Position.CardinalDirection.North));
         assertTrue(room.existDoor(Position.CardinalDirection.South));

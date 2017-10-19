@@ -2,7 +2,6 @@ package rougelikeLibrary;
 
 
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -101,10 +100,6 @@ public class Room {
      * @param cardinalDirection the cardinal direction to get a position for
      */
     public Position getDoorPosition(Position.CardinalDirection cardinalDirection) {
-        // width: 24
-        // cx: 23
-        // center_x: 11,5 = 11
-
         int x = roomSpace.getWidth() - 1;
         int y = roomSpace.getHeight() - 1;
 
@@ -276,8 +271,7 @@ public class Room {
 
 
     /**
-     * If player not currently exist in room, set the player object at specified position.
-     * Otherwise if player exists, the existing player object is moved to the new position.
+     * Set the player object at specified position.
      * @param position for the player
      * @param player the player object
      * @throws IllegalAccessError if there already exist a character at the position
@@ -287,17 +281,13 @@ public class Room {
             throw new IllegalArgumentException("Position already contains a character");
         }
 
-        Position playerPosition = getPlayerPosition();
-        if (playerPosition == null) {
-            getFromPosition(position).add(player);
-            player.setPosition(position);
-        } else {
-            moveCharacter(playerPosition, position);
-        }
+        getFromPosition(position).add(player);
+        player.setPosition(position);
     }
 
 
     /**
+     * Returns the position for the player.
      * @return null if no player is found, otherwise a position for the player
      */
     public Position getPlayerPosition() {
@@ -338,19 +328,19 @@ public class Room {
      * If there is no character in from position method returns.
      * @param fromPosition
      * @param toPosition
-     * @throws IllegalAccessError if there's already a character in to position.
+     * @throws IllegalAccessError if there's already a character in to position or from and to position is same.
      * There can only be one character per position.
      */
     public void moveCharacter(Position fromPosition, Position toPosition) throws IllegalArgumentException {
         if (fromPosition.equals(toPosition)) {
-            return;
+            throw new IllegalArgumentException("From position can't be same as to position.");
         }
 
         List<Mappable> mappablesFrom = getFromPosition(fromPosition);
         List<Mappable> mappablesTo = getFromPosition(toPosition);
 
         if (!existCharacter(mappablesFrom)) {
-            return;
+            throw new IllegalArgumentException("Character at from position is missing.");
         }
         if (existCharacter(mappablesTo)) {
             throw new IllegalArgumentException("To position already contains a character.");

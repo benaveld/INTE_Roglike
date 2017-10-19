@@ -47,10 +47,10 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    87,8%
+    100%
   </span>
   <span class="absValue">
-    (65/ 74)
+    (70/ 70)
   </span>
 </td>
 </tr>
@@ -85,10 +85,10 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    88%
+    100%
   </span>
   <span class="absValue">
-    (66/ 75)
+    (71/ 71)
   </span>
 </td>
 </tr>
@@ -140,206 +140,201 @@
 <i>40</i>&nbsp;     * Creates the initial room. All cardinal directions for doors is optional with a minimum of one door.
 <i>41</i>&nbsp;     * @param position coordinate in world space for the room
 <i>42</i>&nbsp;     */
-<i>43</i>&nbsp;    public Room createInitialRoom(Position position) {
-<b class="fc"><i>44</i>&nbsp;        java.util.Map&lt;Position.CardinalDirection, Position.CardinalDirectionPermission&gt; cardinalDirectionPermissionsAll = new HashMap&lt;&gt;();</b>
-<i>45</i>&nbsp;
-<b class="fc"><i>46</i>&nbsp;        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.North, Position.CardinalDirectionPermission.Mandatory);</b>
-<b class="fc"><i>47</i>&nbsp;        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.South, Position.CardinalDirectionPermission.Mandatory);</b>
-<b class="fc"><i>48</i>&nbsp;        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.West, Position.CardinalDirectionPermission.Mandatory);</b>
-<b class="fc"><i>49</i>&nbsp;        cardinalDirectionPermissionsAll.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Mandatory);</b>
-<i>50</i>&nbsp;
-<b class="fc"><i>51</i>&nbsp;        Room room = createRoom(position, cardinalDirectionPermissionsAll);</b>
-<b class="fc"><i>52</i>&nbsp;        Map&lt;Position, List&lt;Mappable&gt;&gt; roomMap = room.getRoomMap();</b>
-<b class="fc"><i>53</i>&nbsp;        Position playerPosition = getRandomRoomPosition();</b>
+<i>43</i>&nbsp;    public Room createInitialRoom(Position position, Map&lt;Position.CardinalDirection, Position.CardinalDirectionPermission&gt; doorCardinalDirectionPermissions) {
+<b class="fc"><i>44</i>&nbsp;        Room room = createRoom(position, doorCardinalDirectionPermissions);</b>
+<b class="fc"><i>45</i>&nbsp;        Map&lt;Position, List&lt;Mappable&gt;&gt; roomMap = room.getRoomMap();</b>
+<b class="fc"><i>46</i>&nbsp;        Position playerPosition = getRandomRoomPosition();</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;        // Player can&#39;t be placed on enemies at start
+<b class="fc"><i>49</i>&nbsp;        roomMap.remove(playerPosition);</b>
+<b class="fc"><i>50</i>&nbsp;        room.setPlayer(playerPosition, player);</b>
+<b class="fc"><i>51</i>&nbsp;        player.setPosition(playerPosition);</b>
+<i>52</i>&nbsp;
+<b class="fc"><i>53</i>&nbsp;        addToRoom(roomMap, playerPosition, player);</b>
 <i>54</i>&nbsp;
-<i>55</i>&nbsp;        // Player can&#39;t be placed on enemies at start
-<b class="fc"><i>56</i>&nbsp;        roomMap.remove(playerPosition);</b>
-<b class="fc"><i>57</i>&nbsp;        room.setPlayer(playerPosition, player);</b>
-<i>58</i>&nbsp;
-<b class="fc"><i>59</i>&nbsp;        addToRoom(roomMap, playerPosition, player);</b>
-<i>60</i>&nbsp;
-<i>61</i>&nbsp;        // Need minimum one doors at the beginning
-<b class="fc"><i>62</i>&nbsp;        if (room.getDoorsCount() &lt; 1) {</b>
-<b class="nc"><i>63</i>&nbsp;            addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.North), new Door());</b>
-<i>64</i>&nbsp;        }
-<i>65</i>&nbsp;
-<b class="fc"><i>66</i>&nbsp;        return room;</b>
-<i>67</i>&nbsp;    }
-<i>68</i>&nbsp;
-<i>69</i>&nbsp;
-<i>70</i>&nbsp;    /**
-<i>71</i>&nbsp;     * Creates a new room at the specified coordinate.
-<i>72</i>&nbsp;     * @param position coordinate in world space for the room
-<i>73</i>&nbsp;     * @return Room
-<i>74</i>&nbsp;     * @throws IllegalArgumentException if min or max quantity of given type is not completed.
-<i>75</i>&nbsp;     */
-<i>76</i>&nbsp;    public Room createRoom(Position position, java.util.Map&lt;Position.CardinalDirection, Position.CardinalDirectionPermission&gt; cardinalDirectionPermissions) throws IllegalArgumentException {
-<b class="fc"><i>77</i>&nbsp;        Map&lt;Position, List&lt;Mappable&gt;&gt; roomMap = new HashMap&lt;&gt;();</b>
+<i>55</i>&nbsp;        // Need minimum one doors at the beginning
+<b class="fc"><i>56</i>&nbsp;        if (room.getDoorsCount() &lt; 1) {</b>
+<b class="fc"><i>57</i>&nbsp;            addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.North), new Door());</b>
+<i>58</i>&nbsp;        }
+<i>59</i>&nbsp;
+<b class="fc"><i>60</i>&nbsp;        return room;</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    /**
+<i>65</i>&nbsp;     * Creates a new room at the specified coordinate.
+<i>66</i>&nbsp;     * @param position coordinate in world space for the room
+<i>67</i>&nbsp;     * @return Room
+<i>68</i>&nbsp;     * @throws IllegalArgumentException if min or max quantity of given type is not completed.
+<i>69</i>&nbsp;     */
+<i>70</i>&nbsp;    public Room createRoom(Position position, java.util.Map&lt;Position.CardinalDirection, Position.CardinalDirectionPermission&gt; cardinalDirectionPermissions) throws IllegalArgumentException {
+<b class="fc"><i>71</i>&nbsp;        Map&lt;Position, List&lt;Mappable&gt;&gt; roomMap = new HashMap&lt;&gt;();</b>
+<i>72</i>&nbsp;
+<b class="fc"><i>73</i>&nbsp;        Room room = new Room(position, roomSpace, roomMap);</b>
+<i>74</i>&nbsp;
+<b class="fc"><i>75</i>&nbsp;        for(MappableTypeWrapper mappableTypeWrapper : mappableTypes) {</b>
+<b class="fc"><i>76</i>&nbsp;            addTypeToRoom(mappableTypeWrapper, roomMap);</b>
+<b class="fc"><i>77</i>&nbsp;        }</b>
 <i>78</i>&nbsp;
-<b class="fc"><i>79</i>&nbsp;        Room room = new Room(position, roomSpace, roomMap);</b>
+<b class="fc"><i>79</i>&nbsp;        addDoors(room, cardinalDirectionPermissions);</b>
 <i>80</i>&nbsp;
-<b class="fc"><i>81</i>&nbsp;        for(MappableTypeWrapper mappableTypeWrapper : mappableTypes) {</b>
-<b class="nc"><i>82</i>&nbsp;            addTypeToRoom(mappableTypeWrapper, roomMap);</b>
-<b class="nc"><i>83</i>&nbsp;        }</b>
+<b class="fc"><i>81</i>&nbsp;        return room;</b>
+<i>82</i>&nbsp;    }
+<i>83</i>&nbsp;
 <i>84</i>&nbsp;
-<b class="fc"><i>85</i>&nbsp;        addDoors(room, cardinalDirectionPermissions);</b>
-<i>86</i>&nbsp;
-<b class="fc"><i>87</i>&nbsp;        return room;</b>
-<i>88</i>&nbsp;    }
-<i>89</i>&nbsp;
-<i>90</i>&nbsp;
-<i>91</i>&nbsp;    // @TODO private
-<i>92</i>&nbsp;    /**
-<i>93</i>&nbsp;     * Adds type to a position in room based on probability, minimum quantity and not exceeding maximum quantity
-<i>94</i>&nbsp;     * @param mappableTypeWrapper information needed to create a type
-<i>95</i>&nbsp;     * @param roomMap the room
-<i>96</i>&nbsp;     */
-<i>97</i>&nbsp;    public void addTypeToRoom(MappableTypeWrapper mappableTypeWrapper, Map&lt;Position, List&lt;Mappable&gt;&gt; roomMap) {
-<i>98</i>&nbsp;        // Loop until given min and max quantity of type is completed.
-<i>99</i>&nbsp;        while (true) {
-<i>100</i>&nbsp;            // Iterate all positions in a room
-<b class="fc"><i>101</i>&nbsp;            for (int x = 0; x &lt; roomSpace.getWidth(); x++) {</b>
-<b class="fc"><i>102</i>&nbsp;                for (int y = 0; y &lt; roomSpace.getHeight(); y++) {</b>
-<i>103</i>&nbsp;                    // Get probability boolean to create a type in the given position
-<b class="fc"><i>104</i>&nbsp;                    if (getProbabilityBoolean(mappableTypeWrapper.probability)) {</b>
-<b class="fc"><i>105</i>&nbsp;                        addToRoom(roomMap, new Position(x, y), createType(mappableTypeWrapper));</b>
-<b class="fc"><i>106</i>&nbsp;                        mappableTypeWrapper.addQuantity();</b>
-<i>107</i>&nbsp;
-<b class="fc"><i>108</i>&nbsp;                        log.info(&quot;probability create room x: &quot; + x + &quot;, y: &quot; + y + &quot;. mappqnty: &quot; + mappableTypeWrapper.currentQuantity);</b>
-<i>109</i>&nbsp;
-<b class="fc"><i>110</i>&nbsp;                        if (mappableTypeWrapper.isMaxQuantity()) {</b>
-<b class="fc"><i>111</i>&nbsp;                            return;</b>
-<i>112</i>&nbsp;                        }
-<i>113</i>&nbsp;                    }
-<i>114</i>&nbsp;                }
-<i>115</i>&nbsp;            }
-<b class="nc"><i>116</i>&nbsp;            log.info(&quot;room looped&quot;);</b>
-<b class="nc"><i>117</i>&nbsp;            if (mappableTypeWrapper.isMinQuantity()) {</b>
-<b class="nc"><i>118</i>&nbsp;                return;</b>
-<i>119</i>&nbsp;            }
-<i>120</i>&nbsp;        }
-<i>121</i>&nbsp;    }
-<i>122</i>&nbsp;
-<i>123</i>&nbsp;
-<i>124</i>&nbsp;    // @TODO private
-<i>125</i>&nbsp;    /**
-<i>126</i>&nbsp;     * Creates a mappable type
-<i>127</i>&nbsp;     * @param mappableTypeWrapper the wrapper that holds information necessary to create a mappable type
-<i>128</i>&nbsp;     * @return a mappable type
-<i>129</i>&nbsp;     * @throws IllegalArgumentException if arguments is illegal
-<i>130</i>&nbsp;     */
-<i>131</i>&nbsp;    public Mappable createType(MappableTypeWrapper mappableTypeWrapper) throws IllegalArgumentException {
-<i>132</i>&nbsp;        try {
-<b class="fc"><i>133</i>&nbsp;            Constructor&lt;?&gt; constructor = mappableTypeWrapper.classType.getConstructor(mappableTypeWrapper.parameterTypes);</b>
-<b class="fc"><i>134</i>&nbsp;            return (Mappable) constructor.newInstance(mappableTypeWrapper.parameterValues);</b>
-<b class="nc"><i>135</i>&nbsp;        } catch(NoSuchMethodException | InstantiationException | IllegalAccessException |</b>
-<i>136</i>&nbsp;                InvocationTargetException ex) {
-<b class="nc"><i>137</i>&nbsp;            throw new IllegalArgumentException(&quot;Item type, parameter types or parameter values is illegal. : &quot; + ex);</b>
-<i>138</i>&nbsp;        }
-<i>139</i>&nbsp;    }
-<i>140</i>&nbsp;
-<i>141</i>&nbsp;
-<i>142</i>&nbsp;    // @TODO private
-<i>143</i>&nbsp;    /**
-<i>144</i>&nbsp;     * Adds a mappable type to a position in room map
-<i>145</i>&nbsp;     * @param roomMap the map that contains all lists of mappables per position
-<i>146</i>&nbsp;     * @param position the position in map
-<i>147</i>&nbsp;     * @param mappableType the mappable type to add to the position
-<i>148</i>&nbsp;     */
-<i>149</i>&nbsp;    public void addToRoom(Map&lt;Position, List&lt;Mappable&gt;&gt; roomMap, Position position, Mappable mappableType) {
-<b class="fc"><i>150</i>&nbsp;        List&lt;Mappable&gt; mappableList = roomMap.get(position);</b>
-<i>151</i>&nbsp;
-<b class="fc"><i>152</i>&nbsp;        if (mappableList == null) {</b>
-<b class="fc"><i>153</i>&nbsp;            mappableList = new ArrayList&lt;&gt;();</b>
-<b class="fc"><i>154</i>&nbsp;            roomMap.put(position, mappableList);</b>
-<i>155</i>&nbsp;        }
-<b class="fc"><i>156</i>&nbsp;        mappableList.add(mappableType);</b>
-<b class="fc"><i>157</i>&nbsp;    }</b>
-<i>158</i>&nbsp;
-<i>159</i>&nbsp;
-<i>160</i>&nbsp;    // @TODO private
-<i>161</i>&nbsp;    /**
-<i>162</i>&nbsp;     * Adds a door in a specific cardinal direction based on cardinal direction permissions.
-<i>163</i>&nbsp;     * The permissions dictate if it is mandatory, optional or disallowed.
-<i>164</i>&nbsp;     * If it&#39;s optional it&#39;s probability based if the door is created.
-<i>165</i>&nbsp;     * @param room the room to add doors to
-<i>166</i>&nbsp;     * @param cardinalDirectionPermissions the permissions that dictates optional (i.e. probability based), mandatory or disallowed.
-<i>167</i>&nbsp;     */
-<i>168</i>&nbsp;    public void addDoors(Room room, java.util.Map&lt;Position.CardinalDirection, Position.CardinalDirectionPermission&gt; cardinalDirectionPermissions) {
-<b class="fc"><i>169</i>&nbsp;        Map&lt;Position, List&lt;Mappable&gt;&gt; roomMap = room.getRoomMap();</b>
-<i>170</i>&nbsp;
-<b class="fc"><i>171</i>&nbsp;        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.North))) {</b>
-<b class="fc"><i>172</i>&nbsp;           addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.North), new Door());</b>
-<i>173</i>&nbsp;        }
-<b class="fc"><i>174</i>&nbsp;        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.South))) {</b>
-<b class="fc"><i>175</i>&nbsp;            addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.South), new Door());</b>
-<i>176</i>&nbsp;        }
-<b class="fc"><i>177</i>&nbsp;        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.West))) {</b>
-<b class="fc"><i>178</i>&nbsp;            addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.West), new Door());</b>
-<i>179</i>&nbsp;        }
-<b class="fc"><i>180</i>&nbsp;        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.East))) {</b>
-<b class="fc"><i>181</i>&nbsp;            addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.East), new Door());</b>
-<i>182</i>&nbsp;        }
-<b class="fc"><i>183</i>&nbsp;    }</b>
-<i>184</i>&nbsp;
-<i>185</i>&nbsp;
-<i>186</i>&nbsp;    // @TODO private
-<i>187</i>&nbsp;    /**
-<i>188</i>&nbsp;     * Calculates the choice based on the permissions. Optional is roughly 50% probability for either true/false.
-<i>189</i>&nbsp;     * @param cardinalDirectionPermission the permissions to calculate from.
-<i>190</i>&nbsp;     * @return true if permission is mandatory or if random returns true on optional permission.
-<i>191</i>&nbsp;     * If a permission is missing or is null, false will be returned.
-<i>192</i>&nbsp;     */
-<i>193</i>&nbsp;    public boolean getCardinalDirectionPermissionChoice(Position.CardinalDirectionPermission cardinalDirectionPermission) {
-<b class="fc"><i>194</i>&nbsp;        boolean choice = false;</b>
+<i>85</i>&nbsp;    // @TODO private
+<i>86</i>&nbsp;    /**
+<i>87</i>&nbsp;     * Adds type to a position in room based on probability, minimum quantity and not exceeding maximum quantity
+<i>88</i>&nbsp;     * @param mappableTypeWrapper information needed to create a type
+<i>89</i>&nbsp;     * @param roomMap the room
+<i>90</i>&nbsp;     */
+<i>91</i>&nbsp;    public void addTypeToRoom(MappableTypeWrapper mappableTypeWrapper, Map&lt;Position, List&lt;Mappable&gt;&gt; roomMap) {
+<i>92</i>&nbsp;        // Loop until given min and max quantity of type is completed.
+<i>93</i>&nbsp;        while (true) {
+<i>94</i>&nbsp;            // Iterate all positions in a room
+<b class="fc"><i>95</i>&nbsp;            for (int x = 0; x &lt; roomSpace.getWidth(); x++) {</b>
+<b class="fc"><i>96</i>&nbsp;                for (int y = 0; y &lt; roomSpace.getHeight(); y++) {</b>
+<i>97</i>&nbsp;                    // Get probability boolean to create a type in the given position
+<b class="fc"><i>98</i>&nbsp;                    if (getProbabilityBoolean(mappableTypeWrapper.probability)) {</b>
+<b class="fc"><i>99</i>&nbsp;                        addToRoom(roomMap, new Position(x, y), createType(mappableTypeWrapper));</b>
+<b class="fc"><i>100</i>&nbsp;                        mappableTypeWrapper.addQuantity();</b>
+<i>101</i>&nbsp;
+<b class="fc"><i>102</i>&nbsp;                        if (mappableTypeWrapper.isMaxQuantity()) {</b>
+<b class="fc"><i>103</i>&nbsp;                            return;</b>
+<i>104</i>&nbsp;                        }
+<i>105</i>&nbsp;                    }
+<i>106</i>&nbsp;                }
+<i>107</i>&nbsp;            }
+<b class="fc"><i>108</i>&nbsp;            if (mappableTypeWrapper.isMinQuantity()) {</b>
+<b class="fc"><i>109</i>&nbsp;                return;</b>
+<i>110</i>&nbsp;            }
+<i>111</i>&nbsp;        }
+<i>112</i>&nbsp;    }
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    // @TODO private
+<i>116</i>&nbsp;    /**
+<i>117</i>&nbsp;     * Creates a mappable type
+<i>118</i>&nbsp;     * @param mappableTypeWrapper the wrapper that holds information necessary to create a mappable type
+<i>119</i>&nbsp;     * @return a mappable type
+<i>120</i>&nbsp;     * @throws IllegalArgumentException if arguments is illegal
+<i>121</i>&nbsp;     */
+<i>122</i>&nbsp;    public Mappable createType(MappableTypeWrapper mappableTypeWrapper) throws IllegalArgumentException {
+<i>123</i>&nbsp;        try {
+<b class="fc"><i>124</i>&nbsp;            Constructor&lt;?&gt; constructor = mappableTypeWrapper.classType.getConstructor(mappableTypeWrapper.parameterTypes);</b>
+<b class="fc"><i>125</i>&nbsp;            return (Mappable) constructor.newInstance(mappableTypeWrapper.parameterValues);</b>
+<b class="fc"><i>126</i>&nbsp;        } catch(NoSuchMethodException | InstantiationException | IllegalAccessException |</b>
+<i>127</i>&nbsp;                InvocationTargetException ex) {
+<b class="fc"><i>128</i>&nbsp;            throw new IllegalArgumentException(&quot;Item type, parameter types or parameter values is illegal. : &quot; + ex);</b>
+<i>129</i>&nbsp;        }
+<i>130</i>&nbsp;    }
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;    // @TODO private
+<i>134</i>&nbsp;    /**
+<i>135</i>&nbsp;     * Adds a mappable type to a position in room map
+<i>136</i>&nbsp;     * @param roomMap the map that contains all lists of mappables per position
+<i>137</i>&nbsp;     * @param position the position in map
+<i>138</i>&nbsp;     * @param mappableType the mappable type to add to the position
+<i>139</i>&nbsp;     */
+<i>140</i>&nbsp;    public void addToRoom(Map&lt;Position, List&lt;Mappable&gt;&gt; roomMap, Position position, Mappable mappableType) {
+<b class="fc"><i>141</i>&nbsp;        List&lt;Mappable&gt; mappableList = roomMap.get(position);</b>
+<i>142</i>&nbsp;
+<b class="fc"><i>143</i>&nbsp;        if (mappableList == null) {</b>
+<b class="fc"><i>144</i>&nbsp;            mappableList = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>145</i>&nbsp;            roomMap.put(position, mappableList);</b>
+<i>146</i>&nbsp;        }
+<b class="fc"><i>147</i>&nbsp;        mappableList.add(mappableType);</b>
+<i>148</i>&nbsp;
+<b class="fc"><i>149</i>&nbsp;        if (mappableType instanceof Character) {</b>
+<b class="fc"><i>150</i>&nbsp;            ((Character) mappableType).setPosition(position);</b>
+<i>151</i>&nbsp;        }
+<b class="fc"><i>152</i>&nbsp;    }</b>
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;    // @TODO private
+<i>156</i>&nbsp;    /**
+<i>157</i>&nbsp;     * Adds a door in a specific cardinal direction based on cardinal direction permissions.
+<i>158</i>&nbsp;     * The permissions dictate if it is mandatory, optional or disallowed.
+<i>159</i>&nbsp;     * If it&#39;s optional it&#39;s probability based if the door is created.
+<i>160</i>&nbsp;     * @param room the room to add doors to
+<i>161</i>&nbsp;     * @param cardinalDirectionPermissions the permissions that dictates optional (i.e. probability based), mandatory or disallowed.
+<i>162</i>&nbsp;     */
+<i>163</i>&nbsp;    public void addDoors(Room room, java.util.Map&lt;Position.CardinalDirection, Position.CardinalDirectionPermission&gt; cardinalDirectionPermissions) {
+<b class="fc"><i>164</i>&nbsp;        Map&lt;Position, List&lt;Mappable&gt;&gt; roomMap = room.getRoomMap();</b>
+<i>165</i>&nbsp;
+<b class="fc"><i>166</i>&nbsp;        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.North))) {</b>
+<b class="fc"><i>167</i>&nbsp;           addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.North), new Door());</b>
+<i>168</i>&nbsp;        }
+<b class="fc"><i>169</i>&nbsp;        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.South))) {</b>
+<b class="fc"><i>170</i>&nbsp;            addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.South), new Door());</b>
+<i>171</i>&nbsp;        }
+<b class="fc"><i>172</i>&nbsp;        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.West))) {</b>
+<b class="fc"><i>173</i>&nbsp;            addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.West), new Door());</b>
+<i>174</i>&nbsp;        }
+<b class="fc"><i>175</i>&nbsp;        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.East))) {</b>
+<b class="fc"><i>176</i>&nbsp;            addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.East), new Door());</b>
+<i>177</i>&nbsp;        }
+<b class="fc"><i>178</i>&nbsp;    }</b>
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;    // @TODO private
+<i>182</i>&nbsp;    /**
+<i>183</i>&nbsp;     * Calculates the choice based on the permissions. Optional is roughly 50% probability for either true/false.
+<i>184</i>&nbsp;     * @param cardinalDirectionPermission the permissions to calculate from.
+<i>185</i>&nbsp;     * @return true if permission is mandatory or if random returns true on optional permission.
+<i>186</i>&nbsp;     * If a permission is missing or is null, false will be returned.
+<i>187</i>&nbsp;     */
+<i>188</i>&nbsp;    public boolean getCardinalDirectionPermissionChoice(Position.CardinalDirectionPermission cardinalDirectionPermission) {
+<b class="fc"><i>189</i>&nbsp;        boolean choice = false;</b>
+<i>190</i>&nbsp;
+<b class="fc"><i>191</i>&nbsp;        switch (cardinalDirectionPermission) {</b>
+<i>192</i>&nbsp;            case Disallowed:
+<b class="fc"><i>193</i>&nbsp;                choice = false;</b>
+<b class="fc"><i>194</i>&nbsp;                break;</b>
 <i>195</i>&nbsp;
-<b class="fc"><i>196</i>&nbsp;        switch (cardinalDirectionPermission) {</b>
-<i>197</i>&nbsp;            case Disallowed:
-<b class="fc"><i>198</i>&nbsp;                choice = false;</b>
-<b class="fc"><i>199</i>&nbsp;                break;</b>
-<i>200</i>&nbsp;
-<i>201</i>&nbsp;            case Optional:
-<b class="fc"><i>202</i>&nbsp;                choice = random.nextBoolean();</b>
-<b class="fc"><i>203</i>&nbsp;                break;</b>
-<i>204</i>&nbsp;
-<i>205</i>&nbsp;            case Mandatory:
-<b class="fc"><i>206</i>&nbsp;                choice = true;</b>
-<i>207</i>&nbsp;                break;
-<i>208</i>&nbsp;        }
-<b class="fc"><i>209</i>&nbsp;        return choice;</b>
-<i>210</i>&nbsp;    }
-<i>211</i>&nbsp;
-<i>212</i>&nbsp;
-<i>213</i>&nbsp;    /**
-<i>214</i>&nbsp;     * Returns a boolean value based on the probability given as argument to get a random number in the span.
-<i>215</i>&nbsp;     * @param percentProbability the probability in percent. 0 &lt; probability &lt;= 100.
-<i>216</i>&nbsp;     * @return a boolean value based on the probability
-<i>217</i>&nbsp;     * @throws IllegalArgumentException if probability is not 0 &lt; probability &lt;= 100.
-<i>218</i>&nbsp;     */
-<i>219</i>&nbsp;    public boolean getProbabilityBoolean(int percentProbability) throws IllegalArgumentException {
-<b class="fc"><i>220</i>&nbsp;        if (percentProbability &lt; 1 || percentProbability &gt; 100) {</b>
-<b class="nc"><i>221</i>&nbsp;            throw new IllegalArgumentException(&quot;Probability must be between 0 and 100 exclusive.&quot;);</b>
-<i>222</i>&nbsp;        }
-<b class="fc"><i>223</i>&nbsp;        return random.nextDouble() &lt;= (percentProbability / 100d);</b>
-<i>224</i>&nbsp;    }
-<i>225</i>&nbsp;
-<i>226</i>&nbsp;
-<i>227</i>&nbsp;    /**
-<i>228</i>&nbsp;     * Get a random position in roomSpace
-<i>229</i>&nbsp;     * @return random position
-<i>230</i>&nbsp;     */
-<i>231</i>&nbsp;    public Position getRandomRoomPosition() {
-<b class="fc"><i>232</i>&nbsp;        int x = random.nextInt(roomSpace.getWidth());</b>
-<b class="fc"><i>233</i>&nbsp;        int y = random.nextInt(roomSpace.getHeight());</b>
-<b class="fc"><i>234</i>&nbsp;        return new Position(x, y);</b>
-<i>235</i>&nbsp;    }
-<i>236</i>&nbsp;}
+<i>196</i>&nbsp;            case Optional:
+<b class="fc"><i>197</i>&nbsp;                choice = random.nextBoolean();</b>
+<b class="fc"><i>198</i>&nbsp;                break;</b>
+<i>199</i>&nbsp;
+<i>200</i>&nbsp;            case Mandatory:
+<b class="fc"><i>201</i>&nbsp;                choice = true;</b>
+<i>202</i>&nbsp;                break;
+<i>203</i>&nbsp;        }
+<b class="fc"><i>204</i>&nbsp;        return choice;</b>
+<i>205</i>&nbsp;    }
+<i>206</i>&nbsp;
+<i>207</i>&nbsp;
+<i>208</i>&nbsp;    /**
+<i>209</i>&nbsp;     * Returns a boolean value based on the probability given as argument to get a random number in the span.
+<i>210</i>&nbsp;     * @param percentProbability the probability in percent. 0 &lt; probability &lt;= 100.
+<i>211</i>&nbsp;     * @return a boolean value based on the probability
+<i>212</i>&nbsp;     * @throws IllegalArgumentException if probability is not 0 &lt; probability &lt;= 100.
+<i>213</i>&nbsp;     */
+<i>214</i>&nbsp;    public boolean getProbabilityBoolean(int percentProbability) throws IllegalArgumentException {
+<b class="fc"><i>215</i>&nbsp;        if (percentProbability &lt; 1 || percentProbability &gt; 100) {</b>
+<b class="fc"><i>216</i>&nbsp;            throw new IllegalArgumentException(&quot;Probability must be between 0 and 100 exclusive.&quot;);</b>
+<i>217</i>&nbsp;        }
+<b class="fc"><i>218</i>&nbsp;        return random.nextDouble() &lt;= (percentProbability / 100d);</b>
+<i>219</i>&nbsp;    }
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;
+<i>222</i>&nbsp;    /**
+<i>223</i>&nbsp;     * Get a random position in roomSpace
+<i>224</i>&nbsp;     * @return random position
+<i>225</i>&nbsp;     */
+<i>226</i>&nbsp;    public Position getRandomRoomPosition() {
+<b class="fc"><i>227</i>&nbsp;        int x = random.nextInt(roomSpace.getWidth());</b>
+<b class="fc"><i>228</i>&nbsp;        int y = random.nextInt(roomSpace.getHeight());</b>
+<b class="fc"><i>229</i>&nbsp;        return new Position(x, y);</b>
+<i>230</i>&nbsp;    }
+<i>231</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2017-10-18 17:06</div>
+    <div style="float:right;">generated on 2017-10-19 02:27</div>
 </div>
 </body>
 </html>
