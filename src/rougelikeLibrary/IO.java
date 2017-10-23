@@ -2,10 +2,28 @@ package rougelikeLibrary;
 
 import rougelikeLibrary.Position.CardinalDirection;
 
-public abstract class IO {
+public interface IO {
 
-	
-	public abstract CardinalDirection requestMove(Room room, Character c);	
-	
-	public abstract CardinalDirection requestMoveAfterFail(Room room, Character c);
+	/**
+	 * Gets a CardinalDirection from this IO.
+	 * 
+	 * @param room
+	 *            Current active room
+	 * @param c
+	 *            Character connected to this IO
+	 * @return The selected CardinalDirection
+	 */
+	public CardinalDirection requestMove(Room room, Character c);
+
+	/**
+	 * 
+	 * Gets a CardinalDirection from this IO after having failed once before.
+	 * 
+	 * @param room
+	 *            Current active room
+	 * @param c
+	 *            Character connected to this IO
+	 * @return The selected CardinalDirection
+	 */
+	public CardinalDirection requestMoveAfterFail(Room room, Character c);
 }
