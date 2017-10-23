@@ -34,10 +34,10 @@ public class MapControllerTest {
     };
 
     Character [] enemies = {
-            new Enemy(22, 33, 44, new TurnSystem(new EnemyAI(1))),
-            new Enemy(2, 3, 44, new TurnSystem(new EnemyAI(1))),
-            new Enemy(22, 33, 4, new TurnSystem(new EnemyAI(1))),
-            new Enemy(2, 3, 44, new TurnSystem(new EnemyAI(1)))
+            new Enemy(22, 33, 44, new Position(0,0), new TurnSystem(new EnemyAI(1))),
+            new Enemy(2, 3, 44, new Position(0,0), new TurnSystem(new EnemyAI(1))),
+            new Enemy(22, 33, 4, new Position(0,0), new TurnSystem(new EnemyAI(1))),
+            new Enemy(2, 3, 44, new Position(0,0), new TurnSystem(new EnemyAI(1)))
     };
 
 
@@ -54,7 +54,7 @@ public class MapControllerTest {
         cardinalDirectionPermissionsAll.put(Position.CardinalDirection.East, Position.CardinalDirectionPermission.Optional);
 
         roomCreator = new RoomCreator(dummySeed,
-                new Player(1, 1, 1, new TurnSystem(new EnemyAI(1))),
+                new Player(1, 1, 1, new Position(0,0), new TurnSystem(new EnemyAI(1))),
                 new ArrayList<MappableTypeWrapper>(),
                 new RoomSpace(32, 32));
 
