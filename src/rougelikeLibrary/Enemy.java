@@ -12,10 +12,16 @@ public class Enemy extends Character {
 		
 		
 	}
-		
+		/**
+		 * 
+		 * @param Sets what Room the Enemy exists in
+		 */
 	public void setRoom(Room r) {
 		currentRoom = r;
 	}
+	/**
+	 * Drops all items on the position that the enemy was on when it died and also removes the enemy from that position.
+	 */
 	private void dropItems() {
 		Position here = this.getPosition();
 		
@@ -28,6 +34,9 @@ public class Enemy extends Character {
 			}
 		}
 	}
+	/**
+	 * If the enemy dies when taking damage it drops all it's items
+	 */
 	@Override
 	public void takeDamage(int damage) {
 		super.takeDamage(damage);
