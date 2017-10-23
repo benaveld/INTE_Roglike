@@ -100,7 +100,7 @@ public class TurnSystem {
 		int maxSafetyCount = 100;
 		Position newPosition;
 		try {
-			newPosition = getNewPosition(character, IO.requestMove(room, character));
+			newPosition = character.getPosition().translateCardinalDirection(io.requestMove(room, character));
 		} catch (IllegalArgumentException e) {
 			System.out.println(e);
 			newPosition = null;
@@ -111,7 +111,7 @@ public class TurnSystem {
 				return States.END;
 			} else {
 				try {
-					newPosition = getNewPosition(character, IO.requestMoveAfterFail(room, character));
+					newPosition = character.getPosition().translateCardinalDirection(io.requestMove(room, character));
 				} catch (IllegalArgumentException e) {
 					System.out.println(e);
 				}
@@ -136,45 +136,7 @@ public class TurnSystem {
 		}
 		return false;
 	}
-
-	/**
-	 * Gets new position based on the direction the character tried to move
-	 * 
-	 * @param character
-	 *            Character connected to this TurnSystem
-	 * @param dir
-	 *            The direction that IO wanted to move
-	 * @return The new position if it is legal, otherwise it returns null
-	 */
-	private Position getNewPosition(Character character, CardinalDirection dir) {
-		int x = character.getPosition().getX();
-		int y = character.getPosition().getY();
-		Position newPosition = new Position(x, y); // Need new object because of translate
-		try {
-			switch (dir) {
-			case North:
-				newPosition.translate(0, -1);
-				break;
-
-			case West:
-				newPosition.translate(-1, 0);
-				break;
-
-			case South:
-				newPosition.translate(0, 1);
-				break;
-
-			case East:
-				newPosition.translate(1, 0);
-				break;
-
-			}
-		} catch (IllegalArgumentException e) {
-			return null;
-		}
-		return newPosition;
-	}
-
+  
 	/**
 	 * Checks if their is an other Character in the new position
 	 * 
