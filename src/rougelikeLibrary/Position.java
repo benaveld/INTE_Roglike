@@ -40,7 +40,7 @@ public class Position {
 		}
 		return false;
 	}
-
+	
 	public int getX() {
 		return x;
 	}
@@ -63,6 +63,12 @@ public class Position {
 		return new Position(this.x, y);
 	}
 
+	/**
+	 * 
+	 * @param deltaX 
+	 * @param deltaY
+	 * @return A new Position with x + deltaX and y + deltaY.
+	 */
 	public Position translate(int deltaX, int deltaY) {
 		if (Math.addExact(x, deltaX) < 0 || Math.addExact(y, deltaY) < 0) {
 			throw new IllegalArgumentException(
@@ -70,7 +76,12 @@ public class Position {
 		}
 		return new Position(x + deltaX, y + deltaY);
 	}
-
+	
+	/**
+	 * 
+	 * @param dir A Cardinal Direction. The enum is located in Position.
+	 * @return New Position with the same x and y but with one step in the direction of the cardinal direction.
+	 */
 	public Position translateCardinalDirection(CardinalDirection dir) {
 		switch (dir) {
 		// Decrease Y
@@ -89,7 +100,10 @@ public class Position {
 			throw new IllegalArgumentException("Not a Cardinal Direction");
 		}
 	}
-
+	/**
+	 * 
+	 * @return New Position with the same x and y values.
+	 */
 	public Position getLocation() {
 		return new Position(this.x, this.y);
 	}

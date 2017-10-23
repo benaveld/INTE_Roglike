@@ -1,8 +1,6 @@
 package rougelikeLibrary;
 
 
-import javafx.geometry.Pos;
-
 import java.util.*;
 import java.util.logging.Logger;
 
