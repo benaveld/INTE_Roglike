@@ -33,7 +33,7 @@ public class Character implements Mappable {
 		}
 	}
 	
-	public void calculateHealth() {
+	private void calculateHealth() {
 		
 		int diff = totalHealth - currentHealth;
 		totalHealth = originalHealth + inv.getTotalValues().get(Item.Effect.HEALTH);
