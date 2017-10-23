@@ -139,5 +139,47 @@ public class CharacterTests {
 		c.takeDamage(1);
 		assertTrue(c.isDead());
 	}
-	
+	@Test
+	public void testCharacterStatChanges() {
+		
+		Enemy e = new Enemy(1,1,1, new Position(1,1), new TurnSystem(new EnemyAI(1)));
+		e.getInventory().add(new Item("test", 1, Item.Effect.DAMAGE));
+		e.getInventory().add(new Item("test", 1, Item.Effect.HEALTH));
+		e.getInventory().add(new Item("test", 1, Item.Effect.SPEED));
+		Room r = new Room(new Position(1,1), new RoomSpace(10,10));
+		r.addEnemy(new Position(1,1), e);
+		assertFalse(e.startTurn(r));
+		assertEquals(e.getDamage(), 2); //All stats increased
+		assertEquals(e.getSpeed(), 2);
+		assertEquals(e.getHealth(), 2);
+		e.getInventory().add(new Item("test", -2, Item.Effect.DAMAGE));
+		e.getInventory().add(new Item("test", -2, Item.Effect.SPEED));
+		e.getInventory().add(new Item("test", -1, Item.Effect.HEALTH));
+		assertFalse(e.startTurn(r));
+		assertEquals(e.getDamage(), 0); //All stats decreased
+		assertEquals(e.getSpeed(), 0);
+		assertEquals(e.getHealth(), 1);
+		e.getInventory().add(new Item("test", 2, Item.Effect.HEALTH));
+		assertFalse(e.startTurn(r)); 
+		assertEquals(e.getHealth(), 3); //Health increased
+		e.takeDamage(1); 
+		assertFalse(e.startTurn(r));
+		assertEquals(e.getHealth(), 2); //Health decreased by attack
+		e.getInventory().add(new Item("test", -1, Item.Effect.HEALTH));
+		assertFalse(e.startTurn(r));
+		assertEquals(e.getHealth(), 1); //Health further decreased by item
+		e.getInventory().add(new Item("test", 3, Item.Effect.HEALTH));
+		assertFalse(e.startTurn(r));
+		assertEquals(e.getHealth(), 4); //Health increased by item again
+		e.getInventory().add(new Item("test", 1, Item.Effect.HEALTH));
+		e.takeDamage(2);
+		assertEquals(e.getHealth(), 3); //Health is changed when getHealth is called as well as when a turn starts
+		assertFalse(e.startTurn(r));
+		assertEquals(e.getHealth(), 3); //Taking damage and increasing health at the same time
+		e.getInventory().add(new Item("test", -1, Item.Effect.HEALTH));
+		e.takeDamage(2);
+		assertFalse(e.startTurn(r));
+		assertEquals(e.getHealth(), 0); //Taking damage and reducing health with item at the same time
+		assertTrue(e.isDead());
+	}
 }
