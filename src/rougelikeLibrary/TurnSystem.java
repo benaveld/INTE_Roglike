@@ -17,11 +17,11 @@ public class TurnSystem {
 	public boolean startTurn(Character character, int moves, Room room) {
 
 		RoomSpace rs = room.getRoomSpace();
-		Position newPosition = getnewPosition(character, io.requestMove(room, character));
+		Position newPosition = character.getPosition().translateCardinalDirection(io.requestMove(room, character));
 		if (newPosition == null || !newPosIsInsideRoomSpace(newPosition, rs)) {
 			int safetyCount = 0;
 			do {
-				newPosition = getnewPosition(character, io.requestMoveAfterFail(room, character));
+				newPosition = character.getPosition().translateCardinalDirection(io.requestMoveAfterFail(room, character));
 				if (newPosition != null && newPosIsInsideRoomSpace(newPosition, rs)) {
 					break;
 				} else {
@@ -89,34 +89,30 @@ public class TurnSystem {
 		room.put(newPosition, character);
 		character.setPosition(newPosition);
 	}
-
-	private Position getnewPosition(Character character, CardinalDirection dir) {
-		int x = character.getPosition().getX();
-		int y = character.getPosition().getY();
-		Position newPosition = new Position(x, y); // Need new object because of translate
+	/*
+	private Position getNewPosition(Character character, CardinalDirection dir) {
 		try {
+			Position pos = character.getPosition();
 			switch (dir) {
 			case North:
-				newPosition.translate(0, -1);
-				break;
+				return pos.translate(0, -1);
 
 			case West:
-				newPosition.translate(-1, 0);
-				break;
+				return pos.translate(-1, 0);
 
 			case South:
-				newPosition.translate(0, 1);
-				break;
+				return pos.translate(0, 1);
 
 			case East:
-				newPosition.translate(1, 0);
-				break;
-
+				return pos.translate(1, 0);
+				
+			default:
+				return null;
+				
 			}
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			return null;
 		}
-		return newPosition;
 	}
-
+	*/
 }

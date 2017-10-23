@@ -139,6 +139,7 @@ public class CharacterTests {
 	{
 		Character c = new Character(5, 0, 0, new Position(1,2), new TurnSystem(new EnemyAI(1)));
 		Room r = new Room(new Position(0,0), new RoomSpace(3, 3));
+		r.setPlayer(c.getPosition(), c);
 		assertFalse(c.startTurn(r));
 	}
 	@Test

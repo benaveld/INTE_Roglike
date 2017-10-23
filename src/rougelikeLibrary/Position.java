@@ -45,61 +45,52 @@ public class Position {
 		return x;
 	}
 
-	public void setX(int x) {
+	public Position setX(int x) {
 		if (x < 0) {
 			throw new IllegalArgumentException("X can't be negative.");
 		}
-		this.x = x;
+		return new Position(x, this.y);
 	}
 
 	public int getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public Position setY(int y) {
 		if (y < 0) {
 			throw new IllegalArgumentException("Y can't be negative.");
 		}
-		this.y = y;
+		return new Position(this.x, y);
 	}
 
-	public void translate(int deltaX, int deltaY) {
+	public Position translate(int deltaX, int deltaY) {
 		if (Math.addExact(x, deltaX) < 0 || Math.addExact(y, deltaY) < 0) {
 			throw new IllegalArgumentException(
 					"Chanage x or y to less then 0. new X: " + (x + deltaX) + " new Y: " + (y + deltaY));
 		}
-		x += deltaX;
-		y += deltaY;
+		return new Position(x + deltaX, y + deltaY);
 	}
 
-	public void translateCardinalDirection(CardinalDirection dir) {
+	public Position translateCardinalDirection(CardinalDirection dir) {
 		switch (dir) {
 		// Decrease Y
 		case North:
-			this.translate(0, -1);
-			break;
+			return this.translate(0, -1);
 		// Increase Y
 		case South:
-			this.translate(0, 1);
-			break;
+			return this.translate(0, 1);
 		// Decrease X
 		case West:
-			this.translate(-1, 0);
-			break;
+			return this.translate(-1, 0);
 		// Increase X
 		case East:
-			this.translate(1, 0);
-			break;
+			return this.translate(1, 0);
+		default:
+			throw new IllegalArgumentException("Not a Cardinal Direction");
 		}
 	}
 
 	public Position getLocation() {
 		return new Position(this.x, this.y);
-	}
-
-	public Position getNewPositionFromCardinalDirection(CardinalDirection cardinalDirection) {
-		Position p = this.getLocation();
-		p.translateCardinalDirection(cardinalDirection);
-		return p;
 	}
 }
