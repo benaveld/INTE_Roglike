@@ -40,8 +40,8 @@ public class TurnSystemTests {
 		HashMap<Position, Object> room = new HashMap<Position, Object>();
 		room.put(c.getPosition(), c);
 		
-		location.setX(5);
-		location.setY(4);
+		location = location.setX(5);
+		location = location.setY(4);
 		Position p = new Position(5,4); //TEMP;
 		//Position p = ts.getNewLocation(c, ai.requestMove());
 		assertEquals(location, p);
@@ -119,7 +119,7 @@ public class TurnSystemTests {
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
 		Character c = new Character(1, 0, 0, 1, 1, ts);
 		Room r = new Room(new Position(0,0), new RoomSpace(100,100));
-		
+		r.setPlayer(c.getPosition(), c);
 		assertFalse(c.startTurn(r));
 	}
 	
