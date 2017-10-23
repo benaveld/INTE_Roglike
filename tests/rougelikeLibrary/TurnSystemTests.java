@@ -46,7 +46,7 @@ public class TurnSystemTests {
 	@Test
 	public void testTurnSystemEnterDoorWithItemOver()
 	{TurnSystem ts = new TurnSystem(new EnemyAI(2));
-	Player p = new Player(10, 0, 0, 0, 0, ts);
+	Player p = new Player(10, 0, 0, new Position(0,0), ts);
 	Room r = new Room(new Position(0,0), new RoomSpace(3,3));
 	r.addItem(new Position(1,0), new Item("Boots",25,Item.Effect.SPEED));
 	r.addItem(new Position(0,1), new Item("Boots",25,Item.Effect.SPEED));
