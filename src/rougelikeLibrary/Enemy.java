@@ -6,19 +6,13 @@ public class Enemy extends Character {
 
 	private Room currentRoom;
 	
-	public Enemy(int speed, int health, int damage, TurnSystem ts) {
-		super(speed, health, damage, ts);
-		
-	}
+	
 	public Enemy(int speed, int health, int damage, Position position, TurnSystem ts) {
 		super(speed, health, damage, position, ts);
 		
 		
 	}
-	public Enemy(int speed, int health, int damage, int x, int y, TurnSystem ts) {
-		super(speed, health, damage, x, y, ts);		
 		
-	}	
 	public void setRoom(Room r) {
 		currentRoom = r;
 	}
@@ -34,16 +28,11 @@ public class Enemy extends Character {
 			}
 		}
 	}
+	@Override
 	public void takeDamage(int damage) {
-		if (damage < 0) {
-			throw new IllegalArgumentException("Can't take negative damage.");
-		}
-		int health = getHealth() - damage;
-		setHealth(health);
-		if (health <= 0) {
-			health = 0;
+		super.takeDamage(damage);
+		if (getHealth() <= 0) {
 			dropItems();
-			kill();
 		}
 	}
 	

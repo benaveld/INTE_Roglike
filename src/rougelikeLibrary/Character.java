@@ -9,43 +9,28 @@ public class Character implements Mappable {
 	private int speed;
 	private int health;
 	private int damage;
-	private TurnSystem ts;
-	private Inventory inv;
+	private final TurnSystem ts;
+	private final Inventory inv;
 	private boolean isDead = true;
 
-	public Character(int speed, int health, int damage, TurnSystem ts) {
-		if (speed < 0 || health < 0 || damage < 0) {
-			throw new IllegalArgumentException("Speed, health and damage needs to be 0 or more");
-		}
-		
-		this.speed = speed;
-		this.health = health;
-		this.damage = damage;
-		this.ts = ts;
-		pos = new Position(0,0);
-		inv = new Inventory();
-		if(health > 0) {
-			isDead = false;
-		}
-		
-	}
+	
 	
 	public Character(int speed, int health, int damage, Position Position, TurnSystem ts) {
-		this(speed, health, damage, ts);
 		if (speed < 0 || health < 0 || damage < 0) {
 			throw new IllegalArgumentException("Speed, health and damage needs to be 0 or more");
 		}
 		this.pos = Position;
-		
+		this.speed = speed;
+		this.health = health;
+		this.damage = damage;
+		this.ts = ts;
+		inv = new Inventory();
+		if(health > 0) {
+			isDead = false;
+		}
 	}
 	
-	public Character(int speed, int health, int damage, int x, int y, TurnSystem ts) {
-		this(speed, health, damage, new Position(x,y), ts);
-		if (speed < 0 || health < 0 || damage < 0) {
-			throw new IllegalArgumentException("Speed, health and damage needs to be 0 or more");
-		}
-		
-	}
+	
 	
 	public boolean startTurn(Room room)
 	{
@@ -98,6 +83,7 @@ public class Character implements Mappable {
 		isDead = true;
 		health = 0;
 	}
+	@Override
 	public String toString() {
 		
 		return speed + " " + health + " "+ damage;

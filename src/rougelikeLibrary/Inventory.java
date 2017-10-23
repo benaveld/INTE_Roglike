@@ -4,44 +4,44 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 public class Inventory {
 
-	private TreeMap<Item.Effect, Integer> percentages = new TreeMap<Item.Effect, Integer>();
-	private ArrayList<Item> items = new ArrayList<Item>();
-	private TreeMap<Item.Effect, ArrayList<Item>> itemsByStat = new TreeMap<Item.Effect, ArrayList<Item>>();
+	private final TreeMap<Item.Effect, Integer> values = new TreeMap<Item.Effect, Integer>();
+	private final ArrayList<Item> items = new ArrayList<Item>();
+	private final TreeMap<Item.Effect, ArrayList<Item>> itemsByStat = new TreeMap<Item.Effect, ArrayList<Item>>();
 	
 	public Inventory(){
 		
 		
 	}
 	
-	private void calculateItemPercentages(){
+	private void calculateItemValues(){
 		
 		ArrayList<Item> speedItems = getItemsByStat(Item.Effect.SPEED);
 		ArrayList<Item> healthItems = getItemsByStat(Item.Effect.HEALTH);
 		ArrayList<Item> damageItems = getItemsByStat(Item.Effect.DAMAGE);
-		int percent = 0;
+		int value = 0;
 		for(Item i : speedItems){
-			percent += i.getPercentage();
+			value += i.getValue();
 			
 		}
-		percentages.put(Item.Effect.SPEED, percent);
-		percent = 0;
+		values.put(Item.Effect.SPEED, value);
+		value = 0;
 		for(Item i : healthItems){
-			percent += i.getPercentage();
+			value += i.getValue();
 			
 		}
-		percentages.put(Item.Effect.HEALTH, percent);
-		percent = 0;
+		values.put(Item.Effect.HEALTH, value);
+		value = 0;
 		for(Item i : damageItems){
-			percent += i.getPercentage();
+			value += i.getValue();
 			
 		}
-		percentages.put(Item.Effect.DAMAGE, percent);
+		values.put(Item.Effect.DAMAGE, value);
 	}
-	public TreeMap<Item.Effect, Integer> getTotalPercentages(){
+	public TreeMap<Item.Effect, Integer> getTotalValues(){
 		
-		calculateItemPercentages();
+		calculateItemValues();
 		
-		return percentages;
+		return values;
 	}
 	
 	public void remove(Item i){
@@ -88,7 +88,7 @@ public class Inventory {
 	}
 	
 	
-	
+	@Override
 	public String toString(){
 		String out = "";
 		for(Item i : items){

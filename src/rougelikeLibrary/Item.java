@@ -2,14 +2,20 @@ package rougelikeLibrary;
 
 public class Item implements Mappable{
 
-	private String name;
-	private Effect effect;
-	private int percentage;
+	private final String name;
+	private final Effect effect;
+	private final int value;
 	
-	public Item(String name, int percentage, Effect effect){
+	public enum Effect { 
+	    
+		SPEED, HEALTH, DAMAGE
+		
+	}
+	
+	public Item(String name, int value, Effect effect){
 		
 		this.name = name;
-		this.percentage = percentage;
+		this.value = value;
 		this.effect = effect;
 	}
 	
@@ -18,9 +24,9 @@ public class Item implements Mappable{
 		return name;
 	}
 	
-	public int getPercentage(){
+	public int getValue(){
 		
-		return percentage;
+		return value;
 	}
 	public Effect getEffect(){
 		
@@ -28,18 +34,14 @@ public class Item implements Mappable{
 	}
 	
 	
-	public enum Effect { 
-	    
-		SPEED, HEALTH, DAMAGE
-		
-	}
+	@Override
 	public String toString(){
 		String out = "";
-		if(percentage > 0){
-			out = name + " +" + percentage + "% " + effect;
+		if(value > 0){
+			out = name  + " +" + value + " " + effect;
 		}
 		else{
-			out = name + " " + percentage + "% " + effect;
+			out = name + " " + value + " " + effect;
 		}
 		out = out.toLowerCase();
 		
