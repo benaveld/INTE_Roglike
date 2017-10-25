@@ -66,7 +66,17 @@ public class Inventory {
 	 * @param item to remove.
 	 */
 	public void remove(Item i){
+		
 		items.remove(i);
+		itemsByStat.get(i.getEffect()).remove(i);	
+		
+	}
+	
+	public void remove(int index){
+		
+		Item i = items.get(index);
+		itemsByStat.get(i.getEffect()).remove(i);
+		items.remove(index);	
 		
 	}
 	/**

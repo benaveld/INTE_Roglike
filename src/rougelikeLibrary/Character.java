@@ -48,16 +48,14 @@ public class Character implements Mappable {
 	private void calculateHealth() {
 		
 		int diff = totalHealth - currentHealth;
-		System.out.println(diff);
 		if(inv.getTotalValues().get(Item.Effect.HEALTH) != null) {
 			totalHealth = originalHealth + inv.getTotalValues().get(Item.Effect.HEALTH);
+			
 		}
 		else {
 			totalHealth = originalHealth;
 		}
-		System.out.println(totalHealth);
 		currentHealth = totalHealth - diff;
-		System.out.println(currentHealth);
 		if(currentHealth <= 0) {
 			isDead = true;
 		}
@@ -101,6 +99,7 @@ public class Character implements Mappable {
 	 */
 	public int getSpeed() {
 		if(inv.getTotalValues().get(Item.Effect.SPEED) != null) {
+			
 			return speed + inv.getTotalValues().get(Item.Effect.SPEED);
 		}
 		else {
@@ -133,6 +132,7 @@ public class Character implements Mappable {
 	public int getDamage() {
 		if(inv.getTotalValues().get(Item.Effect.DAMAGE) != null) {
 			return damage + inv.getTotalValues().get(Item.Effect.DAMAGE);
+			
 		}
 		else {
 			return damage;

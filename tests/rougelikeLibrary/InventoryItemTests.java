@@ -83,6 +83,20 @@ public class InventoryItemTests {
 		
 	}
 	@Test
+	public void testRemoveItemsFromInventoryWithIndex(){
+	
+		Item i0 = new Item("test0", 25, Item.Effect.SPEED);
+		Item i1 = new Item("test1", 50, Item.Effect.HEALTH);
+		Item i2 = new Item("test2", 100, Item.Effect.DAMAGE);
+		Inventory inv = new Inventory();
+		inv.add(i0);
+		inv.add(i1);
+		inv.add(i2);
+		inv.remove(1);
+		assertEquals("test0 +25 speed\ntest2 +100 damage\n", inv.toString());
+		
+	}
+	@Test
 	public void testGetItems(){
 	
 		Item i0 = new Item("test0", 25, Item.Effect.SPEED);
