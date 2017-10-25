@@ -21,9 +21,9 @@ public class EnemyTests {
 
     Enemy e = (Enemy)r.getFromPosition(new Position(2,2)).get(0);
 		e.getInventory().add(new Item("test", 100, Item.Effect.DAMAGE));
-		assertEquals("1 1 1", e.toString());
+		assertEquals("1 1 101", e.toString());
 		e.takeDamage(1);
-		assertEquals("1 0 1", e.toString());
+		assertEquals("1 0 101", e.toString());
 		assertTrue(e.isDead());
 		List<Mappable> items = r.getFromPosition(new Position(2,2));
 		Inventory inv = new Inventory();
@@ -56,14 +56,14 @@ public class EnemyTests {
 		Room r = new Room(new Position(0,0), new RoomSpace(10,10), new HashMap<Position, List<Mappable>>());
 		r.addEnemy(new Position(2,2), new Enemy(1,1,1, new Position(0,0), ts));
 
-    Enemy e = (Enemy)r.getFromPosition(new Position(2,2)).get(0);
+		Enemy e = (Enemy)r.getFromPosition(new Position(2,2)).get(0);
 		e.getInventory().add(new Item("test0", 100, Item.Effect.DAMAGE));
 		e.getInventory().add(new Item("test1", 10, Item.Effect.SPEED));
-		e.getInventory().add(new Item("test2", 200, Item.Effect.HEALTH));
+		e.getInventory().add(new Item("test2", 1, Item.Effect.HEALTH));
 		e.getInventory().add(new Item("test3", 50, Item.Effect.DAMAGE));
-		assertEquals("1 1 1", e.toString());
-		e.takeDamage(1);
-		assertEquals("1 0 1", e.toString());
+		assertEquals("11 2 151", e.toString());
+		e.takeDamage(3);
+		assertEquals("11 0 151", e.toString());
 		assertTrue(e.isDead());
 		List<Mappable> items = r.getFromPosition(new Position(2,2));
 		Inventory inv = new Inventory();
@@ -74,7 +74,7 @@ public class EnemyTests {
 				inv.add(i);
 			}
 		}
-		assertEquals("test0 +100 damage\ntest1 +10 speed\ntest2 +200 health\ntest3 +50 damage\n", inv.toString());
+		assertEquals("test0 +100 damage\ntest1 +10 speed\ntest2 +1 health\ntest3 +50 damage\n", inv.toString());
 		
 	}
 }

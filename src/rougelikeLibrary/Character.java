@@ -180,6 +180,6 @@ public class Character implements Mappable {
 	@Override
 	public String toString() {
 		
-		return speed + " " + currentHealth + " "+ damage;
+		return getSpeed() + " " + getHealth() + " "+ getDamage();
 	}
 }
