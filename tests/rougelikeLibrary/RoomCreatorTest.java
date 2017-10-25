@@ -179,8 +179,8 @@ public class RoomCreatorTest {
 
     @Test
     public void getCardinalDirectionPermissionChoice() throws Exception {
-        assertTrue(roomCreator.getCardinalDirectionPermissionChoice(Position.CardinalDirectionPermission.Mandatory));
-        assertFalse(roomCreator.getCardinalDirectionPermissionChoice(Position.CardinalDirectionPermission.Disallowed));
+        assertTrue(roomCreator.getCardinalDirectionPC(Position.CardinalDirectionPermission.Mandatory));
+        assertFalse(roomCreator.getCardinalDirectionPC(Position.CardinalDirectionPermission.Disallowed));
     }
 
 
