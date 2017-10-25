@@ -7,6 +7,9 @@ import org.junit.*;
 
 import rougelikeLibrary.Position.CardinalDirection;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class CharacterTests {
 	
 	@Test
@@ -106,7 +109,7 @@ public class CharacterTests {
 	public void testCharacterStartTurnReturnTrue()
 	{
 		Character c = new Character(5, 0, 0, new Position(0,0), new TurnSystem(new EnemyAI(1)));
-		Room r = new Room(new Position(0,0), new RoomSpace(3, 3));
+		Room r = new Room(new Position(0,0), new RoomSpace(3, 3), new HashMap<Position, List<Mappable>>());
 		r.setPlayer(c.getPosition(), c);
 		r.addDoor(CardinalDirection.North);
 		r.addDoor(CardinalDirection.West);
@@ -116,7 +119,7 @@ public class CharacterTests {
 	public void testCharacterStartTurnReturnFalse()
 	{
 		Character c = new Character(5, 0, 0, new Position(1,2), new TurnSystem(new EnemyAI(1)));
-		Room r = new Room(new Position(0,0), new RoomSpace(3, 3));
+		Room r = new Room(new Position(0,0), new RoomSpace(3, 3), new HashMap<Position, List<Mappable>>());
 		r.setPlayer(c.getPosition(), c);
 		assertFalse(c.startTurn(r));
 	}
