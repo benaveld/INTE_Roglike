@@ -32,6 +32,8 @@ public class Character implements Mappable {
 		}
 		this.pos = Position;
 		this.speed = speed;
+		this.currentHealth = health;
+		this.totalHealth = health;
 		this.originalHealth = health;
 		this.damage = damage;
 		this.ts = ts;
@@ -46,8 +48,16 @@ public class Character implements Mappable {
 	private void calculateHealth() {
 		
 		int diff = totalHealth - currentHealth;
-		totalHealth = originalHealth + inv.getTotalValues().get(Item.Effect.HEALTH);
+		System.out.println(diff);
+		if(inv.getTotalValues().get(Item.Effect.HEALTH) != null) {
+			totalHealth = originalHealth + inv.getTotalValues().get(Item.Effect.HEALTH);
+		}
+		else {
+			totalHealth = originalHealth;
+		}
+		System.out.println(totalHealth);
 		currentHealth = totalHealth - diff;
+		System.out.println(currentHealth);
 		if(currentHealth <= 0) {
 			isDead = true;
 		}
@@ -76,12 +86,13 @@ public class Character implements Mappable {
 	public void takeDamage(int damage) {
 		if (damage < 0) {
 			throw new IllegalArgumentException("Can't take negative damage.");
-		}
+		}		
 		currentHealth -= damage;
 		if (currentHealth <= 0) {
 			currentHealth = 0;
 			isDead = true;
 		}
+		
 	}
 
 	/**
@@ -89,7 +100,13 @@ public class Character implements Mappable {
 	 * @return The Character's speed 
 	 */
 	public int getSpeed() {
-		return speed + inv.getTotalValues().get(Item.Effect.SPEED);
+		if(inv.getTotalValues().get(Item.Effect.SPEED) != null) {
+			return speed + inv.getTotalValues().get(Item.Effect.SPEED);
+		}
+		else {
+			return speed;
+		}
+		
 	}
 
 	/**
@@ -114,7 +131,12 @@ public class Character implements Mappable {
 	 * @return The Characters damage
 	 */
 	public int getDamage() {
-		return damage + inv.getTotalValues().get(Item.Effect.DAMAGE);
+		if(inv.getTotalValues().get(Item.Effect.DAMAGE) != null) {
+			return damage + inv.getTotalValues().get(Item.Effect.DAMAGE);
+		}
+		else {
+			return damage;
+		}
 		
 	}
 	/**

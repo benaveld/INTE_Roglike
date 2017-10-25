@@ -27,23 +27,29 @@ public class Inventory {
 		ArrayList<Item> healthItems = getItemsByStat(Item.Effect.HEALTH);
 		ArrayList<Item> damageItems = getItemsByStat(Item.Effect.DAMAGE);
 		int value = 0;
-		for(Item i : speedItems){
-			value += i.getValue();
-			
+		if(speedItems != null) {
+			for(Item i : speedItems){
+				value += i.getValue();
+				
+			}
+			values.put(Item.Effect.SPEED, value);
 		}
-		values.put(Item.Effect.SPEED, value);
 		value = 0;
+		if(healthItems != null) {
 		for(Item i : healthItems){
 			value += i.getValue();
 			
 		}
 		values.put(Item.Effect.HEALTH, value);
-		value = 0;
-		for(Item i : damageItems){
-			value += i.getValue();
-			
 		}
-		values.put(Item.Effect.DAMAGE, value);
+		value = 0;
+		if(damageItems != null) {
+			for(Item i : damageItems){
+				value += i.getValue();
+				
+			}
+			values.put(Item.Effect.DAMAGE, value);
+		}
 	}
 	/**
 	 * 
