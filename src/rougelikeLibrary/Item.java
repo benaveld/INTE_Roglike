@@ -2,44 +2,62 @@ package rougelikeLibrary;
 
 public class Item implements Mappable{
 
-	private String name;
-	private Effect effect;
-	private int percentage;
-	
-	public Item(String name, int percentage, Effect effect){
+	private final String name;
+	private final Effect effect;
+	private final int value;
+
+	public enum Effect { 
+	    
+		SPEED, HEALTH, DAMAGE
+		
+	}
+	/**
+	 * Constructor
+	 * @param Name of the Item
+	 * @param The amount it changes the chosen stat
+	 * @param The chosen stat to effect
+	 */
+	public Item(String name, int value, Effect effect){
 		
 		this.name = name;
-		this.percentage = percentage;
+		this.value = value;
 		this.effect = effect;
 	}
 	
+	/**
+	 * 
+	 * @return The Item's name
+	 */
 	public String getName(){
 		
 		return name;
 	}
-	
-	public int getPercentage(){
+	/**
+	 * 
+	 * @return The value the Item changes it's chosen stat by.
+	 */
+	public int getValue(){
 		
-		return percentage;
+		return value;
 	}
+	/**
+	 * 
+	 * @return The stat that the Item effects.
+	 */
 	public Effect getEffect(){
 		
 		return effect;
 	}
 	
 	
-	public enum Effect { 
-	    
-		SPEED, HEALTH, DAMAGE
-		
-	}
+	@Override
 	public String toString(){
 		String out = "";
-		if(percentage > 0){
-			out = name + " +" + percentage + "% " + effect;
+		if(value > 0){
+			out = name  + " +" + value + " " + effect;
 		}
 		else{
-			out = name + " " + percentage + "% " + effect;
+			out = name + " " + value + " " + effect;
 		}
 		out = out.toLowerCase();
 		

@@ -40,7 +40,8 @@ public class MapController {
         }
 
         Position.CardinalDirection nextRoomDirection =  currentRoom.play();
-        return (nextRoomDirection == null) ? null : currentRoom.getPosition()
+
+      return (nextRoomDirection == null) ? null : currentRoom.getPosition()
                 .getNewPositionFromCardinalDirection(nextRoomDirection);
     }
 
@@ -159,7 +160,7 @@ public class MapController {
         Position roomPositionInCardinalDirection;
 
         try {
-            roomPositionInCardinalDirection = newRoomPosition.getNewPositionFromCardinalDirection(cardinalDirection);
+            roomPositionInCardinalDirection = newRoomPosition.translateCardinalDirection(cardinalDirection);
         } catch (IllegalArgumentException iae) {
             // World position for a room in the cardinal direction is out of bounds.
             return Position.CardinalDirectionPermission.Disallowed;
