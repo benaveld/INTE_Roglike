@@ -34,7 +34,7 @@ public class EnemyTests {
 				inv.add(i);
 			}
 		}
-		assertEquals("test +100% damage\n", inv.toString());		
+		assertEquals("test +100 damage\n", inv.toString());		
 	}
 	@Test
 	public void testEnemyDropsNoItemsOnDeath() {
@@ -74,7 +74,7 @@ public class EnemyTests {
 				inv.add(i);
 			}
 		}
-		assertEquals("test0 +100% damage\ntest1 +10% speed\ntest2 +200% health\ntest3 +50% damage\n", inv.toString());
+		assertEquals("test0 +100 damage\ntest1 +10 speed\ntest2 +200 health\ntest3 +50 damage\n", inv.toString());
 		
 	}
 }

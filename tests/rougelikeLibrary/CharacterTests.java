@@ -148,43 +148,59 @@ public class CharacterTests {
 	public void testCharacterStatChanges() {
 		
 		Enemy e = new Enemy(1,1,1, new Position(1,1), new TurnSystem(new EnemyAI(1)));
-		e.getInventory().add(new Item("test", 1, Item.Effect.DAMAGE));
-		e.getInventory().add(new Item("test", 1, Item.Effect.HEALTH));
-		e.getInventory().add(new Item("test", 1, Item.Effect.SPEED));
+
+		Item id = new Item("test", 1, Item.Effect.DAMAGE);
+		Item iH = new Item("test", 1, Item.Effect.HEALTH);
+		Item iS = new Item("test", 1, Item.Effect.SPEED);
+		e.getInventory().add(id);
+		e.getInventory().add(iH);
+		e.getInventory().add(iS);
 		Room r = new Room(new Position(1,1), new RoomSpace(10,10), new HashMap<Position, List<Mappable>>());
 		r.addEnemy(new Position(1,1), e);
 		assertFalse(e.startTurn(r));
-		assertEquals(e.getDamage(), 2); //All stats increased
-		assertEquals(e.getSpeed(), 2);
-		assertEquals(e.getHealth(), 2);
-		e.getInventory().add(new Item("test", -2, Item.Effect.DAMAGE));
-		e.getInventory().add(new Item("test", -2, Item.Effect.SPEED));
+		assertEquals(2, e.getDamage()); //All stats increased
+		assertEquals(2, e.getSpeed());
+		assertEquals(2, e.getHealth());
+		Item id2 = new Item("test", -2, Item.Effect.DAMAGE);
+		Item is2 = new Item("test", -2, Item.Effect.SPEED);
+		e.getInventory().add(id2);
+		e.getInventory().add(is2);
 		e.getInventory().add(new Item("test", -1, Item.Effect.HEALTH));
 		assertFalse(e.startTurn(r));
-		assertEquals(e.getDamage(), 0); //All stats decreased
-		assertEquals(e.getSpeed(), 0);
-		assertEquals(e.getHealth(), 1);
+		assertEquals(0, e.getDamage()); //All stats decreased
+		assertEquals(0, e.getSpeed());
+		assertEquals(1, e.getHealth());
 		e.getInventory().add(new Item("test", 2, Item.Effect.HEALTH));
 		assertFalse(e.startTurn(r)); 
-		assertEquals(e.getHealth(), 3); //Health increased
+		assertEquals(3, e.getHealth()); //Health increased
 		e.takeDamage(1); 
 		assertFalse(e.startTurn(r));
-		assertEquals(e.getHealth(), 2); //Health decreased by attack
+		assertEquals(2, e.getHealth()); //Health decreased by attack
 		e.getInventory().add(new Item("test", -1, Item.Effect.HEALTH));
 		assertFalse(e.startTurn(r));
-		assertEquals(e.getHealth(), 1); //Health further decreased by item
+		assertEquals(1, e.getHealth()); //Health further decreased by item
 		e.getInventory().add(new Item("test", 3, Item.Effect.HEALTH));
 		assertFalse(e.startTurn(r));
-		assertEquals(e.getHealth(), 4); //Health increased by item again
+		assertEquals(4, e.getHealth()); //Health increased by item again
 		e.getInventory().add(new Item("test", 1, Item.Effect.HEALTH));
 		e.takeDamage(2);
-		assertEquals(e.getHealth(), 3); //Health is changed when getHealth is called as well as when a turn starts
+		assertEquals(3, e.getHealth()); //Health is changed when getHealth is called as well as when a turn starts
 		assertFalse(e.startTurn(r));
-		assertEquals(e.getHealth(), 3); //Taking damage and increasing health at the same time
+		assertEquals(3, e.getHealth()); //Taking damage and increasing health at the same time
 		e.getInventory().add(new Item("test", -1, Item.Effect.HEALTH));
-		e.takeDamage(2);
+		e.takeDamage(1);
 		assertFalse(e.startTurn(r));
-		assertEquals(e.getHealth(), 0); //Taking damage and reducing health with item at the same time
+		assertEquals(1, e.getHealth()); //Removing item to kill player
+		e.getInventory().remove(iH);
+		assertFalse(e.startTurn(r));
+		assertEquals(0, e.getHealth()); 
 		assertTrue(e.isDead());
+		e.getInventory().remove(id2);
+		e.getInventory().remove(is2);
+		e.getInventory().remove(id);
+		e.getInventory().remove(iS);
+		assertFalse(e.startTurn(r));
+		assertEquals(1, e.getDamage()); //All stats changed by removing items
+		assertEquals(1, e.getSpeed());
 	}
 }
