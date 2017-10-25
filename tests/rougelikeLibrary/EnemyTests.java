@@ -16,7 +16,7 @@ public class EnemyTests {
 	@Test
 	public void testEnemyDropItemOnDeath() {
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
-		Room r = new Room(new Position(0,0), new RoomSpace(10,10), new HashMap<Position, List<Mappable>>());
+    Room r = new Room(new Position(0,0), new RoomSpace(10,10), new HashMap<Position, List<Mappable>>());
 		r.addEnemy(new Position(2,2), new Enemy(1,1,1, new Position(0,0), ts));
 
     Enemy e = (Enemy)r.getFromPosition(new Position(2,2)).get(0);

@@ -160,16 +160,16 @@ public class RoomCreator {
     public void addDoors(Room room, java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissions) {
         Map<Position, List<Mappable>> roomMap = room.getRoomMap();
 
-        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.North))) {
+        if (getCardinalDirectionPC(cardinalDirectionPermissions.get(Position.CardinalDirection.North))) {
            addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.North), new Door());
         }
-        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.South))) {
+        if (getCardinalDirectionPC(cardinalDirectionPermissions.get(Position.CardinalDirection.South))) {
             addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.South), new Door());
         }
-        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.West))) {
+        if (getCardinalDirectionPC(cardinalDirectionPermissions.get(Position.CardinalDirection.West))) {
             addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.West), new Door());
         }
-        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.East))) {
+        if (getCardinalDirectionPC(cardinalDirectionPermissions.get(Position.CardinalDirection.East))) {
             addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.East), new Door());
         }
     }
@@ -181,7 +181,7 @@ public class RoomCreator {
      * @return true if permission is mandatory or if random returns true on optional permission.
      * If a permission is missing or is null, false will be returned.
      */
-    public boolean getCardinalDirectionPermissionChoice(Position.CardinalDirectionPermission cardinalDirectionPermission) {
+    public boolean getCardinalDirectionPC(Position.CardinalDirectionPermission cardinalDirectionPermission) {
         boolean choice = false;
 
         switch (cardinalDirectionPermission) {

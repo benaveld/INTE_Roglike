@@ -115,9 +115,10 @@ public class IOTests {
 		EnemyAI e = new EnemyAI(11037);
 		CardinalDirection d = CardinalDirection.values()[0];
 		TurnSystem ts = new TurnSystem(e);
-		Character c = new Character(0, 0, 0, new Position(0,0), ts);
+    Character c = new Character(0, 0, 0, new Position(0,0), ts);
 		Room room = new Room(new Position(0,0),new RoomSpace(3,3), new HashMap<Position, List<Mappable>>());
-		assertEquals(d, e.requestMoveAfterFail(room,c));
+
+    assertEquals(d, e.requestMoveAfterFail(room,c));
 	}
 
 	@After
