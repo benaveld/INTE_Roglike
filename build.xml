@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- WARNING: Eclipse auto-generated file.
+        <!-- WARNING: Eclipse auto-generated file.
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="INTE_Roglike">
+              as the first entry and export the buildfile again. 
+        -->
+    <project basedir="." default="build" name="INTE_Roglike">
     <property environment="env"/>
     <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
@@ -44,6 +46,40 @@
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+
+    <target name="javadoc">
+        <javadoc packagenames="rougelikeLibrary.*" sourcepath="src" 
+            destdir="docs/javadoc" version="true" windowtitle="INTE Rougelike Library">
+            <doctitle><![CDATA[_,.-~' INTE Rougelike Library '^~-.,_]]></doctitle>
+        </javadoc>
+        <echo message="                                 ___"/>
+        <echo message="                               /`  _\"/>
+        <echo message="                               |  / 0|--."/>
+        <echo message="                          -   / \_|0`/ /.`'._/)"/>
+        <echo message="                      - ~ -^_| /-_~ ^- ~_` - -~ _"/>
+        <echo message="                      -  ~  -| |   - ~ -  ~  -"/>
+        <echo message="                     jgs     \ \, ~   -   ~"/>
+        <echo message="                              \_|"/>
+    </target>
+    
+    <target name="clean-lib">
+        <delete dir="lib" />
+        <mkdir dir="lib" />
+    </target>
+    <target name="create-jar">
+        <jar basedir="bin" destfile="lib/${ant.project.name}.jar">
+            <manifest>
+            </manifest>
+        </jar>
+    </target>
+    <target name="jar">
+        <antcall target="build-project" />
+        <antcall target="clean-lib" />
+        <antcall target="create-jar" />
+    </target>
+
+    <!-- Eclipse specific settings
+
     <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
         <copy todir="${ant.library.dir}">
             <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
@@ -57,6 +93,9 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
+    
+    -->
+
     <target name="CharacterTests">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
