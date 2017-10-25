@@ -21,6 +21,7 @@ public class PositionTests {
 	public void testNegativeYPosition() {
 		new Position(1, -1);
 	}
+	
 
 	@Test
 	public void testPositionEqual() {

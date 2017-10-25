@@ -83,22 +83,26 @@ public class Position {
 	 * @return New Position with the same x and y but with one step in the direction of the cardinal direction.
 	 */
 	public Position translateCardinalDirection(CardinalDirection dir) {
+		Position p = null;
 		switch (dir) {
 		// Decrease Y
 		case North:
-			return this.translate(0, -1);
+			p = this.translate(0, -1);
+			break;
 		// Increase Y
 		case South:
-			return this.translate(0, 1);
+			p = this.translate(0, 1);
+			break;
 		// Decrease X
 		case West:
-			return this.translate(-1, 0);
+			p = this.translate(-1, 0);
+			break;
 		// Increase X
 		case East:
-			return this.translate(1, 0);
-		default:
-			throw new IllegalArgumentException("Not a Cardinal Direction");
+			p = this.translate(1, 0);
+			break;
 		}
+		return p;
 	}
 	/**
 	 * 
