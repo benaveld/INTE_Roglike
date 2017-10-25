@@ -67,7 +67,7 @@ public class RoomCreatorBuilderTest {
         long seed = 324;
         roomCreatorBuilder.setSeed(seed);
         roomCreatorBuilder.setRoomSpace(12, 12);
-        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new TurnSystem(new TUI())));
+        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new Position(0,0), new TurnSystem(new TUI())));
         RoomCreator roomCreator = roomCreatorBuilder.build();
         assertNotNull(roomCreator);
     }
@@ -77,7 +77,7 @@ public class RoomCreatorBuilderTest {
         long seed = 434;
         roomCreatorBuilder.setSeed(seed);
         roomCreatorBuilder.setRoomSpace(12, 12);
-        Player player = new Player(1, 2, 3, new TurnSystem(new TUI()));
+        Player player = new Player(1, 2, 3, new Position(0,0), new TurnSystem(new TUI()));
 
         roomCreatorBuilder.setPlayer(player);
         RoomCreator roomCreator = roomCreatorBuilder.build();
@@ -92,7 +92,7 @@ public class RoomCreatorBuilderTest {
         roomCreatorBuilder.setSeed(seed);
         RoomSpace roomSpace = new RoomSpace(234, 234);
         roomCreatorBuilder.setRoomSpace(roomSpace.getWidth(), roomSpace.getHeight());
-        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new TurnSystem(new TUI())));
+        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new Position(0,0), new TurnSystem(new TUI())));
         Room room = roomCreatorBuilder.build().createInitialRoom(new Position(23, 23), cardinalDirectionPermissionsAllOptional);
         assertEquals(room.getRoomSpace().getWidth(), roomSpace.getWidth());
         assertEquals(room.getRoomSpace().getHeight(), roomSpace.getHeight());
@@ -102,7 +102,7 @@ public class RoomCreatorBuilderTest {
     public void build() throws Exception {
         roomCreatorBuilder.setSeed(234);
         roomCreatorBuilder.setRoomSpace(23, 23);
-        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new TurnSystem(new TUI())));
+        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new Position(0,0), new TurnSystem(new TUI())));
         assertNotNull(roomCreatorBuilder.build().createInitialRoom(new Position(23, 23), cardinalDirectionPermissionsAllOptional));
     }
 
@@ -110,7 +110,7 @@ public class RoomCreatorBuilderTest {
     public void addItem() throws Exception {
         roomCreatorBuilder.setSeed(234);
         roomCreatorBuilder.setRoomSpace(23, 23);
-        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new TurnSystem(new TUI())));
+        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new Position(0,0), new TurnSystem(new TUI())));
 
 
         Class [] parameterTypesItemValid = {String.class, int.class, Item.Effect.class};
@@ -137,7 +137,7 @@ public class RoomCreatorBuilderTest {
         int height = 23;
         roomCreatorBuilder.setSeed(234);
         roomCreatorBuilder.setRoomSpace(width, height);
-        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new TurnSystem(new TUI())));
+        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new Position(0,0), new TurnSystem(new TUI())));
 
 
         io = new EnemyAI(23);
@@ -230,7 +230,7 @@ public class RoomCreatorBuilderTest {
     public void testBuilder() {
         assertEquals(roomCreatorBuilder
                 .setSeed(1234)
-                .setPlayer(new Player(1, 2, 3, new TurnSystem(new EnemyAI(6))))
+                .setPlayer(new Player(1, 2, 3, new Position(0,0), new TurnSystem(new EnemyAI(6))))
                 .setRoomSpace(Integer.MAX_VALUE, Integer.MAX_VALUE), roomCreatorBuilder);
 
         assertNotNull(roomCreatorBuilder.build());

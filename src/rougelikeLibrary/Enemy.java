@@ -5,46 +5,45 @@ import java.util.*;
 public class Enemy extends Character {
 
 	private Room currentRoom;
-	
-	public Enemy(int speed, int health, int damage, TurnSystem ts) {
-		super(speed, health, damage, ts);
-		
-	}
+
 	public Enemy(int speed, int health, int damage, Position position, TurnSystem ts) {
 		super(speed, health, damage, position, ts);
-		
-		
+
 	}
-	public Enemy(int speed, int health, int damage, int x, int y, TurnSystem ts) {
-		super(speed, health, damage, x, y, ts);		
-		
-	}	
+
+	/**
+   * 
+	 * @param Sets what Room the Enemy exists in
+	 */
 	public void setRoom(Room r) {
 		currentRoom = r;
 	}
+  
+	/**
+	 * Drops all items on the position that the enemy was on when it died and also removes the enemy from that position.
+	 */
 	private void dropItems() {
 		Position here = this.getPosition();
-		
+
 		ArrayList<Item> items = this.getInventory().getItems();
 		List<Mappable> m = currentRoom.getFromPosition(here);
 		m.remove(this);
-		if(!items.isEmpty()) {
-			for(Item i : items) {
+		if (!items.isEmpty()) {
+			for (Item i : items) {
 				currentRoom.addItem(here, i);
 			}
 		}
 	}
+
+	/**
+	 * If the enemy dies when taking damage it drops all it's items
+	 */
+	@Override
 	public void takeDamage(int damage) {
-		if (damage < 0) {
-			throw new IllegalArgumentException("Can't take negative damage.");
-		}
-		int health = getHealth() - damage;
-		setHealth(health);
-		if (health <= 0) {
-			health = 0;
+		super.takeDamage(damage);
+		if (getHealth() <= 0) {
 			dropItems();
-			kill();
 		}
 	}
-	
+
 }

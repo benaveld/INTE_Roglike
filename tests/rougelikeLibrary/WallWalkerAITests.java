@@ -16,9 +16,9 @@ public class WallWalkerAITests {
 		WallWalkerAI e = new WallWalkerAI(11037);
 		CardinalDirection d = CardinalDirection.values()[0];
 		TurnSystem ts = new TurnSystem(e);
-		Character c = new Character(0, 0, 0, ts);
+		Character c = new Character(0, 0, 0, new Position(0,0), ts);
+		room.setPlayer(new Position(0,0), new Player(0,0,0, new Position(0,0), new TurnSystem(new TUI())));
 		Room room = new Room(new Position(0, 0), new RoomSpace(3, 3), new HashMap<Position, List<Mappable>>());
-		room.setPlayer(new Position(0,0), new Player(0,0,0,new TurnSystem(new TUI())));
 		assertEquals(d, e.requestMove(room,c));
 	}
 
@@ -27,9 +27,9 @@ public class WallWalkerAITests {
 		WallWalkerAI e = new WallWalkerAI(11037);
 		CardinalDirection d = CardinalDirection.values()[0];
 		Room room = new Room(new Position(0, 0), new RoomSpace(3, 3), new HashMap<Position, List<Mappable>>());
-		room.setPlayer(new Position(0,0), new Player(0,0,0,new TurnSystem(new TUI())));
+		room.setPlayer(new Position(0,0), new Player(0,0,0, new Position(0,0), new TurnSystem(new TUI())));
 		TurnSystem ts = new TurnSystem(e);
-		Character c = new Character(0, 0, 0, ts);
+		Character c = new Character(0, 0, 0, new Position(0,0), ts);
 		for (int u = 0; u < 3; u++) {
 			for (int i = 0; i < 3; i++) {
 				e.requestMove(room,c);
@@ -45,8 +45,8 @@ public class WallWalkerAITests {
 		WallWalkerAI e = new WallWalkerAI(11037);
 		Room room = new Room(new Position(0, 0), new RoomSpace(3, 3), new HashMap<Position, List<Mappable>>());
 		TurnSystem ts = new TurnSystem(e);
-		Character c = new Character(0, 0, 0, ts);
-		Player p = new Player(0,0,0,new TurnSystem(new TUI()));
+		Character c = new Character(0, 0, 0, new Position(0,0), ts);
+		Player p = new Player(0,0,0, new Position(0,0), new TurnSystem(new TUI()));
 		room.setPlayer(new Position(1,1), p);
 
 		CardinalDirection d = CardinalDirection.values()[0];
