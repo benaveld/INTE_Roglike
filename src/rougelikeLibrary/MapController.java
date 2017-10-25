@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class MapController {
     private Room currentRoom;
-    private Map<Position, Room> map = new java.util.HashMap<>();
+    private final Map<Position, Room> map = new java.util.HashMap<>();
 
 
     /**
@@ -40,7 +40,9 @@ public class MapController {
         }
 
         Position.CardinalDirection nextRoomDirection =  currentRoom.play();
-        return (nextRoomDirection == null) ? null : currentRoom.getPosition().translateCardinalDirection(nextRoomDirection);
+
+      return (nextRoomDirection == null) ? null : currentRoom.getPosition()
+                .getNewPositionFromCardinalDirection(nextRoomDirection);
     }
 
 
@@ -77,7 +79,8 @@ public class MapController {
         }
 
         if (roomExist(room.getPosition())) {
-            throw new IllegalArgumentException("Can't create room at coordinate " + room.getPosition() + " because there already exists a room.");
+            throw new IllegalArgumentException("Can't create room at coordinate "
+                    + room.getPosition() + " because there already exists a room.");
         }
 
         map.put(room.getPosition(), room);
@@ -152,7 +155,8 @@ public class MapController {
      *      I.e for a given position with cardinal direction North, the permissions is fetched for a door in the north direction in the room.
      * @return the permission for a door in the cardinal direction (Optional, Disallowed or Mandatory)
      */
-    private Position.CardinalDirectionPermission getCardinalDirectionPermission(Position newRoomPosition, Position.CardinalDirection cardinalDirection) {
+    private Position.CardinalDirectionPermission
+        getCardinalDirectionPermission(Position newRoomPosition, Position.CardinalDirection cardinalDirection) {
         Position roomPositionInCardinalDirection;
 
         try {
