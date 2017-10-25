@@ -1,8 +1,6 @@
 package rougelikeLibrary;
 
 
-import javafx.geometry.Pos;
-
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -16,18 +14,11 @@ public class Room {
     private Map<Position, List<Mappable>> roomMap;
 
 
-    public Room(Position worldPosition, RoomSpace roomSpace) {
-        position = worldPosition;
-        this.roomSpace = roomSpace;
-        this.roomMap = new HashMap<>();
-    }
-
-
     /**
      * Constructor
-     *
      * @param worldPosition position for the room in world space
-     * @param roomMap       room map for the room
+     * @param roomSpace dimensions of all rooms
+     * @param roomMap room map for all the rooms
      */
     public Room(Position worldPosition, RoomSpace roomSpace, Map<Position, List<Mappable>> roomMap) {
         position = worldPosition;

@@ -3,6 +3,7 @@ package rougelikeLibrary;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.junit.*;
 
@@ -13,7 +14,7 @@ public class TurnSystemTests {
 	public void testTurnCharacterPlacedInMap() {
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
 		Enemy e = new Enemy(0, 0, 0, 5, 5, new TurnSystem(new EnemyAI(1)));
-		Room r = new Room(new Position(0,0), new RoomSpace(3,3));
+		Room r = new Room(new Position(0,0), new RoomSpace(3,3), new HashMap<Position, List<Mappable>>());
 		r.addEnemy(new Position(5,5), e);
 		
 		assertTrue(r.getFromPosition(new Position(5,5)).size() > 0);
@@ -52,7 +53,7 @@ public class TurnSystemTests {
 	{
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
 		Player p = new Player(10, 0, 0, 0, 0, ts);
-		Room r = new Room(new Position(0,0), new RoomSpace(3,3));
+		Room r = new Room(new Position(0,0), new RoomSpace(3,3), new HashMap<Position, List<Mappable>>());
 		r.setPlayer(p.getPosition(), p);
 		r.addDoor(CardinalDirection.North);
 		r.addDoor(CardinalDirection.West);
@@ -65,7 +66,7 @@ public class TurnSystemTests {
 	{
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
 		Player p = new Player(10, 0, 0, 0, 0, ts);
-		Room r = new Room(new Position(0,0), new RoomSpace(2,2));
+		Room r = new Room(new Position(0,0), new RoomSpace(2,2), new HashMap<Position, List<Mappable>>());
 		r.setPlayer(p.getPosition(), p);
 		r.addItem(new Position(0,1), new Item("Boots of speed",25,Item.Effect.SPEED));
 		p.startTurn(r);
@@ -77,7 +78,7 @@ public class TurnSystemTests {
 	{
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
 		Player p = new Player(10, 0, 1, 0, 0, ts);
-		Room r = new Room(new Position(0,0), new RoomSpace(1,2));
+		Room r = new Room(new Position(0,0), new RoomSpace(1,2), new HashMap<Position, List<Mappable>>());
 		r.setPlayer(p.getPosition(), p);
 		Enemy e = new Enemy(0,1,0,new TurnSystem(new EnemyAI(0)));
 		r.addEnemy(new Position(0,1),e);
@@ -90,7 +91,7 @@ public class TurnSystemTests {
 	{
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
 		Player p = new Player(0, 100, 1, new Position(0,0), ts);
-		Room r = new Room(new Position(0,0), new RoomSpace(1,2));
+		Room r = new Room(new Position(0,0), new RoomSpace(1,2), new HashMap<Position, List<Mappable>>());
 		r.setPlayer(p.getPosition(), p);
 		Enemy e = new Enemy(10,100,1,new TurnSystem(new EnemyAI(0)));
 		r.addEnemy(new Position(0,1),e);
@@ -103,7 +104,7 @@ public class TurnSystemTests {
 	{
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
 		Enemy standStill = new Enemy(0, 100, 1, new Position(0,0), ts);
-		Room r = new Room(new Position(0,0), new RoomSpace(1,2));
+		Room r = new Room(new Position(0,0), new RoomSpace(1,2), new HashMap<Position, List<Mappable>>());
 		Enemy attackingEnemy = new Enemy(10,100,1,new TurnSystem(new EnemyAI(0)));
 		r.addEnemy(attackingEnemy.getPosition(),attackingEnemy);
 		r.addEnemy(standStill.getPosition(), standStill);
@@ -118,7 +119,7 @@ public class TurnSystemTests {
 	{
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
 		Character c = new Character(1, 0, 0, 1, 1, ts);
-		Room r = new Room(new Position(0,0), new RoomSpace(100,100));
+		Room r = new Room(new Position(0,0), new RoomSpace(100,100), new HashMap<Position, List<Mappable>>());
 		
 		assertFalse(c.startTurn(r));
 	}
@@ -127,7 +128,7 @@ public class TurnSystemTests {
 	public void testTurnOutOfBounds()
 	{
 		Character c = new Character(1, 0, 0, 5, 5, new TurnSystem(new EnemyAI(1)));
-		Room r = new Room(new Position(0,0), new RoomSpace(0,0));
+		Room r = new Room(new Position(0,0), new RoomSpace(0,0), new HashMap<Position, List<Mappable>>());
 		
 		assertFalse(c.startTurn(r));
 	}

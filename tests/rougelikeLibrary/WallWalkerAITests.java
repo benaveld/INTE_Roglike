@@ -6,6 +6,9 @@ import org.junit.*;
 
 import rougelikeLibrary.Position.CardinalDirection;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class WallWalkerAITests {
 
 	@Test
@@ -14,7 +17,7 @@ public class WallWalkerAITests {
 		CardinalDirection d = CardinalDirection.values()[0];
 		TurnSystem ts = new TurnSystem(e);
 		Character c = new Character(0, 0, 0, ts);
-		Room room = new Room(new Position(0, 0), new RoomSpace(3, 3));
+		Room room = new Room(new Position(0, 0), new RoomSpace(3, 3), new HashMap<Position, List<Mappable>>());
 		room.setPlayer(new Position(0,0), new Player(0,0,0,new TurnSystem(new TUI())));
 		assertEquals(d, e.requestMove(room,c));
 	}
@@ -23,7 +26,7 @@ public class WallWalkerAITests {
 	public void testWallWalkerChangeDirection() {
 		WallWalkerAI e = new WallWalkerAI(11037);
 		CardinalDirection d = CardinalDirection.values()[0];
-		Room room = new Room(new Position(0, 0), new RoomSpace(3, 3));
+		Room room = new Room(new Position(0, 0), new RoomSpace(3, 3), new HashMap<Position, List<Mappable>>());
 		room.setPlayer(new Position(0,0), new Player(0,0,0,new TurnSystem(new TUI())));
 		TurnSystem ts = new TurnSystem(e);
 		Character c = new Character(0, 0, 0, ts);
@@ -40,7 +43,7 @@ public class WallWalkerAITests {
 	public void testWallWalkerAttackPlayer()
 	{
 		WallWalkerAI e = new WallWalkerAI(11037);
-		Room room = new Room(new Position(0, 0), new RoomSpace(3, 3));
+		Room room = new Room(new Position(0, 0), new RoomSpace(3, 3), new HashMap<Position, List<Mappable>>());
 		TurnSystem ts = new TurnSystem(e);
 		Character c = new Character(0, 0, 0, ts);
 		Player p = new Player(0,0,0,new TurnSystem(new TUI()));
