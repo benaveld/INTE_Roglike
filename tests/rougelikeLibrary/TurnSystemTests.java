@@ -41,9 +41,9 @@ public class TurnSystemTests {
 
     Player p = new Player(10, 0, 0, new Position(0,0), ts);
 		Room r = new Room(new Position(0,0), new RoomSpace(3,3), new HashMap<Position, List<Mappable>>());
-
     r.setPlayer(p.getPosition(), p);
-		r.addDoor(CardinalDirection.North);
+
+    r.addDoor(CardinalDirection.North);
 		r.addDoor(CardinalDirection.West);
 		
 		assertTrue(p.startTurn(r));
@@ -74,7 +74,8 @@ public class TurnSystemTests {
 		Room r = new Room(new Position(0,0), new RoomSpace(2,2), new HashMap<Position, List<Mappable>>());
 
     r.setPlayer(p.getPosition(), p);
-		r.addItem(new Position(0,1), new Item("Boots of speed",25,Item.Effect.SPEED));
+
+    r.addItem(new Position(0,1), new Item("Boots of speed",25,Item.Effect.SPEED));
 		p.startTurn(r);
 		assertTrue(p.getInventory().getItems().size() > 0);
 	}
@@ -88,7 +89,8 @@ public class TurnSystemTests {
 		Room r = new Room(new Position(0,0), new RoomSpace(1,2), new HashMap<Position, List<Mappable>>());
 
     r.setPlayer(p.getPosition(), p);
-		Enemy e = new Enemy(0,1,0, new Position(0,0), new TurnSystem(new EnemyAI(0)));
+
+    Enemy e = new Enemy(0,1,0, new Position(0,0), new TurnSystem(new EnemyAI(0)));
 		r.addEnemy(new Position(0,1),e);
 		p.startTurn(r);
 		assertTrue(e.getHealth() < 100);
@@ -114,7 +116,7 @@ public class TurnSystemTests {
 		Enemy standStill = new Enemy(0, 100, 1, new Position(0,0), ts);
 
     Room r = new Room(new Position(0,0), new RoomSpace(1,2), new HashMap<Position, List<Mappable>>());
-		Enemy attackingEnemy = new Enemy(10,100,1, new Position(0,1),new TurnSystem(new EnemyAI(0)));
+    Enemy attackingEnemy = new Enemy(10,100,1, new Position(0,1),new TurnSystem(new EnemyAI(0)));
 
     r.addEnemy(attackingEnemy.getPosition(),attackingEnemy);
 		r.addEnemy(standStill.getPosition(), standStill);
@@ -129,9 +131,9 @@ public class TurnSystemTests {
 	{
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
 
-    Enemy e = new Enemy(1, 0, 0, new Position(1,1),  ts);
+    Character c = new Character(1, 0, 0, 1, 1, ts);
+		Enemy e = new Enemy(1, 0, 0, new Position(1,1),  ts);
 		Room r = new Room(new Position(0,0), new RoomSpace(100,100), new HashMap<Position, List<Mappable>>());
-
 		r.addEnemy(e.getPosition(), e);
 		
 		assertFalse(e.startTurn(r));

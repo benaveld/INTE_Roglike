@@ -16,10 +16,10 @@ public class EnemyTests {
 	@Test
 	public void testEnemyDropItemOnDeath() {
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
-
     Room r = new Room(new Position(0,0), new RoomSpace(10,10), new HashMap<Position, List<Mappable>>());
 		r.addEnemy(new Position(2,2), new Enemy(1,1,1, new Position(0,0), ts));
-		Enemy e = (Enemy)r.getFromPosition(new Position(2,2)).get(0);
+
+    Enemy e = (Enemy)r.getFromPosition(new Position(2,2)).get(0);
 		e.getInventory().add(new Item("test", 100, Item.Effect.DAMAGE));
 		assertEquals("1 1 1", e.toString());
 		e.takeDamage(1);
@@ -40,7 +40,6 @@ public class EnemyTests {
 	public void testEnemyDropsNoItemsOnDeath() {
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
 		Room r = new Room(new Position(0,0), new RoomSpace(10,10), new HashMap<Position, List<Mappable>>());
-		r.addEnemy(new Position(2,2), new Enemy(1,1,1, ts));
 		r.addEnemy(new Position(2,2), new Enemy(1,1,1, new Position(0,0), ts));
 		Enemy e = (Enemy)r.getFromPosition(new Position(2,2)).get(0);
 		assertEquals("1 1 1", e.toString());
@@ -56,7 +55,8 @@ public class EnemyTests {
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
 		Room r = new Room(new Position(0,0), new RoomSpace(10,10), new HashMap<Position, List<Mappable>>());
 		r.addEnemy(new Position(2,2), new Enemy(1,1,1, new Position(0,0), ts));
-		Enemy e = (Enemy)r.getFromPosition(new Position(2,2)).get(0);
+
+    Enemy e = (Enemy)r.getFromPosition(new Position(2,2)).get(0);
 		e.getInventory().add(new Item("test0", 100, Item.Effect.DAMAGE));
 		e.getInventory().add(new Item("test1", 10, Item.Effect.SPEED));
 		e.getInventory().add(new Item("test2", 200, Item.Effect.HEALTH));

@@ -30,7 +30,7 @@ public class WallWalkerAITests {
 		CardinalDirection d = CardinalDirection.values()[0];
 
     Room room = new Room(new Position(0, 0), new RoomSpace(3, 3), new HashMap<Position, List<Mappable>>());
-		room.setPlayer(new Position(0,0), new Player(0,0,0, new Position(0,0), new TurnSystem(new TUI())));
+    room.setPlayer(new Position(0,0), new Player(0,0,0, new Position(0,0), new TurnSystem(new TUI())));
 
     TurnSystem ts = new TurnSystem(e);
 		Character c = new Character(0, 0, 0, new Position(0,0), ts);
