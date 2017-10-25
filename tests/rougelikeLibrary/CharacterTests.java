@@ -109,12 +109,12 @@ public class CharacterTests {
 	public void testCharacterStartTurnReturnTrue()
 	{
 
-		Character c = new Character(5, 0, 0, new Position(0,0), new TurnSystem(new EnemyAI(1)));
+		Player p = new Player(5, 1, 0, new Position(0,0), new TurnSystem(new EnemyAI(1)));
 		Room r = new Room(new Position(0,0), new RoomSpace(3, 3), new HashMap<Position, List<Mappable>>());
-		r.setPlayer(c.getPosition(), c);
+		r.setPlayer(p.getPosition(), p);
 		r.addDoor(CardinalDirection.North);
 		r.addDoor(CardinalDirection.West);
-		assertTrue(c.startTurn(r));
+		assertTrue(p.startTurn(r));
 	}
 	@Test
 	public void testCharacterStartTurnReturnFalse()
@@ -148,6 +148,7 @@ public class CharacterTests {
 	public void testCharacterStatChanges() {
 		
 		Enemy e = new Enemy(1,1,1, new Position(1,1), new TurnSystem(new EnemyAI(1)));
+
 		Item id = new Item("test", 1, Item.Effect.DAMAGE);
 		Item iH = new Item("test", 1, Item.Effect.HEALTH);
 		Item iS = new Item("test", 1, Item.Effect.SPEED);
@@ -155,6 +156,7 @@ public class CharacterTests {
 		e.getInventory().add(iH);
 		e.getInventory().add(iS);
 		Room r = new Room(new Position(1,1), new RoomSpace(10,10));
+
 		r.addEnemy(new Position(1,1), e);
 		assertFalse(e.startTurn(r));
 		assertEquals(2, e.getDamage()); //All stats increased

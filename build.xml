@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- WARNING: Eclipse auto-generated file.-->
-<project basedir="." default="build" name="INTE_Roglike">
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="INTE_Roglike">
     <property environment="env"/>
     <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
@@ -15,15 +18,13 @@
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
-                <exclude name="**/*.ucls"/>
-                <exclude name="**/*.useq"/>
+                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="tests">
-                <exclude name="**/*.ucls"/>
-                <exclude name="**/*.useq"/>
+                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -65,29 +66,74 @@
             <classpath refid="INTE_Roglike.classpath"/>
         </junit>
     </target>
-    <target name="GameTest">
+    <target name="CustomInputTest">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="rougelikeLibrary.GameTest" todir="${junit.output.dir}"/>
+            <test name="rougelikeLibrary.CustomInputTest" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
             <classpath refid="INTE_Roglike.classpath"/>
         </junit>
     </target>
-    <target name="MapControllerTests">
+    <target name="EnemyAITests">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="rougelikeLibrary.MapControllerTests" todir="${junit.output.dir}"/>
+            <test name="rougelikeLibrary.EnemyAITests" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
             <classpath refid="INTE_Roglike.classpath"/>
         </junit>
     </target>
-    <target name="PlayerTests">
+    <target name="IOTests">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="rougelikeLibrary.PlayerTests" todir="${junit.output.dir}"/>
+            <test name="rougelikeLibrary.IOTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="IOTests.testCalculateMovementBasicAINotAllowedMove">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.IOTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="IOTestSuite">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.IOTestSuite" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="MapObjectTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.MapObjectTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="MapObjectTests.testCheckSpotEmpty">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.MapObjectTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="MapTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.MapTests" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
             <classpath refid="INTE_Roglike.classpath"/>
         </junit>
@@ -101,52 +147,7 @@
             <classpath refid="INTE_Roglike.classpath"/>
         </junit>
     </target>
-    <target name="PositionTests.testPositionEqual">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="rougelikeLibrary.PositionTests" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="INTE_Roglike.classpath"/>
-        </junit>
-    </target>
-    <target name="PositionTests.testPositionEqualNot">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="rougelikeLibrary.PositionTests" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="INTE_Roglike.classpath"/>
-        </junit>
-    </target>
-    <target name="PositionTests.testPositionNotEqualWithOtherObjects">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="rougelikeLibrary.PositionTests" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="INTE_Roglike.classpath"/>
-        </junit>
-    </target>
-    <target name="RoomCreatorTests">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="rougelikeLibrary.RoomCreatorTests" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="INTE_Roglike.classpath"/>
-        </junit>
-    </target>
-    <target name="RoomTests">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="rougelikeLibrary.RoomTests" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="INTE_Roglike.classpath"/>
-        </junit>
-    </target>
-    <target name="TestSuite">
+    <target name="Testsuite">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
@@ -164,11 +165,56 @@
             <classpath refid="INTE_Roglike.classpath"/>
         </junit>
     </target>
-    <target name="TurnSystemTests.testTurnSystemGetNewLocation">
+    <target name="TurnSystemTests.testAttackOtherCharacter">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
             <test name="rougelikeLibrary.TurnSystemTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="TurnSystemTests.testTurnSystemDontEnterDoor">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.TurnSystemTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="TurnSystemTests.testTurnSystemEnemyNOTAttackEnemy">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.TurnSystemTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="TurnSystemTests.testTurnSystemMove">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.TurnSystemTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="WallWalkerAITests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.WallWalkerAITests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="WallWalkerAITests.testWallWalkerAttackPlayer">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.WallWalkerAITests" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
             <classpath refid="INTE_Roglike.classpath"/>
         </junit>
