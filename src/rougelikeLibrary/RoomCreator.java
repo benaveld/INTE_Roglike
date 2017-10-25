@@ -237,10 +237,10 @@ public class RoomCreator {
             throw new IllegalArgumentException("Cardinal direction can not be null.");
         }
 
-        Position north = new Position((room.getRoomSpace().getWidth() - 1) / 2, 0);
-        Position south = new Position((room.getRoomSpace().getWidth() - 1) / 2, room.getRoomSpace().getHeight() - 1);
-        Position west = new Position(0, (room.getRoomSpace().getHeight() - 1) / 2);
-        Position east = new Position(room.getRoomSpace().getWidth() - 1, (room.getRoomSpace().getWidth() - 1) / 2);
+        Position north = new Position((room.getRoomSpace().getMaxIndexWidth()) / 2, 0);
+        Position south = new Position((room.getRoomSpace().getMaxIndexWidth()) / 2, room.getRoomSpace().getMaxIndexHeight());
+        Position west = new Position(0, (room.getRoomSpace().getMaxIndexHeight()) / 2);
+        Position east = new Position(room.getRoomSpace().getMaxIndexWidth(), (room.getRoomSpace().getMaxIndexWidth() / 2));
 
         Position cardinalDirectionPosition = null;
         switch (cardinalDirection) {

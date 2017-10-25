@@ -46,7 +46,7 @@ public class WallWalkerAI extends EnemyAI {
 				return CardinalDirection.West;
 			}
 		}
-		if (myPosition.getX() < room.getRoomSpace().getWidth() - 1)
+		if (myPosition.getX() < room.getRoomSpace().getMaxIndexWidth())
 		{
 			if (room.existPlayer(new Position(myPosition.getX() + 1, myPosition.getY())))
 			{
@@ -60,7 +60,7 @@ public class WallWalkerAI extends EnemyAI {
 				return CardinalDirection.North;
 			}
 		}
-		if (myPosition.getY() < room.getRoomSpace().getHeight() - 1)
+		if (myPosition.getY() < room.getRoomSpace().getMaxIndexHeight())
 		{
 			if (room.existPlayer(new Position(myPosition.getX(), myPosition.getY() + 1)))
 			{
