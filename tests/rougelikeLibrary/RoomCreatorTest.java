@@ -80,8 +80,8 @@ public class RoomCreatorTest {
         Class [] parameterTypesItem = {String.class, int.class, Item.Effect.class};
         Object [] parameterValuesItem = {"item 1", 43, Item.Effect.DAMAGE};
 
-        Class [] parameterTypesEnemy = {int.class, int.class, int.class, TurnSystem.class};
-        Object [] parameterValuesEnemy = {34, 87, 22, new TurnSystem(new EnemyAI(43))};
+        Class [] parameterTypesEnemy = {int.class, int.class, int.class, Position.class, TurnSystem.class};
+        Object [] parameterValuesEnemy = {34, 87, 22, stdPosition, new TurnSystem(new EnemyAI(43))};
 
         int minQntyItem = 1;
         int maxQntyItem = 5;
@@ -89,6 +89,7 @@ public class RoomCreatorTest {
         int maxQntyEnemy = 28;
         MappableTypeWrapper itemType = new MappableTypeWrapper(Item.class, parameterTypesItem, parameterValuesItem, minQntyItem, maxQntyItem, 1);
         MappableTypeWrapper enemyType = new MappableTypeWrapper(Enemy.class, parameterTypesEnemy, parameterValuesEnemy, new EnemyAI(2143), minQntyEnemy, maxQntyEnemy, 30);
+
 
         Room room = roomCreator.createRoom(stdWorldPosition, stdCardinalPermissions);
         Map<Position, List<Mappable>> roomMapLocal = room.getRoomMap();
@@ -115,9 +116,9 @@ public class RoomCreatorTest {
 
     @Test
     public void createType() throws Exception {
-        Class [] parameterTypesEnemyInvalid = {String.class, int.class, int.class, TurnSystem.class};
-        Class [] parameterTypesEnemy = {int.class, int.class, int.class, TurnSystem.class};
-        Object [] parameterValuesEnemy = {34, 87, 22, new TurnSystem(new EnemyAI(43))};
+        Class [] parameterTypesEnemyInvalid = {String.class, int.class, int.class, Position.class, TurnSystem.class};
+        Class [] parameterTypesEnemy = {int.class, int.class, int.class, Position.class, TurnSystem.class};
+        Object [] parameterValuesEnemy = {34, 87, 22, stdPosition, new TurnSystem(new EnemyAI(43))};
 
         MappableTypeWrapper enemyType = new MappableTypeWrapper(Enemy.class, parameterTypesEnemy, parameterValuesEnemy,
                 new EnemyAI(2143), 1, 2, 30);

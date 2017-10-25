@@ -373,17 +373,19 @@ public class Room {
         }
 
         List<Mappable> mappablesFrom = getFromPosition(fromPosition);
-        List<Mappable> mappablesTo = getFromPosition(toPosition);
-
         if (!existCharacter(mappablesFrom)) {
             throw new IllegalArgumentException("Character at from position is missing.");
         }
+
+        List<Mappable> mappablesTo = getFromPosition(toPosition);
         if (existCharacter(mappablesTo)) {
             throw new IllegalArgumentException("To position already contains a character.");
         }
 
+        boolean finished = false;
+
         Iterator fromIterator = mappablesFrom.iterator();
-        while (fromIterator.hasNext()) {
+        while (fromIterator.hasNext() && !finished) {
             Mappable mappable = (Mappable) fromIterator.next();
             if (mappable instanceof Character) {
                 mappablesTo.add(mappable);
@@ -393,7 +395,7 @@ public class Room {
 
                 roomMap.put(fromPosition, mappablesFrom);
                 roomMap.put(toPosition, mappablesTo);
-                return;
+                finished = true;
             }
         }
     }

@@ -472,8 +472,6 @@ public class RoomTest {
             stdRoom.moveCharacter(fromPosition4, fromPosition3);
             fail("Expected IllegalArgumentException: character at from position is missing.");
         } catch (IllegalArgumentException iae) {assertTrue(true); }
-
-
     }
 
 
