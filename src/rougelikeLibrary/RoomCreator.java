@@ -160,16 +160,16 @@ public class RoomCreator {
     public void addDoors(Room room, java.util.Map<Position.CardinalDirection, Position.CardinalDirectionPermission> cardinalDirectionPermissions) {
         Map<Position, List<Mappable>> roomMap = room.getRoomMap();
 
-        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.North))) {
+        if (getCardinalDirectionPC(cardinalDirectionPermissions.get(Position.CardinalDirection.North))) {
            addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.North), new Door());
         }
-        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.South))) {
+        if (getCardinalDirectionPC(cardinalDirectionPermissions.get(Position.CardinalDirection.South))) {
             addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.South), new Door());
         }
-        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.West))) {
+        if (getCardinalDirectionPC(cardinalDirectionPermissions.get(Position.CardinalDirection.West))) {
             addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.West), new Door());
         }
-        if (getCardinalDirectionPermissionChoice(cardinalDirectionPermissions.get(Position.CardinalDirection.East))) {
+        if (getCardinalDirectionPC(cardinalDirectionPermissions.get(Position.CardinalDirection.East))) {
             addToRoom(roomMap, room.getDoorPosition(Position.CardinalDirection.East), new Door());
         }
     }
@@ -181,7 +181,7 @@ public class RoomCreator {
      * @return true if permission is mandatory or if random returns true on optional permission.
      * If a permission is missing or is null, false will be returned.
      */
-    public boolean getCardinalDirectionPermissionChoice(Position.CardinalDirectionPermission cardinalDirectionPermission) {
+    public boolean getCardinalDirectionPC(Position.CardinalDirectionPermission cardinalDirectionPermission) {
         boolean choice = false;
 
         switch (cardinalDirectionPermission) {
@@ -237,10 +237,10 @@ public class RoomCreator {
             throw new IllegalArgumentException("Cardinal direction can not be null.");
         }
 
-        Position north = new Position((room.getRoomSpace().getWidth() - 1) / 2, 0);
-        Position south = new Position((room.getRoomSpace().getWidth() - 1) / 2, room.getRoomSpace().getHeight() - 1);
-        Position west = new Position(0, (room.getRoomSpace().getHeight() - 1) / 2);
-        Position east = new Position(room.getRoomSpace().getWidth() - 1, (room.getRoomSpace().getWidth() - 1) / 2);
+        Position north = new Position((room.getRoomSpace().getMaxIndexWidth()) / 2, 0);
+        Position south = new Position((room.getRoomSpace().getMaxIndexWidth()) / 2, room.getRoomSpace().getMaxIndexHeight());
+        Position west = new Position(0, (room.getRoomSpace().getMaxIndexHeight()) / 2);
+        Position east = new Position(room.getRoomSpace().getMaxIndexWidth(), (room.getRoomSpace().getMaxIndexWidth() / 2));
 
         Position cardinalDirectionPosition = null;
         switch (cardinalDirection) {

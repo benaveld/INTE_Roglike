@@ -117,10 +117,10 @@ public class RoomTest {
         room.addDoor(Position.CardinalDirection.West);
         room.addDoor(Position.CardinalDirection.East);
 
-        Position north = new Position((room.getRoomSpace().getWidth() - 1) / 2, 0);
-        Position south = new Position((room.getRoomSpace().getWidth() - 1) / 2, (room.getRoomSpace().getHeight() - 1));
-        Position west = new Position(0, (room.getRoomSpace().getHeight() - 1) / 2);
-        Position east = new Position((room.getRoomSpace().getWidth() - 1), (room.getRoomSpace().getHeight() - 1) / 2);
+        Position north = new Position((room.getRoomSpace().getMaxIndexWidth()) / 2, 0);
+        Position south = new Position((room.getRoomSpace().getMaxIndexWidth()) / 2, (room.getRoomSpace().getMaxIndexHeight()));
+        Position west = new Position(0, (room.getRoomSpace().getMaxIndexHeight()) / 2);
+        Position east = new Position((room.getRoomSpace().getMaxIndexWidth()), (room.getRoomSpace().getMaxIndexHeight()) / 2);
 
         assertTrue(room.existDoor(north));
         assertTrue(room.existDoor(south));
@@ -513,10 +513,10 @@ public class RoomTest {
     @Test
     public void getCardinalDirection() {
         RoomSpace thisRoomSpace = new RoomSpace(32, 32);
-        Position positionNorth = new Position((thisRoomSpace.getWidth() - 1) / 2, 0);
-        Position positionSouth = new Position((thisRoomSpace.getWidth() - 1) / 2, thisRoomSpace.getHeight() - 1);
+        Position positionNorth = new Position((thisRoomSpace.getMaxIndexWidth()) / 2, 0);
+        Position positionSouth = new Position((thisRoomSpace.getMaxIndexWidth()) / 2, thisRoomSpace.getMaxIndexHeight());
         Position positionWest = new Position(0, (thisRoomSpace.getHeight() - 1) / 2);
-        Position positionEast = new Position(thisRoomSpace.getWidth() - 1, (thisRoomSpace.getHeight() - 1) / 2);
+        Position positionEast = new Position(thisRoomSpace.getMaxIndexWidth(), (thisRoomSpace.getMaxIndexHeight()) / 2);
 
         Room room = new Room(stdPosition, thisRoomSpace, roomMap);
         assertEquals(room.getCardinalDirection(positionNorth), Position.CardinalDirection.North);
