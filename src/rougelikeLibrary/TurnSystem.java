@@ -100,7 +100,7 @@ public class TurnSystem {
 		int maxSafetyCount = 100;
 		Position newPosition;
 		try {
-			newPosition = character.getPosition().translateCardinalDirection(io.requestMove(room, character));
+			newPosition = character.getPosition().translateCardinalDirection(IO.requestMove(room, character));
 		} catch (IllegalArgumentException e) {
 			System.out.println(e);
 			newPosition = null;
@@ -111,7 +111,7 @@ public class TurnSystem {
 				return States.END;
 			} else {
 				try {
-					newPosition = character.getPosition().translateCardinalDirection(io.requestMove(room, character));
+					newPosition = character.getPosition().translateCardinalDirection(IO.requestMove(room, character));
 				} catch (IllegalArgumentException e) {
 					System.out.println(e);
 				}

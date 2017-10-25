@@ -116,7 +116,7 @@ public class TurnSystemTests {
 	public void testTurnSystemDontEnterDoor()
 	{
 		TurnSystem ts = new TurnSystem(new EnemyAI(2));
-		enemy e = new Enemy(1, 0, 0, new Position(1,1),  ts);
+		Enemy e = new Enemy(1, 0, 0, new Position(1,1),  ts);
 		Room r = new Room(new Position(0,0), new RoomSpace(100,100));
 		r.addEnemy(e.getPosition(), e);
 		
