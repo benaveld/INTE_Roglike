@@ -103,11 +103,12 @@ public class CharacterTests {
 		Item i = new Item("test", 25, Item.Effect.SPEED);
 		c.getInventory().add(i);
 		Item itemReturned = c.getInventory().getItem(0);
-		assertEquals("test +25% speed", itemReturned.toString());
+		assertEquals("test +25 speed", itemReturned.toString());
 	}
 	@Test
 	public void testCharacterStartTurnReturnTrue()
 	{
+
 		Character c = new Character(5, 0, 0, new Position(0,0), new TurnSystem(new EnemyAI(1)));
 		Room r = new Room(new Position(0,0), new RoomSpace(3, 3), new HashMap<Position, List<Mappable>>());
 		r.setPlayer(c.getPosition(), c);
