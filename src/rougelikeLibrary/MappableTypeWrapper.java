@@ -4,13 +4,13 @@ package rougelikeLibrary;
  * Wrapper class for mappable types
  */
 class MappableTypeWrapper {
-    Class classType;
-    Class [] parameterTypes;
-    Object [] parameterValues;
-    IO io;
-    int minQuantity;
-    int maxQuantity;
-    int probability;
+    final Class classType;
+    final Class [] parameterTypes;
+    final Object [] parameterValues;
+    final IO io;
+    final int minQuantity;
+    final int maxQuantity;
+    final int probability;
     int currentQuantity;
 
 
@@ -21,6 +21,7 @@ class MappableTypeWrapper {
         this.minQuantity = minQuantity;
         this.maxQuantity = maxQuantity;
         this.probability = probability;
+        this.io = null;
     }
 
 
