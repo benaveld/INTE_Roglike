@@ -214,7 +214,10 @@ public class TurnSystem {
 					itemsToAdd.add((Item) m);
 				} else if (m instanceof Door) {
 					tempDoorHolder = (Door) m;
+					if (character instanceof Player)
+					{
 					foundDoor = true;
+					}
 				}
 			}
 
