@@ -155,8 +155,7 @@ public class CharacterTests {
 		e.getInventory().add(id);
 		e.getInventory().add(iH);
 		e.getInventory().add(iS);
-		Room r = new Room(new Position(1,1), new RoomSpace(10,10));
-
+		Room r = new Room(new Position(1,1), new RoomSpace(10,10), new HashMap<Position, List<Mappable>>());
 		r.addEnemy(new Position(1,1), e);
 		assertFalse(e.startTurn(r));
 		assertEquals(2, e.getDamage()); //All stats increased
