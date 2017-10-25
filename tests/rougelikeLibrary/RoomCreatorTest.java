@@ -33,10 +33,10 @@ public class RoomCreatorTest {
     };
 
     Character [] enemies = {
-            new Enemy(22, 33, 44, new TurnSystem(new EnemyAI(1))),
-            new Enemy(2, 3, 44, new TurnSystem(new EnemyAI(1))),
-            new Enemy(22, 33, 4, new TurnSystem(new EnemyAI(1))),
-            new Enemy(2, 3, 44, new TurnSystem(new EnemyAI(1)))
+            new Enemy(22, 33, 44, new Position(0,0), new TurnSystem(new EnemyAI(1))),
+            new Enemy(2, 3, 44, new Position(0,0), new TurnSystem(new EnemyAI(1))),
+            new Enemy(22, 33, 4, new Position(0,0), new TurnSystem(new EnemyAI(1))),
+            new Enemy(2, 3, 44, new Position(0,0), new TurnSystem(new EnemyAI(1)))
     };
 
 
@@ -47,7 +47,7 @@ public class RoomCreatorTest {
     @Before
     public void init() {
         roomCreator = new RoomCreator(roomCreatorSeed,
-                new Player(1, 1, 1, new TurnSystem(new EnemyAI(1))),
+                new Player(1, 1, 1, new Position(0,0), new TurnSystem(new EnemyAI(1))),
                 new ArrayList<MappableTypeWrapper>(),
                 new RoomSpace(32, 32));
                 stdPosition = new Position(dummyX, dummyY);
@@ -137,7 +137,7 @@ public class RoomCreatorTest {
 
     @Test
     public void addToRoom() throws Exception {
-        Mappable mappable = new Enemy(1, 2, 3, new TurnSystem(new EnemyAI(53)));
+        Mappable mappable = new Enemy(1, 2, 3, new Position(0,0), new TurnSystem(new EnemyAI(53)));
         Room room = new Room(stdWorldPosition, new RoomSpace(32, 32), roomMap);
         assertTrue(room.getRoomMap().isEmpty());
 
@@ -179,8 +179,8 @@ public class RoomCreatorTest {
 
     @Test
     public void getCardinalDirectionPermissionChoice() throws Exception {
-        assertTrue(roomCreator.getCardinalDirectionPermissionChoice(Position.CardinalDirectionPermission.Mandatory));
-        assertFalse(roomCreator.getCardinalDirectionPermissionChoice(Position.CardinalDirectionPermission.Disallowed));
+        assertTrue(roomCreator.getCardinalDirectionPC(Position.CardinalDirectionPermission.Mandatory));
+        assertFalse(roomCreator.getCardinalDirectionPC(Position.CardinalDirectionPermission.Disallowed));
     }
 
 
@@ -248,7 +248,7 @@ public class RoomCreatorTest {
         mappableTypes.add(new MappableTypeWrapper(Item.class, parameterTypesItem, parameterValuesItem, 1, 90, 1));
         mappableTypes.add(new MappableTypeWrapper(Item.class, parameterTypesItem2, parameterValuesItem2, 11, 90, 1));
 
-        RoomCreator roomCreatorNew = new RoomCreator(123, new Player(1, 2, 3, new TurnSystem(new EnemyAI(213))), mappableTypes, new RoomSpace(32, 32));
+        RoomCreator roomCreatorNew = new RoomCreator(123, new Player(1, 2, 3, new Position(0,0), new TurnSystem(new EnemyAI(213))), mappableTypes, new RoomSpace(32, 32));
 
         room = roomCreatorNew.createRoom(new Position(arbitraryX, arbitraryY), cardinalDirectionPermissions);
         assertNotNull(room);

@@ -18,10 +18,10 @@ public class InventoryItemTests {
 		
 	}
 	@Test
-	public void testItemPercentage(){
+	public void testItemValue(){
 		Item i = new Item("test", 100, Item.Effect.DAMAGE);
 		
-		assertEquals(100, i.getPercentage());
+		assertEquals(100, i.getValue());
 		
 	}
 	@Test 
@@ -35,14 +35,14 @@ public class InventoryItemTests {
 	public void testItem(){ 
 		Item i = new Item("test", 100, Item.Effect.DAMAGE);
 		
-		assertEquals("test +100% damage", i.toString());
+		assertEquals("test +100 damage", i.toString());
 		
 	}
 	@Test
-	public void testItemNegativePercentage(){ 
+	public void testItemNegativeValue(){ 
 		Item i = new Item("test", -100, Item.Effect.DAMAGE);
 		
-		assertEquals("test -100% damage", i.toString());
+		assertEquals("test -100 damage", i.toString());
 		
 	}
 	
@@ -52,7 +52,7 @@ public class InventoryItemTests {
 		Item i = new Item("test", 100, Item.Effect.DAMAGE);
 		Inventory inv = new Inventory();
 		inv.add(i);
-		assertEquals("test +100% damage\n", inv.toString());
+		assertEquals("test +100 damage\n", inv.toString());
 		
 	}
 	@Test
@@ -65,7 +65,7 @@ public class InventoryItemTests {
 		inv.add(i0);
 		inv.add(i1);
 		inv.add(i2);
-		assertEquals("test0 +25% speed\ntest1 +50% health\ntest2 +100% damage\n", inv.toString());
+		assertEquals("test0 +25 speed\ntest1 +50 health\ntest2 +100 damage\n", inv.toString());
 		
 	}
 	@Test
@@ -79,7 +79,21 @@ public class InventoryItemTests {
 		inv.add(i1);
 		inv.add(i2);
 		inv.remove(i1);
-		assertEquals("test0 +25% speed\ntest2 +100% damage\n", inv.toString());
+		assertEquals("test0 +25 speed\ntest2 +100 damage\n", inv.toString());
+		
+	}
+	@Test
+	public void testRemoveItemsFromInventoryWithIndex(){
+	
+		Item i0 = new Item("test0", 25, Item.Effect.SPEED);
+		Item i1 = new Item("test1", 50, Item.Effect.HEALTH);
+		Item i2 = new Item("test2", 100, Item.Effect.DAMAGE);
+		Inventory inv = new Inventory();
+		inv.add(i0);
+		inv.add(i1);
+		inv.add(i2);
+		inv.remove(1);
+		assertEquals("test0 +25 speed\ntest2 +100 damage\n", inv.toString());
 		
 	}
 	@Test
@@ -99,7 +113,7 @@ public class InventoryItemTests {
 			itemsString += i.toString();
 			
 		}
-		assertEquals("test0 +25% speedtest1 +50% healthtest2 +100% damage", itemsString);
+		assertEquals("test0 +25 speedtest1 +50 healthtest2 +100 damage", itemsString);
 		
 	}
 	@Test
@@ -109,7 +123,7 @@ public class InventoryItemTests {
 		Inventory inv = new Inventory();
 		inv.add(i);
 		Item itemReturned = inv.getItem(0);
-		assertEquals("test +25% speed", itemReturned.toString());
+		assertEquals("test +25 speed", itemReturned.toString());
 		
 	}
 	
@@ -125,7 +139,7 @@ public class InventoryItemTests {
 		inv.add(i2);
 		inv.remove(i1);
 		Item itemReturned = inv.getItem(1);
-		assertEquals("test2 +100% damage", itemReturned.toString());
+		assertEquals("test2 +100 damage", itemReturned.toString());
 		
 	}
 	@Test(expected = IndexOutOfBoundsException.class)
@@ -140,7 +154,7 @@ public class InventoryItemTests {
 		inv.add(i2);
 		inv.remove(i1);
 		Item itemReturned = inv.getItem(2);
-		assertEquals("test2 +100% damage", itemReturned.toString());
+		assertEquals("test2 +100 damage", itemReturned.toString());
 		
 	}
 	
@@ -183,7 +197,7 @@ public class InventoryItemTests {
 			itemString += i.toString();
 		}
 		
-		assertEquals("test0 +25% speedtest3 +25% speed", itemString);
+		assertEquals("test0 +25 speedtest3 +25 speed", itemString);
 	}
 	
 	@Test
@@ -211,7 +225,7 @@ public class InventoryItemTests {
 			itemString += i.toString();
 		}
 		
-		assertEquals("test1 +50% healthtest4 +50% health", itemString);
+		assertEquals("test1 +50 healthtest4 +50 health", itemString);
 	}
 	
 	@Test
@@ -239,11 +253,11 @@ public class InventoryItemTests {
 			itemString += i.toString();
 		}
 		
-		assertEquals("test2 +100% damagetest5 +100% damage", itemString);
+		assertEquals("test2 +100 damagetest5 +100 damage", itemString);
 	}
 	
 	@Test
-	public void testTotalPercentages(){
+	public void testTotalValues(){
 		
 		Item i0 = new Item("test0", 25, Item.Effect.SPEED);
 		Item i1 = new Item("test1", 50, Item.Effect.HEALTH);
@@ -258,19 +272,19 @@ public class InventoryItemTests {
 			inv.add(items[i]);
 		}
 		
-		TreeMap<Item.Effect, Integer> totalPercentByStat = inv.getTotalPercentages();
+		TreeMap<Item.Effect, Integer> totalPercentByStat = inv.getTotalValues();
 		
-		int speedPercentage = totalPercentByStat.get(Item.Effect.SPEED);
-		int healthPercentage = totalPercentByStat.get(Item.Effect.HEALTH);
-		int damagePercentage = totalPercentByStat.get(Item.Effect.DAMAGE);
+		int speedValue = totalPercentByStat.get(Item.Effect.SPEED);
+		int healthValue = totalPercentByStat.get(Item.Effect.HEALTH);
+		int damageValue = totalPercentByStat.get(Item.Effect.DAMAGE);
 		
-		assertEquals(50, speedPercentage);
-		assertEquals(100, healthPercentage);
-		assertEquals(200, damagePercentage);
+		assertEquals(50, speedValue);
+		assertEquals(100, healthValue);
+		assertEquals(200, damageValue);
 	}
 	
 	@Test
-	public void testTotalNegativePercentages(){
+	public void testTotalNegativeValues(){
 		
 		Item i0 = new Item("test0", -25, Item.Effect.SPEED);
 		Item i1 = new Item("test1", -50, Item.Effect.HEALTH);
@@ -285,18 +299,18 @@ public class InventoryItemTests {
 			inv.add(items[i]);
 		}
 		
-		TreeMap<Item.Effect, Integer> totalPercentByStat = inv.getTotalPercentages();
+		TreeMap<Item.Effect, Integer> totalPercentByStat = inv.getTotalValues();
 		
-		int speedPercentage = totalPercentByStat.get(Item.Effect.SPEED);
-		int healthPercentage = totalPercentByStat.get(Item.Effect.HEALTH);
-		int damagePercentage = totalPercentByStat.get(Item.Effect.DAMAGE);
+		int speedValue = totalPercentByStat.get(Item.Effect.SPEED);
+		int healthValue = totalPercentByStat.get(Item.Effect.HEALTH);
+		int damageValue = totalPercentByStat.get(Item.Effect.DAMAGE);
 		
-		assertEquals(-50, speedPercentage);
-		assertEquals(-100, healthPercentage);
-		assertEquals(-200, damagePercentage);
+		assertEquals(-50, speedValue);
+		assertEquals(-100, healthValue);
+		assertEquals(-200, damageValue);
 	}
 	@Test
-	public void testTotalMixedPercentages(){
+	public void testTotalMixedValues(){
 		
 		Item i0 = new Item("test0", -25, Item.Effect.SPEED);
 		Item i1 = new Item("test1", 100, Item.Effect.HEALTH);
@@ -311,15 +325,15 @@ public class InventoryItemTests {
 			inv.add(items[i]);
 		}
 		
-		TreeMap<Item.Effect, Integer> totalPercentByStat = inv.getTotalPercentages();
+		TreeMap<Item.Effect, Integer> totalPercentByStat = inv.getTotalValues();
 		
-		int speedPercentage = totalPercentByStat.get(Item.Effect.SPEED);
-		int healthPercentage = totalPercentByStat.get(Item.Effect.HEALTH);
-		int damagePercentage = totalPercentByStat.get(Item.Effect.DAMAGE);
+		int speedValue = totalPercentByStat.get(Item.Effect.SPEED);
+		int healthValue = totalPercentByStat.get(Item.Effect.HEALTH);
+		int damageValue = totalPercentByStat.get(Item.Effect.DAMAGE);
 		
-		assertEquals(25, speedPercentage);
-		assertEquals(50, healthPercentage);
-		assertEquals(-100, damagePercentage);
+		assertEquals(25, speedValue);
+		assertEquals(50, healthValue);
+		assertEquals(-100, damageValue);
 	}
 	
 }

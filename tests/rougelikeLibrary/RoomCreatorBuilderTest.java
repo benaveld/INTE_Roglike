@@ -67,7 +67,7 @@ public class RoomCreatorBuilderTest {
         long seed = 324;
         roomCreatorBuilder.setSeed(seed);
         roomCreatorBuilder.setRoomSpace(12, 12);
-        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new TurnSystem(new TUI())));
+        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new Position(0,0), new TurnSystem(new TUI())));
         RoomCreator roomCreator = roomCreatorBuilder.build();
         assertNotNull(roomCreator);
     }
@@ -77,7 +77,7 @@ public class RoomCreatorBuilderTest {
         long seed = 434;
         roomCreatorBuilder.setSeed(seed);
         roomCreatorBuilder.setRoomSpace(12, 12);
-        Player player = new Player(1, 2, 3, new TurnSystem(new TUI()));
+        Player player = new Player(1, 2, 3, new Position(0,0), new TurnSystem(new TUI()));
 
         roomCreatorBuilder.setPlayer(player);
         RoomCreator roomCreator = roomCreatorBuilder.build();
@@ -92,7 +92,7 @@ public class RoomCreatorBuilderTest {
         roomCreatorBuilder.setSeed(seed);
         RoomSpace roomSpace = new RoomSpace(234, 234);
         roomCreatorBuilder.setRoomSpace(roomSpace.getWidth(), roomSpace.getHeight());
-        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new TurnSystem(new TUI())));
+        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new Position(0,0), new TurnSystem(new TUI())));
         Room room = roomCreatorBuilder.build().createInitialRoom(new Position(23, 23), cardinalDirectionPermissionsAllOptional);
         assertEquals(room.getRoomSpace().getWidth(), roomSpace.getWidth());
         assertEquals(room.getRoomSpace().getHeight(), roomSpace.getHeight());
@@ -102,7 +102,7 @@ public class RoomCreatorBuilderTest {
     public void build() throws Exception {
         roomCreatorBuilder.setSeed(234);
         roomCreatorBuilder.setRoomSpace(23, 23);
-        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new TurnSystem(new TUI())));
+        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new Position(0,0), new TurnSystem(new TUI())));
         assertNotNull(roomCreatorBuilder.build().createInitialRoom(new Position(23, 23), cardinalDirectionPermissionsAllOptional));
     }
 
@@ -110,7 +110,7 @@ public class RoomCreatorBuilderTest {
     public void addItem() throws Exception {
         roomCreatorBuilder.setSeed(234);
         roomCreatorBuilder.setRoomSpace(23, 23);
-        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new TurnSystem(new TUI())));
+        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new Position(0,0), new TurnSystem(new TUI())));
 
 
         Class [] parameterTypesItemValid = {String.class, int.class, Item.Effect.class};
@@ -118,16 +118,16 @@ public class RoomCreatorBuilderTest {
         Object [] parameterValuesItemValid = {"item 1", 43, Item.Effect.DAMAGE};
         Object [] parameterValuesItemInvalid = {"item 1", "43", Item.Effect.DAMAGE};
 
-        roomCreatorBuilder.addItem(Item.class, parameterTypesItemValid, parameterValuesItemValid, 1, 3, 34);
+        roomCreatorBuilder.addItemTemplate(Item.class, parameterTypesItemValid, parameterValuesItemValid, 1, 3, 34);
 
         exception.expect(IllegalArgumentException.class);
-        roomCreatorBuilder.addItem(Item.class, parameterTypesItemInvalid, parameterValuesItemValid, 1, 3, 34);
+        roomCreatorBuilder.addItemTemplate(Item.class, parameterTypesItemInvalid, parameterValuesItemValid, 1, 3, 34);
 
         exception.expect(IllegalArgumentException.class);
-        roomCreatorBuilder.addItem(Item.class, parameterTypesItemValid, parameterValuesItemInvalid, 1, 3, 34);
+        roomCreatorBuilder.addItemTemplate(Item.class, parameterTypesItemValid, parameterValuesItemInvalid, 1, 3, 34);
 
         exception.expect(IllegalArgumentException.class);
-        roomCreatorBuilder.addItem(Item.class, parameterTypesItemInvalid, parameterValuesItemInvalid, 1, 3, 34);
+        roomCreatorBuilder.addItemTemplate(Item.class, parameterTypesItemInvalid, parameterValuesItemInvalid, 1, 3, 34);
 
     }
 
@@ -137,7 +137,7 @@ public class RoomCreatorBuilderTest {
         int height = 23;
         roomCreatorBuilder.setSeed(234);
         roomCreatorBuilder.setRoomSpace(width, height);
-        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new TurnSystem(new TUI())));
+        roomCreatorBuilder.setPlayer(new Player(1, 2, 3, new Position(0,0), new TurnSystem(new TUI())));
 
 
         io = new EnemyAI(23);
@@ -146,57 +146,57 @@ public class RoomCreatorBuilderTest {
         Object [] parameterValuesEnemyValid = {1, 43, 78, new TurnSystem(io)};
         Object [] parameterValuesEnemyInvalid = {"5", 5, 78, "dummy"};
 
-        roomCreatorBuilder.addEnemy(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, 1, 3, 34);
+        roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, 1, 3, 34);
 
         try {
-            roomCreatorBuilder.addEnemy(Enemy.class, parameterTypesEnemyInvalid, parameterValuesEnemyValid, io, 1, 3, 34);
+            roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesEnemyInvalid, parameterValuesEnemyValid, io, 1, 3, 34);
             fail("Expected IllegalArgumentException, wrong parameters addEnemy: parameter type and value");
         } catch (IllegalArgumentException iae) { assertTrue(true); }
 
         try {
-            roomCreatorBuilder.addEnemy(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyInvalid, io, 1, 3, 34);
+            roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyInvalid, io, 1, 3, 34);
             fail("Expected IllegalArgumentException, wrong parameters addEnemy: parameter value");
         } catch (IllegalArgumentException iae) { assertTrue(true); }
 
         try {
-            roomCreatorBuilder.addEnemy(Enemy.class, parameterTypesEnemyInvalid, parameterValuesEnemyValid, io, 1, 3, 34);
+            roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesEnemyInvalid, parameterValuesEnemyValid, io, 1, 3, 34);
             fail("Expected IllegalArgumentException, wrong parameters addEnemy: parameter type");
         } catch (IllegalArgumentException iae) { assertTrue(true); }
 
         try {
-            roomCreatorBuilder.addEnemy(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, null, 1, 3, 34);
+            roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, null, 1, 3, 34);
             fail("Expected IllegalArgumentException, wrong parameters addEnemy: io == null");
         } catch (IllegalArgumentException iae) { assertTrue(true); }
 
 
         try {
-            roomCreatorBuilder.addEnemy(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, -1, 3, 34);
+            roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, -1, 3, 34);
             fail("Expected IllegalArgumentException, illegal min Enemies: min < 0");
         } catch (IllegalArgumentException iae) { assertTrue(true); }
 
         try {
-            roomCreatorBuilder.addEnemy(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, 5, 3, 34);
+            roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, 5, 3, 34);
             fail("Expected IllegalArgumentException, illegal min Enemies: min > max");
         } catch (IllegalArgumentException iae) { assertTrue(true); }
 
         try {
-            roomCreatorBuilder.addEnemy(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, width * height + 1, 3, 34);
+            roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, width * height + 1, 3, 34);
             fail("Expected IllegalArgumentException, illeagal min Enemies: min > roomspace");
         } catch (IllegalArgumentException iae) { assertTrue(true); }
 
 
         try {
-            roomCreatorBuilder.addEnemy(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, 5, -1, 34);
+            roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, 5, -1, 34);
             fail("Expected IllegalArgumentException, illeagal max Enemies: max < 0");
         } catch (IllegalArgumentException iae) { assertTrue(true); }
 
         try {
-            roomCreatorBuilder.addEnemy(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, 5, 4, 34);
+            roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, 5, 4, 34);
             fail("Expected IllegalArgumentException, illeagal max Enemies: max < min");
         } catch (IllegalArgumentException iae) { assertTrue(true); }
 
         try {
-            roomCreatorBuilder.addEnemy(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, 1, width * height + 1, 34);
+            roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, 1, width * height + 1, 34);
             fail("Expected IllegalArgumentException, illeagal max Enemies: max > roomspace");
         } catch (IllegalArgumentException iae) { assertTrue(true); }
     }
@@ -230,7 +230,7 @@ public class RoomCreatorBuilderTest {
     public void testBuilder() {
         assertEquals(roomCreatorBuilder
                 .setSeed(1234)
-                .setPlayer(new Player(1, 2, 3, new TurnSystem(new EnemyAI(6))))
+                .setPlayer(new Player(1, 2, 3, new Position(0,0), new TurnSystem(new EnemyAI(6))))
                 .setRoomSpace(Integer.MAX_VALUE, Integer.MAX_VALUE), roomCreatorBuilder);
 
         assertNotNull(roomCreatorBuilder.build());
@@ -240,13 +240,13 @@ public class RoomCreatorBuilderTest {
     @Test
     public void testGenericItem() {
         roomCreatorBuilder.setRoomSpace(13, 13);
-        roomCreatorBuilder.addItem(Item.class, parameterTypesItem, parameterValuesItem, 1,5, 50);
+        roomCreatorBuilder.addItemTemplate(Item.class, parameterTypesItem, parameterValuesItem, 1,5, 50);
     }
 
     @Test
     public void testGenericEnemy() {
         roomCreatorBuilder.setRoomSpace(13, 13);
-        roomCreatorBuilder.addEnemy(Enemy.class, parameterTypesEnemy, parameterValuesEnemy, io,1,5, 50);
+        roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesEnemy, parameterValuesEnemy, io,1,5, 50);
     }
 
 
@@ -258,7 +258,7 @@ public class RoomCreatorBuilderTest {
             Item.Effect.class
         };
 
-        roomCreatorBuilder.addItem(Item.class, parameterTypesInvalid, parameterValuesItem,1, 5, 50);
+        roomCreatorBuilder.addItemTemplate(Item.class, parameterTypesInvalid, parameterValuesItem,1, 5, 50);
     }
 
 
@@ -283,7 +283,7 @@ public class RoomCreatorBuilderTest {
             int.class
         };
 
-        roomCreatorBuilder.addEnemy(Enemy.class, parameterTypesInvalid, parameterValuesEnemy, io, 1, 5, 50);
+        roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesInvalid, parameterValuesEnemy, io, 1, 5, 50);
     }
 
 
@@ -295,6 +295,6 @@ public class RoomCreatorBuilderTest {
             3
         };
 
-        roomCreatorBuilder.addEnemy(Enemy.class, parameterTypesEnemy, parameterValuesInvalid, io, 1, 5, 50);
+        roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesEnemy, parameterValuesInvalid, io, 1, 5, 50);
     }
 }
