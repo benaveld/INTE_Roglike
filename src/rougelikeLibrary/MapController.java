@@ -42,7 +42,7 @@ public class MapController {
         Position.CardinalDirection nextRoomDirection =  currentRoom.play();
 
       return (nextRoomDirection == null) ? null : currentRoom.getPosition()
-                .getNewPositionFromCardinalDirection(nextRoomDirection);
+                .translateCardinalDirection(nextRoomDirection);
     }
 
 
