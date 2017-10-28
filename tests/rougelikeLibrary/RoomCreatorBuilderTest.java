@@ -30,6 +30,7 @@ public class RoomCreatorBuilderTest {
         int.class,
         int.class,
         int.class,
+        Position.class,
         TurnSystem.class
     };
 
@@ -37,6 +38,7 @@ public class RoomCreatorBuilderTest {
         1,
         2,
         3,
+        new Position(65, 3),
         new TurnSystem(new EnemyAI(1234))
     };
 
@@ -141,9 +143,9 @@ public class RoomCreatorBuilderTest {
 
 
         io = new EnemyAI(23);
-        Class [] parameterTypesEnemyValid = {int.class, int.class, int.class, TurnSystem.class};
-        Class [] parameterTypesEnemyInvalid = {int.class, int.class, String.class, TurnSystem.class};
-        Object [] parameterValuesEnemyValid = {1, 43, 78, new TurnSystem(io)};
+        Class [] parameterTypesEnemyValid = {int.class, int.class, int.class, Position.class, TurnSystem.class};
+        Class [] parameterTypesEnemyInvalid = {int.class, int.class, String.class, Position.class, TurnSystem.class};
+        Object [] parameterValuesEnemyValid = {1, 43, 78, new Position(5, 7), new TurnSystem(io)};
         Object [] parameterValuesEnemyInvalid = {"5", 5, 78, "dummy"};
 
         roomCreatorBuilder.addEnemyTemplate(Enemy.class, parameterTypesEnemyValid, parameterValuesEnemyValid, io, 1, 3, 34);

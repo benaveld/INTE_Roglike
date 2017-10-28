@@ -72,10 +72,12 @@ public class MapControllerTest {
         new MapController(null);
     }
 
-    @Test
-    public void playCurrentRoom() throws Exception {
-        mapController.playCurrentRoom();
+
+    @Test(expected = IllegalArgumentException.class)
+    public void playCurrentRoomInvalid() throws Exception {
+        MapController mapController = new MapController(null);
     }
+
 
     @Test
     public void setCurrentRoom() throws Exception {
@@ -106,6 +108,17 @@ public class MapControllerTest {
         mapController.addRoom(null);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void addRoomExisting() {
+        Position worldPosition = new Position(32, 54);
+        Map<Position, List<Mappable>> roomMap = new HashMap<>();
+        Room room = new Room(worldPosition, new RoomSpace(32, 32), roomMap);
+        mapController.addRoom(room);
+
+        mapController.addRoom(room);
+    }
+
+
     @Test
     public void roomExist() throws Exception {
         Position worldPosition = new Position(32, 54);
@@ -120,6 +133,7 @@ public class MapControllerTest {
     public void getRoom() throws Exception {
         mapController.getRoom(new Position(0, 0));
     }
+
 
     @Test
     public void getCardinalDirectionPermissions() throws Exception {
