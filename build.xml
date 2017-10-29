@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-        <!-- WARNING: Eclipse auto-generated file.
-              Any modifications will be overwritten.
-              To include a user specific buildfile here, simply create one in the same
-              directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. 
-        -->
     <project basedir="." default="build" name="INTE_Roglike">
     <property environment="env"/>
     <property name="junit.output.dir" value="junit"/>
@@ -16,6 +10,7 @@
         <pathelement location="tools/hamcrest-core-1.3.jar"/>
         <pathelement location="tools/junit-4.12.jar"/>
     </path>
+    	
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
@@ -34,9 +29,11 @@
     <target name="clean">
         <delete dir="bin"/>
     </target>
+    	
     <target depends="clean" name="cleanall"/>
     <target depends="build-subprojects,build-project" name="build"/>
     <target name="build-subprojects"/>
+    	
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
@@ -66,12 +63,14 @@
         <delete dir="lib" />
         <mkdir dir="lib" />
     </target>
+    	
     <target name="create-jar">
         <jar basedir="bin" destfile="lib/${ant.project.name}.jar">
             <manifest>
             </manifest>
         </jar>
     </target>
+    	
     <target name="jar">
         <antcall target="build-project" />
         <antcall target="clean-lib" />
