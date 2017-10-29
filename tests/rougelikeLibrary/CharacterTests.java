@@ -24,6 +24,13 @@ public class CharacterTests {
 		assertEquals(0, c.getHealth());
 		
 	}
+	@Test
+	public void testCharacterSetHealth(){
+		Character lO = new Character(0,0,0, new Position(0,0), new TurnSystem(new EnemyAI(1)));
+		lO.setHealth(10);
+		assertEquals(10, lO.getHealth());
+		
+	}
 
 	
 	@Test
