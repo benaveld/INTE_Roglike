@@ -1,8 +1,6 @@
 package rougelikeLibrary;
 
 
-import javafx.geometry.Pos;
-
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -16,18 +14,11 @@ public class Room {
     private Map<Position, List<Mappable>> roomMap;
 
 
-    public Room(Position worldPosition, RoomSpace roomSpace) {
-        position = worldPosition;
-        this.roomSpace = roomSpace;
-        this.roomMap = new HashMap<>();
-    }
-
-
     /**
      * Constructor
-     *
      * @param worldPosition position for the room in world space
-     * @param roomMap       room map for the room
+     * @param roomSpace dimensions of all rooms
+     * @param roomMap room map for all the rooms
      */
     public Room(Position worldPosition, RoomSpace roomSpace, Map<Position, List<Mappable>> roomMap) {
         position = worldPosition;
@@ -382,17 +373,19 @@ public class Room {
         }
 
         List<Mappable> mappablesFrom = getFromPosition(fromPosition);
-        List<Mappable> mappablesTo = getFromPosition(toPosition);
-
         if (!existCharacter(mappablesFrom)) {
             throw new IllegalArgumentException("Character at from position is missing.");
         }
+
+        List<Mappable> mappablesTo = getFromPosition(toPosition);
         if (existCharacter(mappablesTo)) {
             throw new IllegalArgumentException("To position already contains a character.");
         }
 
+        boolean finished = false;
+
         Iterator fromIterator = mappablesFrom.iterator();
-        while (fromIterator.hasNext()) {
+        while (fromIterator.hasNext() && !finished) {
             Mappable mappable = (Mappable) fromIterator.next();
             if (mappable instanceof Character) {
                 mappablesTo.add(mappable);
@@ -402,7 +395,7 @@ public class Room {
 
                 roomMap.put(fromPosition, mappablesFrom);
                 roomMap.put(toPosition, mappablesTo);
-                return;
+                finished = true;
             }
         }
     }

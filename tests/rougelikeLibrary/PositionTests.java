@@ -21,6 +21,7 @@ public class PositionTests {
 	public void testNegativeYPosition() {
 		new Position(1, -1);
 	}
+	
 
 	@Test
 	public void testPositionEqual() {
@@ -64,8 +65,7 @@ public class PositionTests {
 
 	@Test
 	public void testPositonSetX() {
-		Position p = new Position(1, 2);
-		p.setX(3);
+		Position p = new Position(1, 2).setX(3);
 		assertEquals(3, p.getX());
 	}
 
@@ -77,8 +77,7 @@ public class PositionTests {
 
 	@Test
 	public void testPositionSetY() {
-		Position p = new Position(1, 2);
-		p.setY(17);
+		Position p = new Position(1, 2).setY(17);
 		assertEquals(17, p.getY());
 	}
 
@@ -98,8 +97,7 @@ public class PositionTests {
 
 	@Test
 	public void testPositionTranslate() {
-		Position p = new Position(1, 2);
-		p.translate(3, 4);
+		Position p = new Position(1, 2).translate(3, 4);
 		assertEquals(4, p.getX());
 		assertEquals(6, p.getY());
 	}
@@ -118,26 +116,22 @@ public class PositionTests {
 
 	@Test(expected = ArithmeticException.class)
 	public void testOverflowEast() {
-		Position worldPosition = new Position(Integer.MAX_VALUE, Integer.MAX_VALUE);
-		worldPosition.getNewPositionFromCardinalDirection(Position.CardinalDirection.East);
+		new Position(Integer.MAX_VALUE, Integer.MAX_VALUE).translateCardinalDirection(Position.CardinalDirection.East);
 	}
 
 	@Test(expected = ArithmeticException.class)
 	public void testOverflowSouth() {
-		Position worldPosition = new Position(Integer.MAX_VALUE, Integer.MAX_VALUE);
-		worldPosition.getNewPositionFromCardinalDirection(Position.CardinalDirection.South);
+		new Position(Integer.MAX_VALUE, Integer.MAX_VALUE).translateCardinalDirection(Position.CardinalDirection.South);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testUnderflowNorth() {
-		Position worldPosition = new Position(0, 0);
-		worldPosition.getNewPositionFromCardinalDirection(Position.CardinalDirection.North);
+		new Position(0, 0).translateCardinalDirection(Position.CardinalDirection.North);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testUnderflowWest() {
-		Position worldPosition = new Position(0, 0);
-		worldPosition.getNewPositionFromCardinalDirection(Position.CardinalDirection.West);
+		new Position(0, 0).translateCardinalDirection(Position.CardinalDirection.West);
 	}
 	
 	@Test(expected = ArithmeticException.class)
@@ -154,29 +148,27 @@ public class PositionTests {
 	
 	@Test
 	public void testPositionTranslateCardinalDirectionNorth() {
-		Position p = new Position(1, 2);
-		p.translateCardinalDirection(Position.CardinalDirection.North);
+		Position p = new Position(1, 2).translateCardinalDirection(Position.CardinalDirection.North);
 		assertEquals(1, p.getY());
 	}
 	
 	@Test
 	public void testPositionTranslateCardinalDirectionSouth() {
-		Position p = new Position(1, 2);
-		p.translateCardinalDirection(Position.CardinalDirection.South);
+		Position p = new Position(1, 2).translateCardinalDirection(Position.CardinalDirection.South);
 		assertEquals(3, p.getY());
 	}
 	
 	@Test
 	public void testPositionTranslateCardinalDirectionEast() {
-		Position p = new Position(1, 2);
-		p.translateCardinalDirection(Position.CardinalDirection.East);
+		Position p = new Position(1, 2).translateCardinalDirection(Position.CardinalDirection.East);
 		assertEquals(2, p.getX());
+		assertEquals(2, p.getY());
 	}
 	
 	@Test
 	public void testPositionTranslateCardinalDirectionWest() {
-		Position p = new Position(1, 2);
-		p.translateCardinalDirection(Position.CardinalDirection.West);
+		Position p = new Position(1, 2).translateCardinalDirection(Position.CardinalDirection.West);
 		assertEquals(0, p.getX());
+		assertEquals(2, p.getY());
 	}
 }

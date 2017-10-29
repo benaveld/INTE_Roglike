@@ -33,10 +33,10 @@ public class RoomCreatorTest {
     };
 
     Character [] enemies = {
-            new Enemy(22, 33, 44, new TurnSystem(new EnemyAI(1))),
-            new Enemy(2, 3, 44, new TurnSystem(new EnemyAI(1))),
-            new Enemy(22, 33, 4, new TurnSystem(new EnemyAI(1))),
-            new Enemy(2, 3, 44, new TurnSystem(new EnemyAI(1)))
+            new Enemy(22, 33, 44, new Position(0,0), new TurnSystem(new EnemyAI(1))),
+            new Enemy(2, 3, 44, new Position(0,0), new TurnSystem(new EnemyAI(1))),
+            new Enemy(22, 33, 4, new Position(0,0), new TurnSystem(new EnemyAI(1))),
+            new Enemy(2, 3, 44, new Position(0,0), new TurnSystem(new EnemyAI(1)))
     };
 
 
@@ -47,7 +47,7 @@ public class RoomCreatorTest {
     @Before
     public void init() {
         roomCreator = new RoomCreator(roomCreatorSeed,
-                new Player(1, 1, 1, new TurnSystem(new EnemyAI(1))),
+                new Player(1, 1, 1, new Position(0,0), new TurnSystem(new EnemyAI(1))),
                 new ArrayList<MappableTypeWrapper>(),
                 new RoomSpace(32, 32));
                 stdPosition = new Position(dummyX, dummyY);
@@ -80,8 +80,8 @@ public class RoomCreatorTest {
         Class [] parameterTypesItem = {String.class, int.class, Item.Effect.class};
         Object [] parameterValuesItem = {"item 1", 43, Item.Effect.DAMAGE};
 
-        Class [] parameterTypesEnemy = {int.class, int.class, int.class, TurnSystem.class};
-        Object [] parameterValuesEnemy = {34, 87, 22, new TurnSystem(new EnemyAI(43))};
+        Class [] parameterTypesEnemy = {int.class, int.class, int.class, Position.class, TurnSystem.class};
+        Object [] parameterValuesEnemy = {34, 87, 22, stdPosition, new TurnSystem(new EnemyAI(43))};
 
         int minQntyItem = 1;
         int maxQntyItem = 5;
@@ -89,6 +89,7 @@ public class RoomCreatorTest {
         int maxQntyEnemy = 28;
         MappableTypeWrapper itemType = new MappableTypeWrapper(Item.class, parameterTypesItem, parameterValuesItem, minQntyItem, maxQntyItem, 1);
         MappableTypeWrapper enemyType = new MappableTypeWrapper(Enemy.class, parameterTypesEnemy, parameterValuesEnemy, new EnemyAI(2143), minQntyEnemy, maxQntyEnemy, 30);
+
 
         Room room = roomCreator.createRoom(stdWorldPosition, stdCardinalPermissions);
         Map<Position, List<Mappable>> roomMapLocal = room.getRoomMap();
@@ -115,9 +116,9 @@ public class RoomCreatorTest {
 
     @Test
     public void createType() throws Exception {
-        Class [] parameterTypesEnemyInvalid = {String.class, int.class, int.class, TurnSystem.class};
-        Class [] parameterTypesEnemy = {int.class, int.class, int.class, TurnSystem.class};
-        Object [] parameterValuesEnemy = {34, 87, 22, new TurnSystem(new EnemyAI(43))};
+        Class [] parameterTypesEnemyInvalid = {String.class, int.class, int.class, Position.class, TurnSystem.class};
+        Class [] parameterTypesEnemy = {int.class, int.class, int.class, Position.class, TurnSystem.class};
+        Object [] parameterValuesEnemy = {34, 87, 22, stdPosition, new TurnSystem(new EnemyAI(43))};
 
         MappableTypeWrapper enemyType = new MappableTypeWrapper(Enemy.class, parameterTypesEnemy, parameterValuesEnemy,
                 new EnemyAI(2143), 1, 2, 30);
@@ -137,7 +138,7 @@ public class RoomCreatorTest {
 
     @Test
     public void addToRoom() throws Exception {
-        Mappable mappable = new Enemy(1, 2, 3, new TurnSystem(new EnemyAI(53)));
+        Mappable mappable = new Enemy(1, 2, 3, new Position(0,0), new TurnSystem(new EnemyAI(53)));
         Room room = new Room(stdWorldPosition, new RoomSpace(32, 32), roomMap);
         assertTrue(room.getRoomMap().isEmpty());
 
@@ -179,8 +180,8 @@ public class RoomCreatorTest {
 
     @Test
     public void getCardinalDirectionPermissionChoice() throws Exception {
-        assertTrue(roomCreator.getCardinalDirectionPermissionChoice(Position.CardinalDirectionPermission.Mandatory));
-        assertFalse(roomCreator.getCardinalDirectionPermissionChoice(Position.CardinalDirectionPermission.Disallowed));
+        assertTrue(roomCreator.getCardinalDirectionPC(Position.CardinalDirectionPermission.Mandatory));
+        assertFalse(roomCreator.getCardinalDirectionPC(Position.CardinalDirectionPermission.Disallowed));
     }
 
 
@@ -248,7 +249,7 @@ public class RoomCreatorTest {
         mappableTypes.add(new MappableTypeWrapper(Item.class, parameterTypesItem, parameterValuesItem, 1, 90, 1));
         mappableTypes.add(new MappableTypeWrapper(Item.class, parameterTypesItem2, parameterValuesItem2, 11, 90, 1));
 
-        RoomCreator roomCreatorNew = new RoomCreator(123, new Player(1, 2, 3, new TurnSystem(new EnemyAI(213))), mappableTypes, new RoomSpace(32, 32));
+        RoomCreator roomCreatorNew = new RoomCreator(123, new Player(1, 2, 3, new Position(0,0), new TurnSystem(new EnemyAI(213))), mappableTypes, new RoomSpace(32, 32));
 
         room = roomCreatorNew.createRoom(new Position(arbitraryX, arbitraryY), cardinalDirectionPermissions);
         assertNotNull(room);

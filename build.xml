@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+        <!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. 
+        -->
+    <project basedir="." default="build" name="INTE_Roglike">
+    <property environment="env"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    <path id="INTE_Roglike.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="tools/hamcrest-core-1.3.jar"/>
+        <pathelement location="tools/junit-4.12.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="tests">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <src path="tests"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+
+    <target name="javadoc">
+        <javadoc packagenames="rougelikeLibrary.*" sourcepath="src" 
+            destdir="docs/javadoc" version="true" windowtitle="INTE Rougelike Library">
+            <doctitle><![CDATA[_,.-~' INTE Rougelike Library '^~-.,_]]></doctitle>
+        </javadoc>
+        <echo message="                                 ___"/>
+        <echo message="                               /`  _\"/>
+        <echo message="                               |  / 0|--."/>
+        <echo message="                          -   / \_|0`/ /.`'._/)"/>
+        <echo message="                      - ~ -^_| /-_~ ^- ~_` - -~ _"/>
+        <echo message="                      -  ~  -| |   - ~ -  ~  -"/>
+        <echo message="                     jgs     \ \, ~   -   ~"/>
+        <echo message="                              \_|"/>
+    </target>
+    
+    <target name="clean-lib">
+        <delete dir="lib" />
+        <mkdir dir="lib" />
+    </target>
+    <target name="create-jar">
+        <jar basedir="bin" destfile="lib/${ant.project.name}.jar">
+            <manifest>
+            </manifest>
+        </jar>
+    </target>
+    <target name="jar">
+        <antcall target="build-project" />
+        <antcall target="clean-lib" />
+        <antcall target="create-jar" />
+    </target>
+
+    <!-- Eclipse specific settings
+
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    
+    -->
+
+    <target name="CharacterTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.CharacterTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="CustomInputTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.CustomInputTest" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="EnemyAITests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.EnemyAITests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="IOTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.IOTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="IOTests.testCalculateMovementBasicAINotAllowedMove">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.IOTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="IOTestSuite">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.IOTestSuite" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="MapObjectTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.MapObjectTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="MapObjectTests.testCheckSpotEmpty">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.MapObjectTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="MapTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.MapTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="PositionTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.PositionTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="Testsuite">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.Testsuite" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="TurnSystemTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.TurnSystemTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="TurnSystemTests.testAttackOtherCharacter">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.TurnSystemTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="TurnSystemTests.testTurnSystemDontEnterDoor">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.TurnSystemTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="TurnSystemTests.testTurnSystemEnemyNOTAttackEnemy">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.TurnSystemTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="TurnSystemTests.testTurnSystemMove">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.TurnSystemTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="WallWalkerAITests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.WallWalkerAITests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="WallWalkerAITests.testWallWalkerAttackPlayer">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rougelikeLibrary.WallWalkerAITests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="INTE_Roglike.classpath"/>
+        </junit>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+</project>

@@ -29,15 +29,15 @@ public class RoomTest {
 
     @Before
     public void setUp() throws Exception {
-        stdEnemy = new Enemy(12, 45, 23, new TurnSystem(new EnemyAI(1)));
-        stdEnemy2 = new Enemy(99, 22, 77, new TurnSystem(new TUI()));
+        stdEnemy = new Enemy(12, 45, 23, new Position(0,0), new TurnSystem(new EnemyAI(1)));
+        stdEnemy2 = new Enemy(99, 22, 77, new Position(0,0), new TurnSystem(new TUI()));
         item1 = new Item("item 1", 12, Item.Effect.DAMAGE);
         item2 = new Item("item 2", 2, Item.Effect.SPEED);
         item3 = new Item("item 3", 88, Item.Effect.HEALTH);
 
         roomMap = new HashMap<>();
         stdRoom = new Room(new Position(dummyX, dummyY), new RoomSpace(32, 32), roomMap);
-        stdPlayer = new Player(1, 2, 3, new TurnSystem(new TUI()));
+        stdPlayer = new Player(1, 2, 3, new Position(0,0), new TurnSystem(new TUI()));
         stdPosition = new Position(dummyX, dummyY);
 
     }
@@ -117,10 +117,10 @@ public class RoomTest {
         room.addDoor(Position.CardinalDirection.West);
         room.addDoor(Position.CardinalDirection.East);
 
-        Position north = new Position((room.getRoomSpace().getWidth() - 1) / 2, 0);
-        Position south = new Position((room.getRoomSpace().getWidth() - 1) / 2, (room.getRoomSpace().getHeight() - 1));
-        Position west = new Position(0, (room.getRoomSpace().getHeight() - 1) / 2);
-        Position east = new Position((room.getRoomSpace().getWidth() - 1), (room.getRoomSpace().getHeight() - 1) / 2);
+        Position north = new Position((room.getRoomSpace().getMaxIndexWidth()) / 2, 0);
+        Position south = new Position((room.getRoomSpace().getMaxIndexWidth()) / 2, (room.getRoomSpace().getMaxIndexHeight()));
+        Position west = new Position(0, (room.getRoomSpace().getMaxIndexHeight()) / 2);
+        Position east = new Position((room.getRoomSpace().getMaxIndexWidth()), (room.getRoomSpace().getMaxIndexHeight()) / 2);
 
         assertTrue(room.existDoor(north));
         assertTrue(room.existDoor(south));
@@ -229,8 +229,8 @@ public class RoomTest {
         Position position = new Position(66, 66);
         Position position2 = new Position(6, 99);
 
-        Mappable player = new Player(1, 2, 3, new TurnSystem(new TUI()));
-        Mappable enemy = new Enemy(1, 2, 3, new TurnSystem(new EnemyAI(243)));
+        Mappable player = new Player(1, 2, 3, new Position(0,0), new TurnSystem(new TUI()));
+        Mappable enemy = new Enemy(1, 2, 3, new Position(0,0), new TurnSystem(new EnemyAI(243)));
 
         mappableList1.add(player);
         mappableList1.add(new Item("item 1", 23, Item.Effect.SPEED));
@@ -377,7 +377,7 @@ public class RoomTest {
     @Test
     public void setPlayer() throws Exception {
         assertNull(stdRoom.getPlayer());
-        stdRoom.setPlayer(stdPosition, new Player(4, 54, 25, new TurnSystem(new EnemyAI(55))));
+        stdRoom.setPlayer(stdPosition, new Player(4, 54, 25, new Position(0,0), new TurnSystem(new EnemyAI(55))));
 
         assertNotNull(stdRoom.getPlayer());
         assertEquals(stdRoom.getPlayer().getSpeed(), 4);
@@ -408,7 +408,7 @@ public class RoomTest {
     @Test
     public void getPlayer() throws Exception {
         assertNull(stdRoom.getPlayer());
-        stdRoom.setPlayer(stdPosition, new Player(14, 22, 35, new TurnSystem(new EnemyAI(5))));
+        stdRoom.setPlayer(stdPosition, new Player(14, 22, 35, new Position(0,0), new TurnSystem(new EnemyAI(5))));
         assertNotNull(stdRoom.getPlayer());
         assertEquals(stdRoom.getPlayer().getSpeed(), 14);
         assertEquals(stdRoom.getPlayer().getHealth(), 22);
@@ -472,8 +472,6 @@ public class RoomTest {
             stdRoom.moveCharacter(fromPosition4, fromPosition3);
             fail("Expected IllegalArgumentException: character at from position is missing.");
         } catch (IllegalArgumentException iae) {assertTrue(true); }
-
-
     }
 
 
@@ -513,10 +511,10 @@ public class RoomTest {
     @Test
     public void getCardinalDirection() {
         RoomSpace thisRoomSpace = new RoomSpace(32, 32);
-        Position positionNorth = new Position((thisRoomSpace.getWidth() - 1) / 2, 0);
-        Position positionSouth = new Position((thisRoomSpace.getWidth() - 1) / 2, thisRoomSpace.getHeight() - 1);
+        Position positionNorth = new Position((thisRoomSpace.getMaxIndexWidth()) / 2, 0);
+        Position positionSouth = new Position((thisRoomSpace.getMaxIndexWidth()) / 2, thisRoomSpace.getMaxIndexHeight());
         Position positionWest = new Position(0, (thisRoomSpace.getHeight() - 1) / 2);
-        Position positionEast = new Position(thisRoomSpace.getWidth() - 1, (thisRoomSpace.getHeight() - 1) / 2);
+        Position positionEast = new Position(thisRoomSpace.getMaxIndexWidth(), (thisRoomSpace.getMaxIndexHeight()) / 2);
 
         Room room = new Room(stdPosition, thisRoomSpace, roomMap);
         assertEquals(room.getCardinalDirection(positionNorth), Position.CardinalDirection.North);

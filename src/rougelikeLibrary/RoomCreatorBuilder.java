@@ -79,7 +79,7 @@ public class RoomCreatorBuilder {
      * @param probability the probability to create this item
      * @throws IllegalArgumentException if roomspaace is invalid or the number of parameters or value in parameterTypes or parameterValues is wrong.
      */
-    public void addItem(Class<? extends Item> itemClass, Class<?> [] parameterTypes, Object [] parameterValues, int minItems, int maxItems, int probability)
+    public void addItemTemplate(Class<? extends Item> itemClass, Class<?> [] parameterTypes, Object [] parameterValues, int minItems, int maxItems, int probability)
             throws IllegalArgumentException {
         if (roomSpace == null || roomSpace.getWidth() < 1 || roomSpace.getHeight() < 1) {
             throw new IllegalArgumentException("Can't add items before world dimension is set");
@@ -101,7 +101,7 @@ public class RoomCreatorBuilder {
      * @param probability the probability to create this enemy
      * @throws IllegalArgumentException if io is null or the number of parameters or value in parameterTypes or parameterValues is wrong.
      */
-    public void addEnemy(Class<? extends Character> enemyClass, Class<?> [] parameterTypes, Object [] parameterValues, IO io, int minEnemies, int maxEnemies, int probability)
+    public void addEnemyTemplate(Class<? extends Character> enemyClass, Class<?> [] parameterTypes, Object [] parameterValues, IO io, int minEnemies, int maxEnemies, int probability)
             throws IllegalArgumentException {
         if (roomSpace == null || roomSpace.getWidth() < 1 || roomSpace.getHeight() < 1) {
             throw new IllegalArgumentException("Can't add enemies before world dimension is set");
