@@ -1,0 +1,2197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>
+        FindBugs (3.0.1)
+         Analysis for
+         </title>
+<script type="text/javascript">
+         function show(foo) {
+            document.getElementById(foo).style.display="block";
+         }
+         function hide(foo) {
+            document.getElementById(foo).style.display="none";
+         }
+         function toggle(foo) {
+            if( document.getElementById(foo).style.display == "none") {
+               show(foo);
+            } else {
+               if( document.getElementById(foo).style.display == "block") {
+                  hide(foo);
+               } else {
+                  show(foo);
+               }
+            }
+         }
+
+         function showmenu(foo) {
+            if( document.getElementById(foo).style.display == "none") {
+               hide("bug-summary");
+               document.getElementById("bug-summary-tab").className="menu-tab";
+               hide("analysis-data");
+               document.getElementById("analysis-data-tab").className="menu-tab";
+               //hide("list-by-b-t");
+               //document.getElementById("list-by-b-t-tab").className="menu-tab";
+               hide("list-by-package");
+               document.getElementById("list-by-package-tab").className="menu-tab";
+               hide("list-by-category");
+               document.getElementById("list-by-category-tab").className="menu-tab";
+               document.getElementById(foo+"-tab").className="menu-tab-selected";
+               show(foo);
+
+            }
+            // else menu already selected!
+         }
+         function showbug(buguid, list) {
+            var bugplaceholder   = document.getElementById(buguid+'-ph-'+list);
+            var bug              = document.getElementById(buguid);
+
+            if ( bugplaceholder==null) {
+               alert(buguid+'-ph-'+list+' - '+buguid+' - bugplaceholder==null');
+               return;
+            }
+            if ( bug==null) {
+               alert(buguid+'-ph-'+list+' - '+buguid+' - bug==null');
+               return;
+            }
+
+            var oldBug = bugplaceholder.innerHTML;
+            var newBug = bug.innerHTML;
+            //alert(oldBug);
+            //alert(newBug);
+            toggle(buguid+'-ph-'+list);
+            bugplaceholder.innerHTML = newBug;
+         }
+      </script>
+<script type="text/javascript">
+     /*  */
+         // Extended Tooltip Javascript
+         // copyright 9th August 2002, 3rd July 2005
+         // by Stephen Chapman, Felgall Pty Ltd
+
+         // permission is granted to use this javascript provided that the below code is not altered
+         var DH = 0;var an = 0;var al = 0;var ai = 0;if (document.getElementById) {ai = 1; DH = 1;}else {if (document.all) {al = 1; DH = 1;} else { browserVersion = parseInt(navigator.appVersion); if (navigator.appName.indexOf('Netscape') != -1) if (browserVersion == 4) {an = 1; DH = 1;}}}
+         function fd(oi, wS) {if (ai) return wS ? document.getElementById(oi).style:document.getElementById(oi); if (al) return wS ? document.all[oi].style: document.all[oi]; if (an) return document.layers[oi];}
+         function pw() {return window.innerWidth != null? window.innerWidth: document.body.clientWidth != null? document.body.clientWidth:null;}
+         function mouseX(evt) {if (evt.pageX) return evt.pageX; else if (evt.clientX)return evt.clientX + (document.documentElement.scrollLeft ?  document.documentElement.scrollLeft : document.body.scrollLeft); else return null;}
+         function mouseY(evt) {if (evt.pageY) return evt.pageY; else if (evt.clientY)return evt.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop); else return null;}
+         function popUp(evt,oi) {if (DH) {var wp = pw(); ds = fd(oi,1); dm = fd(oi,0); st = ds.visibility; if (dm.offsetWidth) ew = dm.offsetWidth; else if (dm.clip.width) ew = dm.clip.width; if (st == "visible" || st == "show") { ds.visibility = "hidden"; } else {tv = mouseY(evt) + 20; lv = mouseX(evt) - (ew/4); if (lv < 2) lv = 2; else if (lv + ew > wp) lv -= ew/2; if (!an) {lv += 'px';tv += 'px';} ds.left = lv; ds.top = tv; ds.visibility = "visible";}}}
+  /*  */
+</script>
+<style type="text/css">
+         html, body {
+            background-color: #ffffff;
+         }
+         a, a:link , a:active, a:visited, a:hover {
+            text-decoration: none; color: black;
+         }
+         .b-r a {
+            text-decoration: underline; color: blue;
+         }
+         div, span {
+            vertical-align: top;
+         }
+         p {
+            margin: 0px;
+         }
+         h1 {
+            /*font-size: 14pt;*/
+            color: red;
+         }
+         #menu {
+            margin-bottom: 10px;
+         }
+         #menu ul {
+            margin-left: 0;
+            padding-left: 0;
+            display: inline;
+         }
+         #menu ul li {
+            margin-left: 0;
+            margin-bottom: 0;
+            padding: 2px 15px 5px;
+            border: 1px solid #000;
+            list-style: none;
+            display: inline;
+         }
+         #menu ul li.here {
+            border-bottom: 1px solid #ffc;
+            list-style: none;
+            display: inline;
+         }
+         .menu-tab {
+            background: white;
+         }
+         .menu-tab:hover {
+            background: grey;
+         }
+         .menu-tab-selected {
+            background: #aaaaaa;
+         }
+         #analysis-data ul {
+            margin-left: 15px;
+         }
+         #analyzed-files, #used-libraries, #analysis-error {
+           margin: 2px;
+           border: 1px black solid;
+           padding: 2px;
+           float: left;
+           overflow:auto;
+         }
+         #analyzed-files {
+           width: 25%;
+         }
+         #used-libraries {
+           width: 25%;
+         }
+         #analysis-error {
+           width: 40%;
+         }
+         div.summary {
+            width:100%;
+            text-align:left;
+         }
+         .summary table {
+            border:1px solid black;
+         }
+         .summary th {
+            background: #aaaaaa;
+            color: white;
+         }
+         .summary th, .summary td {
+            padding: 2px 4px 2px 4px;
+         }
+         .summary-name {
+            background: #eeeeee;
+            text-align:left;
+         }
+         .summary-size {
+            background: #eeeeee;
+            text-align:center;
+         }
+         .summary-ratio {
+            background: #eeeeee;
+            text-align:center;
+         }
+         .summary-priority-all {
+            background: #dddddd;
+            text-align:center;
+         }
+         .summary-priority-1 {
+            background: red;
+            text-align:center;
+         }
+         .summary-priority-2 {
+            background: orange;
+            text-align:center;
+         }
+         .summary-priority-3 {
+            background: green;
+            text-align:center;
+         }
+         .summary-priority-4 {
+            background: blue;
+            text-align:center;
+         }
+         .ob {
+            border: 1px solid black;
+            margin: 10px;
+         }
+         .ob-t {
+            border-bottom: 1px solid #000000; font-size: 12pt; font-weight: bold;
+            background: #cccccc; margin: 0; padding: 0 5px 0 5px;
+         }
+         .t-h {
+            font-weight: normal;
+         }
+         .ib-1, .ib-2 {
+            margin: 0 0 0 10px;
+         }
+         .ib-1-t, .ib-2-t {
+            border-bottom: 1px solid #000000; border-left: 1px solid #000000;
+            margin: 0; padding: 0 5px 0 5px;
+            font-size: 12pt; font-weight: bold; background: #cccccc;
+         }
+         .bb {
+            border-bottom: 1px solid #000000; border-left: 1px solid #000000;
+         }
+         .b-1 {
+            background: red; height: 0.5em; width: 1em;
+            margin-right: 0.5em;
+         }
+         .b-2 {
+            background: orange; height: 0.5em; width: 1em;
+            margin-right: 0.5em;
+         }
+         .b-3 {
+            background: green; height: 0.5em; width: 1em;
+            margin-right: 0.5em;
+         }
+         .b-4 {
+            background: blue; height: 0.5em; width: 1em;
+            margin-right: 0.5em;
+         }
+         .b-t {
+         }
+         .b-r {
+            font-size: 10pt; font-weight: bold; padding: 0 0 0 60px;
+         }
+         .b-d {
+            font-weight: normal; background: #eeeee0;
+            padding: 0 5px 0 5px; margin: 0px;
+         }
+         .bug-placeholder {
+            top:140px;
+            border:1px solid black;
+            display:none;
+         }
+         .tip {
+            border:solid 1px #666666;
+            width:600px;
+            padding:3px;
+            position:absolute;
+            z-index:100;
+            visibility:hidden;
+            color:#333333;
+            top:20px;
+            left:90px;
+            background-color:#ffffcc;
+            layer-background-color:#ffffcc;
+         }
+
+
+      </style>
+</head>
+<body>
+<div id="content">
+<h1>
+         FindBugs (3.0.1)
+         Analysis for
+         </h1>
+<div id="menu">
+<ul>
+<li id="bug-summary-tab" class="menu-tab-selected" onclick="showmenu('bug-summary');return false;">
+<a href="" onclick="return false;">Bug Summary</a>
+</li>
+<li id="analysis-data-tab" class="menu-tab" onclick="showmenu('analysis-data');return false;">
+<a href="" onclick="return false;">Analysis Information</a>
+</li>
+<li id="list-by-category-tab" class="menu-tab" onclick="showmenu('list-by-category');return false;">
+<a href="" onclick="return false;">List bugs by bug category</a>
+</li>
+<li id="list-by-package-tab" class="menu-tab" onclick="showmenu('list-by-package');return false;">
+<a href="" onclick="return false;">List bugs by package</a>
+</li>
+</ul>
+</div>
+<div class="summary" id="bug-summary">
+<h2>FindBugs Analysis generated at: Wed, 25 Oct 2017 20:07:18 +0200</h2>
+<table>
+<tr>
+<th>Package</th>
+<th>Code Size</th>
+<th>Bugs</th>
+<th>High Prio Bugs</th>
+<th>Medium Prio Bugs</th>
+<th>Low Prio Bugs</th>
+<th>Exp. Bugs</th>
+<th>Ratio</th>
+</tr>
+<tr>
+<td class="summary-name">
+            Overall
+            (1 packages),
+            (44 classes)
+         </td>
+<td class="summary-size">2772</td>
+<td class="summary-priority-all">49</td>
+<td class="summary-priority-1">11</td>
+<td class="summary-priority-2">32</td>
+<td class="summary-priority-3">6</td>
+<td class="summary-priority-4"/>
+<td class="summary-ratio"/>
+</tr>
+<tr>
+<td class="summary-name">rougelikeLibrary</td>
+<td class="summary-size">2772</td>
+<td class="summary-priority-all">49</td>
+<td class="summary-priority-1">11</td>
+<td class="summary-priority-2">32</td>
+<td class="summary-priority-3">6</td>
+<td class="summary-priority-4"/>
+<td class="summary-ratio"/>
+</tr>
+</table>
+</div>
+<div id="analysis-data" style="display:none;">
+<div id="analyzed-files">
+<h3>Analyzed Files:</h3>
+<ul>
+<li>d:\Studier\SU\INTE\HT2017\Kod\INTE_Roglike\lib\INTE_Roglike.jar</li>
+</ul>
+</div>
+<div id="used-libraries">
+<h3>Used Libraries:</h3>
+<ul>
+<li>d:\Studier\SU\INTE\HT2017\Kod\INTE_Roglike\tools\junit-4.12.jar</li>
+</ul>
+</div>
+<div id="analysis-error">
+<h3>Analysis Errors:</h3>
+<ul>
+<li>None</li>
+</ul>
+</div>
+</div>
+<div id="list-by-category" class="data-box" style="display:none;">
+<span class="b-1">&nbsp;&nbsp;</span> High Prio
+   <span class="b-2">&nbsp;&nbsp;</span> Medium Prio
+   <span class="b-3">&nbsp;&nbsp;</span> Low Prio
+   <span class="b-4">&nbsp;&nbsp;</span> Exp.
+<div class="ob">
+<div class="ob-t">
+<a href="" onclick="toggle('category-I18N');return false;">Internationalization
+            (10:
+            <span class="t-h">8/0/2/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-I18N">
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-I18N-and-code-Dm');return false;">Dm: Dubious method used
+            (10:
+            <span class="t-h">8/0/2/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-I18N-and-code-Dm">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-I18N-and-code-Dm-and-bug-DM_CONVERT_CASE');return false;" onmouseout="popUp(event,'tip-DM_CONVERT_CASE');" onmouseover="popUp(event,'tip-DM_CONVERT_CASE');">Consider using Locale parameterized version of invoked method&nbsp;&nbsp;
+            (2:
+            <span class="t-h">0/0/2/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-I18N-and-code-Dm-and-bug-DM_CONVERT_CASE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-c0f6098c1beabd1adade5ee27637aeb-0','c');return false;">
+<span class="b-3">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.Item</a>
+<div style="display:none;" id="b-uid-c0f6098c1beabd1adade5ee27637aeb-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-fafe95412e72b0fb35bd1da2af376435-0','c');return false;">
+<span class="b-3">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.TUI</a>
+<div style="display:none;" id="b-uid-fafe95412e72b0fb35bd1da2af376435-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-I18N-and-code-Dm-and-bug-DM_DEFAULT_ENCODING');return false;" onmouseout="popUp(event,'tip-DM_DEFAULT_ENCODING');" onmouseover="popUp(event,'tip-DM_DEFAULT_ENCODING');">Reliance on default encoding&nbsp;&nbsp;
+            (8:
+            <span class="t-h">8/0/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-I18N-and-code-Dm-and-bug-DM_DEFAULT_ENCODING">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-c7a233574e968ae9d2494ac06358d1de-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.IOTests</a>
+<div style="display:none;" id="b-uid-c7a233574e968ae9d2494ac06358d1de-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-a09ab43033329eb7c9f538daa46da91c-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.IOTests</a>
+<div style="display:none;" id="b-uid-a09ab43033329eb7c9f538daa46da91c-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-d30e5b217e643ac4794843e2a60264a1-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.IOTests</a>
+<div style="display:none;" id="b-uid-d30e5b217e643ac4794843e2a60264a1-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-6ef9bbc7fc0555ad7f22120c44d4a43a-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.IOTests</a>
+<div style="display:none;" id="b-uid-6ef9bbc7fc0555ad7f22120c44d4a43a-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-d184089e812f3555ca9bc7187f7f7be0-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.IOTests</a>
+<div style="display:none;" id="b-uid-d184089e812f3555ca9bc7187f7f7be0-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-859e965bd1709934137028face8261b6-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.IOTests</a>
+<div style="display:none;" id="b-uid-859e965bd1709934137028face8261b6-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-48f954a13ba8099f96f154725b4d5545-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.IOTests</a>
+<div style="display:none;" id="b-uid-48f954a13ba8099f96f154725b4d5545-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-14ac0303128c9a5e694545c8490504e1-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.TUI</a>
+<div style="display:none;" id="b-uid-14ac0303128c9a5e694545c8490504e1-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ob">
+<div class="ob-t">
+<a href="" onclick="toggle('category-PERFORMANCE');return false;">Performance
+            (25:
+            <span class="t-h">0/23/2/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE">
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-PERFORMANCE-and-code-SBSC');return false;">SBSC: String concatenation in loop using + operator
+            (5:
+            <span class="t-h">0/5/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE-and-code-SBSC">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-PERFORMANCE-and-code-SBSC-and-bug-SBSC_USE_STRINGBUFFER_CONCATENATION');return false;" onmouseout="popUp(event,'tip-SBSC_USE_STRINGBUFFER_CONCATENATION');" onmouseover="popUp(event,'tip-SBSC_USE_STRINGBUFFER_CONCATENATION');">Method concatenates strings using + in a loop&nbsp;&nbsp;
+            (5:
+            <span class="t-h">0/5/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE-and-code-SBSC-and-bug-SBSC_USE_STRINGBUFFER_CONCATENATION">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-a28c4dfed8489df701a2875dbdf6e7eb-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SBSC: </span>In class rougelikeLibrary.Inventory</a>
+<div style="display:none;" id="b-uid-a28c4dfed8489df701a2875dbdf6e7eb-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-bccf5c6d7518ef07876919b633dfd5fd-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SBSC: </span>In class rougelikeLibrary.InventoryItemTests</a>
+<div style="display:none;" id="b-uid-bccf5c6d7518ef07876919b633dfd5fd-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-2d22eadba476d9da2579c7bed0d8df70-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SBSC: </span>In class rougelikeLibrary.InventoryItemTests</a>
+<div style="display:none;" id="b-uid-2d22eadba476d9da2579c7bed0d8df70-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-72dd9c6af61997b7b001eaab291db674-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SBSC: </span>In class rougelikeLibrary.InventoryItemTests</a>
+<div style="display:none;" id="b-uid-72dd9c6af61997b7b001eaab291db674-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-ccf6aed41b4765b4d51fee1f786239c5-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SBSC: </span>In class rougelikeLibrary.InventoryItemTests</a>
+<div style="display:none;" id="b-uid-ccf6aed41b4765b4d51fee1f786239c5-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-PERFORMANCE-and-code-SS');return false;">SS: Unread field should be static
+            (11:
+            <span class="t-h">0/11/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE-and-code-SS">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-PERFORMANCE-and-code-SS-and-bug-SS_SHOULD_BE_STATIC');return false;" onmouseout="popUp(event,'tip-SS_SHOULD_BE_STATIC');" onmouseover="popUp(event,'tip-SS_SHOULD_BE_STATIC');">Unread field: should this field be static?&nbsp;&nbsp;
+            (11:
+            <span class="t-h">0/11/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE-and-code-SS-and-bug-SS_SHOULD_BE_STATIC">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-38caecaa76fc0289890d27e573e98e42-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.GameTest</a>
+<div style="display:none;" id="b-uid-38caecaa76fc0289890d27e573e98e42-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-cf333c013c671d252025846c2bb101ae-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.MapControllerTest</a>
+<div style="display:none;" id="b-uid-cf333c013c671d252025846c2bb101ae-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-3db8d58fc6a7faa1583a5e3559d3c50d-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.MapControllerTest</a>
+<div style="display:none;" id="b-uid-3db8d58fc6a7faa1583a5e3559d3c50d-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-d7167b6edff1aea3608538894594d9d0-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.MapControllerTest</a>
+<div style="display:none;" id="b-uid-d7167b6edff1aea3608538894594d9d0-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-bcdc3977b2602085dfef746d62bfaf8e-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-bcdc3977b2602085dfef746d62bfaf8e-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-fec93d7262ba67472bb9c924eddff84e-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-fec93d7262ba67472bb9c924eddff84e-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-6829f9e8a137b3f19e2014dc8cf37a6a-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-6829f9e8a137b3f19e2014dc8cf37a6a-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-108164cd0b47de24fc3b357b863718b6-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-108164cd0b47de24fc3b357b863718b6-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-dc8f1efe818f8c5391bba5f774477022-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-dc8f1efe818f8c5391bba5f774477022-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-fec956c5d2027aa1f62cb03f4498b484-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.RoomTest</a>
+<div style="display:none;" id="b-uid-fec956c5d2027aa1f62cb03f4498b484-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-61d1083dba2c5bdabf5500f6169dc66a-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.RoomTest</a>
+<div style="display:none;" id="b-uid-61d1083dba2c5bdabf5500f6169dc66a-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-PERFORMANCE-and-code-UrF');return false;">UrF: Unread field
+            (9:
+            <span class="t-h">0/7/2/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE-and-code-UrF">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-PERFORMANCE-and-code-UrF-and-bug-URF_UNREAD_FIELD');return false;" onmouseout="popUp(event,'tip-URF_UNREAD_FIELD');" onmouseover="popUp(event,'tip-URF_UNREAD_FIELD');">Unread field&nbsp;&nbsp;
+            (9:
+            <span class="t-h">0/7/2/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE-and-code-UrF-and-bug-URF_UNREAD_FIELD">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-a75f62b92f33e3d7d8fe14c12f02fd1c-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.GameTest</a>
+<div style="display:none;" id="b-uid-a75f62b92f33e3d7d8fe14c12f02fd1c-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-e5b99dd28f22a6887c72157ed0590d8f-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.GameTest</a>
+<div style="display:none;" id="b-uid-e5b99dd28f22a6887c72157ed0590d8f-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-1db98a309a631baebfac7553dd55ccf8-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.MapControllerTest</a>
+<div style="display:none;" id="b-uid-1db98a309a631baebfac7553dd55ccf8-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-1aca6a7d578f49b0213e3f5d0c2f5924-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.MapControllerTest</a>
+<div style="display:none;" id="b-uid-1aca6a7d578f49b0213e3f5d0c2f5924-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-dd9b85209c1e74585fa20ebf1d775e05-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.MapControllerTest</a>
+<div style="display:none;" id="b-uid-dd9b85209c1e74585fa20ebf1d775e05-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-3678038e24c677b819e04e635b4f52ca-0','c');return false;">
+<span class="b-3">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.MappableTypeWrapper</a>
+<div style="display:none;" id="b-uid-3678038e24c677b819e04e635b4f52ca-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-a6061f3992fccc944d2d0a611a56e72b-0','c');return false;">
+<span class="b-3">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.RoomCreator</a>
+<div style="display:none;" id="b-uid-a6061f3992fccc944d2d0a611a56e72b-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-93a72d915c441344c53392224f5c7b30-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-93a72d915c441344c53392224f5c7b30-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-20e19bf175ffc3c7279ecb0dfde45414-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-20e19bf175ffc3c7279ecb0dfde45414-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ob">
+<div class="ob-t">
+<a href="" onclick="toggle('category-STYLE');return false;">Dodgy code
+            (14:
+            <span class="t-h">3/9/2/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE">
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-STYLE-and-code-BC');return false;">BC: Bad casts of object references
+            (1:
+            <span class="t-h">0/0/1/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-BC">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-STYLE-and-code-BC-and-bug-BC_UNCONFIRMED_CAST_OF_RETURN_VALUE');return false;" onmouseout="popUp(event,'tip-BC_UNCONFIRMED_CAST_OF_RETURN_VALUE');" onmouseover="popUp(event,'tip-BC_UNCONFIRMED_CAST_OF_RETURN_VALUE');">Unchecked/unconfirmed cast of return value from method&nbsp;&nbsp;
+            (1:
+            <span class="t-h">0/0/1/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-BC-and-bug-BC_UNCONFIRMED_CAST_OF_RETURN_VALUE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-9fb3c9ea8f65548101a5e8627a1ed5f6-0','c');return false;">
+<span class="b-3">&nbsp;&nbsp;</span>
+<span class="b-t">BC: </span>In class rougelikeLibrary.RoomCreatorBuilderTest</a>
+<div style="display:none;" id="b-uid-9fb3c9ea8f65548101a5e8627a1ed5f6-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-STYLE-and-code-DLS');return false;">DLS: Dead local store
+            (3:
+            <span class="t-h">3/0/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-DLS">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-STYLE-and-code-DLS-and-bug-DLS_DEAD_LOCAL_STORE');return false;" onmouseout="popUp(event,'tip-DLS_DEAD_LOCAL_STORE');" onmouseover="popUp(event,'tip-DLS_DEAD_LOCAL_STORE');">Dead store to local variable&nbsp;&nbsp;
+            (3:
+            <span class="t-h">3/0/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-DLS-and-bug-DLS_DEAD_LOCAL_STORE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-dc7e9e59e135554235f404fc05efb4db-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">DLS: </span>In class rougelikeLibrary.RoomTest</a>
+<div style="display:none;" id="b-uid-dc7e9e59e135554235f404fc05efb4db-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-b24c2fdafcef93192ce07f877b56f6ba-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">DLS: </span>In class rougelikeLibrary.TurnSystemTests</a>
+<div style="display:none;" id="b-uid-b24c2fdafcef93192ce07f877b56f6ba-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-7e59fa527d6442e405d446b1f347d8cd-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">DLS: </span>In class rougelikeLibrary.TurnSystemTests</a>
+<div style="display:none;" id="b-uid-7e59fa527d6442e405d446b1f347d8cd-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-STYLE-and-code-RV');return false;">RV: Bad use of return value from method
+            (7:
+            <span class="t-h">0/7/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-RV">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-STYLE-and-code-RV-and-bug-RV_RETURN_VALUE_IGNORED_INFERRED');return false;" onmouseout="popUp(event,'tip-RV_RETURN_VALUE_IGNORED_INFERRED');" onmouseover="popUp(event,'tip-RV_RETURN_VALUE_IGNORED_INFERRED');">Method ignores return value, is this OK?&nbsp;&nbsp;
+            (6:
+            <span class="t-h">0/6/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-RV-and-bug-RV_RETURN_VALUE_IGNORED_INFERRED">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-9cf93735892c2cb13dfbaa82954aa13a-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RV: </span>In class rougelikeLibrary.PositionTests</a>
+<div style="display:none;" id="b-uid-9cf93735892c2cb13dfbaa82954aa13a-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-ba12c38e7e0a91aadfd7b5f33e681a54-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RV: </span>In class rougelikeLibrary.PositionTests</a>
+<div style="display:none;" id="b-uid-ba12c38e7e0a91aadfd7b5f33e681a54-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-8004460d505ea301e91683ecd09cd1f4-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RV: </span>In class rougelikeLibrary.PositionTests</a>
+<div style="display:none;" id="b-uid-8004460d505ea301e91683ecd09cd1f4-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-70b8cb58a216b815a400e31f66247573-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RV: </span>In class rougelikeLibrary.PositionTests</a>
+<div style="display:none;" id="b-uid-70b8cb58a216b815a400e31f66247573-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-3005b58f993c644211bee96b18564587-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RV: </span>In class rougelikeLibrary.PositionTests</a>
+<div style="display:none;" id="b-uid-3005b58f993c644211bee96b18564587-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-d0e6baef26c9184e489d62eebfc08420-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RV: </span>In class rougelikeLibrary.PositionTests</a>
+<div style="display:none;" id="b-uid-d0e6baef26c9184e489d62eebfc08420-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-STYLE-and-code-RV-and-bug-RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT');return false;" onmouseout="popUp(event,'tip-RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT');" onmouseover="popUp(event,'tip-RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT');">Return value of method without side effect is ignored&nbsp;&nbsp;
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-RV-and-bug-RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-cc5f5deeb0d3a532557254d3249e3c23-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RV: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-cc5f5deeb0d3a532557254d3249e3c23-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-STYLE-and-code-UC');return false;">UC: Useless code
+            (2:
+            <span class="t-h">0/2/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-UC">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-STYLE-and-code-UC-and-bug-UC_USELESS_OBJECT');return false;" onmouseout="popUp(event,'tip-UC_USELESS_OBJECT');" onmouseover="popUp(event,'tip-UC_USELESS_OBJECT');">Useless object created&nbsp;&nbsp;
+            (2:
+            <span class="t-h">0/2/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-UC-and-bug-UC_USELESS_OBJECT">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-357671039dda01c1a50cc504c17ada8-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UC: </span>In class rougelikeLibrary.TurnSystemTests</a>
+<div style="display:none;" id="b-uid-357671039dda01c1a50cc504c17ada8-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-46a0f7ba87ca818217fe1bd9b9035722-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UC: </span>In class rougelikeLibrary.TurnSystemTests</a>
+<div style="display:none;" id="b-uid-46a0f7ba87ca818217fe1bd9b9035722-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-STYLE-and-code-UwF');return false;">UwF: Unwritten field
+            (1:
+            <span class="t-h">0/0/1/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-UwF">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-STYLE-and-code-UwF-and-bug-UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR');return false;" onmouseout="popUp(event,'tip-UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR');" onmouseover="popUp(event,'tip-UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR');">Field not initialized in constructor but dereferenced without null check&nbsp;&nbsp;
+            (1:
+            <span class="t-h">0/0/1/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-UwF-and-bug-UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-d14d9138456ee31312c88350e2ce61cd-0','c');return false;">
+<span class="b-3">&nbsp;&nbsp;</span>
+<span class="b-t">UwF: </span>In class rougelikeLibrary.RoomCreatorBuilder</a>
+<div style="display:none;" id="b-uid-d14d9138456ee31312c88350e2ce61cd-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="list-by-package" class="data-box" style="display:none;">
+<span class="b-1">&nbsp;&nbsp;</span> High Prio
+   <span class="b-2">&nbsp;&nbsp;</span> Medium Prio
+   <span class="b-3">&nbsp;&nbsp;</span> Low Prio
+   <span class="b-4">&nbsp;&nbsp;</span> Exp.
+<div class="ob">
+<div class="ob-t">
+<a href="" onclick="toggle('package-rougelikeLibrary');return false;">rougelikeLibrary
+            (49:
+            <span class="t-h">11/32/6/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary">
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.GameTest');return false;">rougelikeLibrary.GameTest  (3:
+            <span class="t-h">0/3/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.GameTest">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.GameTest-and-type-SS_SHOULD_BE_STATIC');return false;" onmouseout="popUp(event,'tip-SS_SHOULD_BE_STATIC')" onmouseover="popUp(event,'tip-SS_SHOULD_BE_STATIC')">Unread field: should this field be static?&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.GameTest-and-type-SS_SHOULD_BE_STATIC">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-38caecaa76fc0289890d27e573e98e42-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.GameTest</a>
+<div style="display:none;" id="b-uid-38caecaa76fc0289890d27e573e98e42-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.GameTest-and-type-URF_UNREAD_FIELD');return false;" onmouseout="popUp(event,'tip-URF_UNREAD_FIELD')" onmouseover="popUp(event,'tip-URF_UNREAD_FIELD')">Unread field&nbsp;&nbsp;
+            (2)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.GameTest-and-type-URF_UNREAD_FIELD">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-a75f62b92f33e3d7d8fe14c12f02fd1c-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.GameTest</a>
+<div style="display:none;" id="b-uid-a75f62b92f33e3d7d8fe14c12f02fd1c-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-e5b99dd28f22a6887c72157ed0590d8f-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.GameTest</a>
+<div style="display:none;" id="b-uid-e5b99dd28f22a6887c72157ed0590d8f-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.Inventory');return false;">rougelikeLibrary.Inventory  (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.Inventory">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.Inventory-and-type-SBSC_USE_STRINGBUFFER_CONCATENATION');return false;" onmouseout="popUp(event,'tip-SBSC_USE_STRINGBUFFER_CONCATENATION')" onmouseover="popUp(event,'tip-SBSC_USE_STRINGBUFFER_CONCATENATION')">Method concatenates strings using + in a loop&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.Inventory-and-type-SBSC_USE_STRINGBUFFER_CONCATENATION">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-a28c4dfed8489df701a2875dbdf6e7eb-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SBSC: </span>In class rougelikeLibrary.Inventory</a>
+<div style="display:none;" id="b-uid-a28c4dfed8489df701a2875dbdf6e7eb-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.InventoryItemTests');return false;">rougelikeLibrary.InventoryItemTests  (4:
+            <span class="t-h">0/4/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.InventoryItemTests">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.InventoryItemTests-and-type-SBSC_USE_STRINGBUFFER_CONCATENATION');return false;" onmouseout="popUp(event,'tip-SBSC_USE_STRINGBUFFER_CONCATENATION')" onmouseover="popUp(event,'tip-SBSC_USE_STRINGBUFFER_CONCATENATION')">Method concatenates strings using + in a loop&nbsp;&nbsp;
+            (4)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.InventoryItemTests-and-type-SBSC_USE_STRINGBUFFER_CONCATENATION">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-bccf5c6d7518ef07876919b633dfd5fd-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SBSC: </span>In class rougelikeLibrary.InventoryItemTests</a>
+<div style="display:none;" id="b-uid-bccf5c6d7518ef07876919b633dfd5fd-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-2d22eadba476d9da2579c7bed0d8df70-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SBSC: </span>In class rougelikeLibrary.InventoryItemTests</a>
+<div style="display:none;" id="b-uid-2d22eadba476d9da2579c7bed0d8df70-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-72dd9c6af61997b7b001eaab291db674-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SBSC: </span>In class rougelikeLibrary.InventoryItemTests</a>
+<div style="display:none;" id="b-uid-72dd9c6af61997b7b001eaab291db674-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-ccf6aed41b4765b4d51fee1f786239c5-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SBSC: </span>In class rougelikeLibrary.InventoryItemTests</a>
+<div style="display:none;" id="b-uid-ccf6aed41b4765b4d51fee1f786239c5-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.IOTests');return false;">rougelikeLibrary.IOTests  (7:
+            <span class="t-h">7/0/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.IOTests">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.IOTests-and-type-DM_DEFAULT_ENCODING');return false;" onmouseout="popUp(event,'tip-DM_DEFAULT_ENCODING')" onmouseover="popUp(event,'tip-DM_DEFAULT_ENCODING')">Reliance on default encoding&nbsp;&nbsp;
+            (7)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.IOTests-and-type-DM_DEFAULT_ENCODING">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-c7a233574e968ae9d2494ac06358d1de-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.IOTests</a>
+<div style="display:none;" id="b-uid-c7a233574e968ae9d2494ac06358d1de-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-a09ab43033329eb7c9f538daa46da91c-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.IOTests</a>
+<div style="display:none;" id="b-uid-a09ab43033329eb7c9f538daa46da91c-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-d30e5b217e643ac4794843e2a60264a1-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.IOTests</a>
+<div style="display:none;" id="b-uid-d30e5b217e643ac4794843e2a60264a1-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-6ef9bbc7fc0555ad7f22120c44d4a43a-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.IOTests</a>
+<div style="display:none;" id="b-uid-6ef9bbc7fc0555ad7f22120c44d4a43a-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-d184089e812f3555ca9bc7187f7f7be0-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.IOTests</a>
+<div style="display:none;" id="b-uid-d184089e812f3555ca9bc7187f7f7be0-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-859e965bd1709934137028face8261b6-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.IOTests</a>
+<div style="display:none;" id="b-uid-859e965bd1709934137028face8261b6-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-48f954a13ba8099f96f154725b4d5545-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.IOTests</a>
+<div style="display:none;" id="b-uid-48f954a13ba8099f96f154725b4d5545-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.Item');return false;">rougelikeLibrary.Item  (1:
+            <span class="t-h">0/0/1/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.Item">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.Item-and-type-DM_CONVERT_CASE');return false;" onmouseout="popUp(event,'tip-DM_CONVERT_CASE')" onmouseover="popUp(event,'tip-DM_CONVERT_CASE')">Consider using Locale parameterized version of invoked method&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.Item-and-type-DM_CONVERT_CASE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-c0f6098c1beabd1adade5ee27637aeb-0','p');return false;">
+<span class="b-3">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.Item</a>
+<div style="display:none;" id="b-uid-c0f6098c1beabd1adade5ee27637aeb-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.MapControllerTest');return false;">rougelikeLibrary.MapControllerTest  (6:
+            <span class="t-h">0/6/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.MapControllerTest">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.MapControllerTest-and-type-SS_SHOULD_BE_STATIC');return false;" onmouseout="popUp(event,'tip-SS_SHOULD_BE_STATIC')" onmouseover="popUp(event,'tip-SS_SHOULD_BE_STATIC')">Unread field: should this field be static?&nbsp;&nbsp;
+            (3)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.MapControllerTest-and-type-SS_SHOULD_BE_STATIC">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-cf333c013c671d252025846c2bb101ae-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.MapControllerTest</a>
+<div style="display:none;" id="b-uid-cf333c013c671d252025846c2bb101ae-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-3db8d58fc6a7faa1583a5e3559d3c50d-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.MapControllerTest</a>
+<div style="display:none;" id="b-uid-3db8d58fc6a7faa1583a5e3559d3c50d-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-d7167b6edff1aea3608538894594d9d0-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.MapControllerTest</a>
+<div style="display:none;" id="b-uid-d7167b6edff1aea3608538894594d9d0-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.MapControllerTest-and-type-URF_UNREAD_FIELD');return false;" onmouseout="popUp(event,'tip-URF_UNREAD_FIELD')" onmouseover="popUp(event,'tip-URF_UNREAD_FIELD')">Unread field&nbsp;&nbsp;
+            (3)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.MapControllerTest-and-type-URF_UNREAD_FIELD">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-1db98a309a631baebfac7553dd55ccf8-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.MapControllerTest</a>
+<div style="display:none;" id="b-uid-1db98a309a631baebfac7553dd55ccf8-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-1aca6a7d578f49b0213e3f5d0c2f5924-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.MapControllerTest</a>
+<div style="display:none;" id="b-uid-1aca6a7d578f49b0213e3f5d0c2f5924-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-dd9b85209c1e74585fa20ebf1d775e05-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.MapControllerTest</a>
+<div style="display:none;" id="b-uid-dd9b85209c1e74585fa20ebf1d775e05-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.MappableTypeWrapper');return false;">rougelikeLibrary.MappableTypeWrapper  (1:
+            <span class="t-h">0/0/1/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.MappableTypeWrapper">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.MappableTypeWrapper-and-type-URF_UNREAD_FIELD');return false;" onmouseout="popUp(event,'tip-URF_UNREAD_FIELD')" onmouseover="popUp(event,'tip-URF_UNREAD_FIELD')">Unread field&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.MappableTypeWrapper-and-type-URF_UNREAD_FIELD">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-3678038e24c677b819e04e635b4f52ca-0','p');return false;">
+<span class="b-3">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.MappableTypeWrapper</a>
+<div style="display:none;" id="b-uid-3678038e24c677b819e04e635b4f52ca-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.PositionTests');return false;">rougelikeLibrary.PositionTests  (6:
+            <span class="t-h">0/6/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.PositionTests">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.PositionTests-and-type-RV_RETURN_VALUE_IGNORED_INFERRED');return false;" onmouseout="popUp(event,'tip-RV_RETURN_VALUE_IGNORED_INFERRED')" onmouseover="popUp(event,'tip-RV_RETURN_VALUE_IGNORED_INFERRED')">Method ignores return value, is this OK?&nbsp;&nbsp;
+            (6)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.PositionTests-and-type-RV_RETURN_VALUE_IGNORED_INFERRED">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-9cf93735892c2cb13dfbaa82954aa13a-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RV: </span>In class rougelikeLibrary.PositionTests</a>
+<div style="display:none;" id="b-uid-9cf93735892c2cb13dfbaa82954aa13a-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-ba12c38e7e0a91aadfd7b5f33e681a54-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RV: </span>In class rougelikeLibrary.PositionTests</a>
+<div style="display:none;" id="b-uid-ba12c38e7e0a91aadfd7b5f33e681a54-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-8004460d505ea301e91683ecd09cd1f4-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RV: </span>In class rougelikeLibrary.PositionTests</a>
+<div style="display:none;" id="b-uid-8004460d505ea301e91683ecd09cd1f4-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-70b8cb58a216b815a400e31f66247573-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RV: </span>In class rougelikeLibrary.PositionTests</a>
+<div style="display:none;" id="b-uid-70b8cb58a216b815a400e31f66247573-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-3005b58f993c644211bee96b18564587-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RV: </span>In class rougelikeLibrary.PositionTests</a>
+<div style="display:none;" id="b-uid-3005b58f993c644211bee96b18564587-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-d0e6baef26c9184e489d62eebfc08420-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RV: </span>In class rougelikeLibrary.PositionTests</a>
+<div style="display:none;" id="b-uid-d0e6baef26c9184e489d62eebfc08420-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreator');return false;">rougelikeLibrary.RoomCreator  (1:
+            <span class="t-h">0/0/1/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreator">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreator-and-type-URF_UNREAD_FIELD');return false;" onmouseout="popUp(event,'tip-URF_UNREAD_FIELD')" onmouseover="popUp(event,'tip-URF_UNREAD_FIELD')">Unread field&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreator-and-type-URF_UNREAD_FIELD">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-a6061f3992fccc944d2d0a611a56e72b-0','p');return false;">
+<span class="b-3">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.RoomCreator</a>
+<div style="display:none;" id="b-uid-a6061f3992fccc944d2d0a611a56e72b-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorBuilder');return false;">rougelikeLibrary.RoomCreatorBuilder  (1:
+            <span class="t-h">0/0/1/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorBuilder">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorBuilder-and-type-UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR');return false;" onmouseout="popUp(event,'tip-UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR')" onmouseover="popUp(event,'tip-UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR')">Field not initialized in constructor but dereferenced without null check&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorBuilder-and-type-UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-d14d9138456ee31312c88350e2ce61cd-0','p');return false;">
+<span class="b-3">&nbsp;&nbsp;</span>
+<span class="b-t">UwF: </span>In class rougelikeLibrary.RoomCreatorBuilder</a>
+<div style="display:none;" id="b-uid-d14d9138456ee31312c88350e2ce61cd-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorBuilderTest');return false;">rougelikeLibrary.RoomCreatorBuilderTest  (1:
+            <span class="t-h">0/0/1/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorBuilderTest">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorBuilderTest-and-type-BC_UNCONFIRMED_CAST_OF_RETURN_VALUE');return false;" onmouseout="popUp(event,'tip-BC_UNCONFIRMED_CAST_OF_RETURN_VALUE')" onmouseover="popUp(event,'tip-BC_UNCONFIRMED_CAST_OF_RETURN_VALUE')">Unchecked/unconfirmed cast of return value from method&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorBuilderTest-and-type-BC_UNCONFIRMED_CAST_OF_RETURN_VALUE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-9fb3c9ea8f65548101a5e8627a1ed5f6-0','p');return false;">
+<span class="b-3">&nbsp;&nbsp;</span>
+<span class="b-t">BC: </span>In class rougelikeLibrary.RoomCreatorBuilderTest</a>
+<div style="display:none;" id="b-uid-9fb3c9ea8f65548101a5e8627a1ed5f6-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorTest');return false;">rougelikeLibrary.RoomCreatorTest  (8:
+            <span class="t-h">0/8/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorTest">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorTest-and-type-RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT');return false;" onmouseout="popUp(event,'tip-RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT')" onmouseover="popUp(event,'tip-RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT')">Return value of method without side effect is ignored&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorTest-and-type-RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-cc5f5deeb0d3a532557254d3249e3c23-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RV: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-cc5f5deeb0d3a532557254d3249e3c23-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorTest-and-type-SS_SHOULD_BE_STATIC');return false;" onmouseout="popUp(event,'tip-SS_SHOULD_BE_STATIC')" onmouseover="popUp(event,'tip-SS_SHOULD_BE_STATIC')">Unread field: should this field be static?&nbsp;&nbsp;
+            (5)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorTest-and-type-SS_SHOULD_BE_STATIC">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-bcdc3977b2602085dfef746d62bfaf8e-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-bcdc3977b2602085dfef746d62bfaf8e-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-fec93d7262ba67472bb9c924eddff84e-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-fec93d7262ba67472bb9c924eddff84e-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-6829f9e8a137b3f19e2014dc8cf37a6a-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-6829f9e8a137b3f19e2014dc8cf37a6a-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-108164cd0b47de24fc3b357b863718b6-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-108164cd0b47de24fc3b357b863718b6-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-dc8f1efe818f8c5391bba5f774477022-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-dc8f1efe818f8c5391bba5f774477022-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorTest-and-type-URF_UNREAD_FIELD');return false;" onmouseout="popUp(event,'tip-URF_UNREAD_FIELD')" onmouseover="popUp(event,'tip-URF_UNREAD_FIELD')">Unread field&nbsp;&nbsp;
+            (2)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.RoomCreatorTest-and-type-URF_UNREAD_FIELD">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-93a72d915c441344c53392224f5c7b30-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-93a72d915c441344c53392224f5c7b30-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-20e19bf175ffc3c7279ecb0dfde45414-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UrF: </span>In class rougelikeLibrary.RoomCreatorTest</a>
+<div style="display:none;" id="b-uid-20e19bf175ffc3c7279ecb0dfde45414-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.RoomTest');return false;">rougelikeLibrary.RoomTest  (3:
+            <span class="t-h">1/2/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.RoomTest">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.RoomTest-and-type-DLS_DEAD_LOCAL_STORE');return false;" onmouseout="popUp(event,'tip-DLS_DEAD_LOCAL_STORE')" onmouseover="popUp(event,'tip-DLS_DEAD_LOCAL_STORE')">Dead store to local variable&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.RoomTest-and-type-DLS_DEAD_LOCAL_STORE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-dc7e9e59e135554235f404fc05efb4db-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">DLS: </span>In class rougelikeLibrary.RoomTest</a>
+<div style="display:none;" id="b-uid-dc7e9e59e135554235f404fc05efb4db-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.RoomTest-and-type-SS_SHOULD_BE_STATIC');return false;" onmouseout="popUp(event,'tip-SS_SHOULD_BE_STATIC')" onmouseover="popUp(event,'tip-SS_SHOULD_BE_STATIC')">Unread field: should this field be static?&nbsp;&nbsp;
+            (2)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.RoomTest-and-type-SS_SHOULD_BE_STATIC">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-fec956c5d2027aa1f62cb03f4498b484-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.RoomTest</a>
+<div style="display:none;" id="b-uid-fec956c5d2027aa1f62cb03f4498b484-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-61d1083dba2c5bdabf5500f6169dc66a-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SS: </span>In class rougelikeLibrary.RoomTest</a>
+<div style="display:none;" id="b-uid-61d1083dba2c5bdabf5500f6169dc66a-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.TUI');return false;">rougelikeLibrary.TUI  (2:
+            <span class="t-h">1/0/1/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.TUI">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.TUI-and-type-DM_CONVERT_CASE');return false;" onmouseout="popUp(event,'tip-DM_CONVERT_CASE')" onmouseover="popUp(event,'tip-DM_CONVERT_CASE')">Consider using Locale parameterized version of invoked method&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.TUI-and-type-DM_CONVERT_CASE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-fafe95412e72b0fb35bd1da2af376435-0','p');return false;">
+<span class="b-3">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.TUI</a>
+<div style="display:none;" id="b-uid-fafe95412e72b0fb35bd1da2af376435-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.TUI-and-type-DM_DEFAULT_ENCODING');return false;" onmouseout="popUp(event,'tip-DM_DEFAULT_ENCODING')" onmouseover="popUp(event,'tip-DM_DEFAULT_ENCODING')">Reliance on default encoding&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.TUI-and-type-DM_DEFAULT_ENCODING">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-14ac0303128c9a5e694545c8490504e1-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class rougelikeLibrary.TUI</a>
+<div style="display:none;" id="b-uid-14ac0303128c9a5e694545c8490504e1-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.TurnSystemTests');return false;">rougelikeLibrary.TurnSystemTests  (4:
+            <span class="t-h">2/2/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.TurnSystemTests">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.TurnSystemTests-and-type-DLS_DEAD_LOCAL_STORE');return false;" onmouseout="popUp(event,'tip-DLS_DEAD_LOCAL_STORE')" onmouseover="popUp(event,'tip-DLS_DEAD_LOCAL_STORE')">Dead store to local variable&nbsp;&nbsp;
+            (2)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.TurnSystemTests-and-type-DLS_DEAD_LOCAL_STORE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-b24c2fdafcef93192ce07f877b56f6ba-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">DLS: </span>In class rougelikeLibrary.TurnSystemTests</a>
+<div style="display:none;" id="b-uid-b24c2fdafcef93192ce07f877b56f6ba-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-7e59fa527d6442e405d446b1f347d8cd-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">DLS: </span>In class rougelikeLibrary.TurnSystemTests</a>
+<div style="display:none;" id="b-uid-7e59fa527d6442e405d446b1f347d8cd-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-rougelikeLibrary-and-class-rougelikeLibrary.TurnSystemTests-and-type-UC_USELESS_OBJECT');return false;" onmouseout="popUp(event,'tip-UC_USELESS_OBJECT')" onmouseover="popUp(event,'tip-UC_USELESS_OBJECT')">Useless object created&nbsp;&nbsp;
+            (2)
+         </a>
+</div>
+<div style="display:none;" id="package-rougelikeLibrary-and-class-rougelikeLibrary.TurnSystemTests-and-type-UC_USELESS_OBJECT">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-357671039dda01c1a50cc504c17ada8-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UC: </span>In class rougelikeLibrary.TurnSystemTests</a>
+<div style="display:none;" id="b-uid-357671039dda01c1a50cc504c17ada8-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-46a0f7ba87ca818217fe1bd9b9035722-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">UC: </span>In class rougelikeLibrary.TurnSystemTests</a>
+<div style="display:none;" id="b-uid-46a0f7ba87ca818217fe1bd9b9035722-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tip-UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" class="tip">
+<b>UwF / UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR</b>
+<br/>
+
+  <p> This field is never initialized within any constructor, and is therefore could be null after
+the object is constructed. Elsewhere, it is loaded and dereferenced without a null check.
+This could be a either an error or a questionable design, since
+it means a null pointer exception will be generated if that field is dereferenced
+before being initialized.
+</p>
+
+    </div>
+<div id="tip-DLS_DEAD_LOCAL_STORE" class="tip">
+<b>DLS / DLS_DEAD_LOCAL_STORE</b>
+<br/>
+
+<p>
+This instruction assigns a value to a local variable,
+but the value is not read or used in any subsequent instruction.
+Often, this indicates an error, because the value computed is never
+used.
+</p>
+<p>
+Note that Sun's javac compiler often generates dead stores for
+final local variables.  Because FindBugs is a bytecode-based tool,
+there is no easy way to eliminate these false positives.
+</p>
+
+    </div>
+<div id="tip-BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" class="tip">
+<b>BC / BC_UNCONFIRMED_CAST_OF_RETURN_VALUE</b>
+<br/>
+
+<p>
+This code performs an unchecked cast of the return value of a method.
+The code might be calling the method in such a way that the cast is guaranteed to be
+safe, but FindBugs is unable to verify that the cast is safe.  Check that your program logic ensures that this
+cast will not fail.
+</p>
+
+    </div>
+<div id="tip-RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT" class="tip">
+<b>RV / RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT</b>
+<br/>
+
+<p>This code calls a method and ignores the return value. However our analysis shows that
+the method (including its implementations in subclasses if any) does not produce any effect 
+other than return value. Thus this call can be removed.
+</p>
+<p>We are trying to reduce the false positives as much as possible, but in some cases this warning might be wrong.
+Common false-positive cases include:</p>
+<p>- The method is designed to be overridden and produce a side effect in other projects which are out of the scope of the analysis.</p>
+<p>- The method is called to trigger the class loading which may have a side effect.</p>
+<p>- The method is called just to get some exception.</p>
+<p>If you feel that our assumption is incorrect, you can use a @CheckReturnValue annotation
+to instruct FindBugs that ignoring the return value of this method is acceptable.
+</p>
+
+    </div>
+<div id="tip-SS_SHOULD_BE_STATIC" class="tip">
+<b>SS / SS_SHOULD_BE_STATIC</b>
+<br/>
+
+  <p> This class contains an instance final field that
+   is initialized to a compile-time static value.
+   Consider making the field static.</p>
+
+    </div>
+<div id="tip-SBSC_USE_STRINGBUFFER_CONCATENATION" class="tip">
+<b>SBSC / SBSC_USE_STRINGBUFFER_CONCATENATION</b>
+<br/>
+
+<p> The method seems to be building a String using concatenation in a loop.
+In each iteration, the String is converted to a StringBuffer/StringBuilder,
+   appended to, and converted back to a String.
+   This can lead to a cost quadratic in the number of iterations,
+   as the growing string is recopied in each iteration. </p>
+
+<p>Better performance can be obtained by using
+a StringBuffer (or StringBuilder in Java 1.5) explicitly.</p>
+
+<p> For example:</p>
+<pre>
+  // This is bad
+  String s = "";
+  for (int i = 0; i &lt; field.length; ++i) {
+    s = s + field[i];
+  }
+
+  // This is better
+  StringBuffer buf = new StringBuffer();
+  for (int i = 0; i &lt; field.length; ++i) {
+    buf.append(field[i]);
+  }
+  String s = buf.toString();
+</pre>
+
+    </div>
+<div id="tip-RV_RETURN_VALUE_IGNORED_INFERRED" class="tip">
+<b>RV / RV_RETURN_VALUE_IGNORED_INFERRED</b>
+<br/>
+
+<p>This code calls a method and ignores the return value. The return value
+is the same type as the type the method is invoked on, and from our analysis it looks
+like the return value might be important (e.g., like ignoring the
+return value of <code>String.toLowerCase()</code>).
+</p>
+<p>We are guessing that ignoring the return value might be a bad idea just from
+a simple analysis of the body of the method. You can use a @CheckReturnValue annotation
+to instruct FindBugs as to whether ignoring the return value of this method
+is important or acceptable.
+</p>
+<p>Please investigate this closely to decide whether it is OK to ignore the return value.
+</p>
+
+    </div>
+<div id="tip-UC_USELESS_OBJECT" class="tip">
+<b>UC / UC_USELESS_OBJECT</b>
+<br/>
+
+<p>Our analysis shows that this object is useless. 
+It's created and modified, but its value never go outside of the method or produce any side-effect.
+Either there is a mistake and object was intended to be used or it can be removed.</p>
+<p>This analysis rarely produces false-positives. Common false-positive cases include:</p>
+<p>- This object used to implicitly throw some obscure exception.</p>
+<p>- This object used as a stub to generalize the code.</p>
+<p>- This object used to hold strong references to weak/soft-referenced objects.</p>
+
+    </div>
+<div id="tip-URF_UNREAD_FIELD" class="tip">
+<b>UrF / URF_UNREAD_FIELD</b>
+<br/>
+
+  <p> This field is never read.&nbsp; Consider removing it from the class.</p>
+
+    </div>
+<div id="tip-DM_DEFAULT_ENCODING" class="tip">
+<b>Dm / DM_DEFAULT_ENCODING</b>
+<br/>
+
+<p> Found a call to a method which will perform a byte to String (or String to byte) conversion, and will assume that the default platform encoding is suitable. This will cause the application behaviour to vary between platforms. Use an alternative API and specify a charset name or Charset object explicitly.  </p>
+
+      </div>
+<div id="tip-DM_CONVERT_CASE" class="tip">
+<b>Dm / DM_CONVERT_CASE</b>
+<br/>
+
+  <p> A String is being converted to upper or lowercase, using the platform's default encoding. This may
+      result in improper conversions when used with international characters. Use the </p>
+      <ul>
+    <li>String.toUpperCase( Locale l )</li>
+    <li>String.toLowerCase( Locale l )</li>
+    </ul>
+      <p>versions instead.</p>
+
+    </div>
+<div style="display:none;" id="b-uid-38caecaa76fc0289890d27e573e98e42-0">
+<div class="b-r">In class rougelikeLibrary.GameTest</div>
+<div class="b-r">Field rougelikeLibrary.GameTest.roomCreatorSeed</div>
+<div class="b-r">At GameTest.java:[line 20]</div>
+<div class="b-d">Unread field: rougelikeLibrary.GameTest.roomCreatorSeed; should this field be static?</div>
+</div>
+<div style="display:none;" id="b-uid-a75f62b92f33e3d7d8fe14c12f02fd1c-0">
+<div class="b-r">In class rougelikeLibrary.GameTest</div>
+<div class="b-r">Field rougelikeLibrary.GameTest.enemies</div>
+<div class="b-r">At GameTest.java:[line 34]</div>
+<div class="b-d">Unread field: rougelikeLibrary.GameTest.enemies</div>
+</div>
+<div style="display:none;" id="b-uid-e5b99dd28f22a6887c72157ed0590d8f-0">
+<div class="b-r">In class rougelikeLibrary.GameTest</div>
+<div class="b-r">Field rougelikeLibrary.GameTest.items</div>
+<div class="b-r">At GameTest.java:[line 27]</div>
+<div class="b-d">Unread field: rougelikeLibrary.GameTest.items</div>
+</div>
+<div style="display:none;" id="b-uid-c7a233574e968ae9d2494ac06358d1de-0">
+<div class="b-r">In class rougelikeLibrary.IOTests</div>
+<div class="b-r">In method rougelikeLibrary.IOTests.saveInputStream()</div>
+<div class="b-r">Called method new java.io.PrintStream(OutputStream)</div>
+<div class="b-r">At IOTests.java:[line 25]</div>
+<div class="b-d">Found reliance on default encoding in rougelikeLibrary.IOTests.saveInputStream(): new java.io.PrintStream(OutputStream)</div>
+</div>
+<div style="display:none;" id="b-uid-a09ab43033329eb7c9f538daa46da91c-0">
+<div class="b-r">In class rougelikeLibrary.IOTests</div>
+<div class="b-r">In method rougelikeLibrary.IOTests.testRequestMovePlayerAllDirections()</div>
+<div class="b-r">Called method String.getBytes()</div>
+<div class="b-r">At IOTests.java:[line 54]</div>
+<div class="b-d">Found reliance on default encoding in rougelikeLibrary.IOTests.testRequestMovePlayerAllDirections(): String.getBytes()</div>
+</div>
+<div style="display:none;" id="b-uid-d30e5b217e643ac4794843e2a60264a1-0">
+<div class="b-r">In class rougelikeLibrary.IOTests</div>
+<div class="b-r">In method rougelikeLibrary.IOTests.testRequestNotAllowedMove()</div>
+<div class="b-r">Called method new java.io.PrintStream(OutputStream)</div>
+<div class="b-r">At IOTests.java:[line 83]</div>
+<div class="b-d">Found reliance on default encoding in rougelikeLibrary.IOTests.testRequestNotAllowedMove(): new java.io.PrintStream(OutputStream)</div>
+</div>
+<div style="display:none;" id="b-uid-6ef9bbc7fc0555ad7f22120c44d4a43a-0">
+<div class="b-r">In class rougelikeLibrary.IOTests</div>
+<div class="b-r">In method rougelikeLibrary.IOTests.testRequestNotAllowedMove()</div>
+<div class="b-r">Called method String.getBytes()</div>
+<div class="b-r">At IOTests.java:[line 81]</div>
+<div class="b-d">Found reliance on default encoding in rougelikeLibrary.IOTests.testRequestNotAllowedMove(): String.getBytes()</div>
+</div>
+<div style="display:none;" id="b-uid-d184089e812f3555ca9bc7187f7f7be0-0">
+<div class="b-r">In class rougelikeLibrary.IOTests</div>
+<div class="b-r">In method rougelikeLibrary.IOTests.testRequestNotAllowedMove()</div>
+<div class="b-r">Called method new java.util.Scanner(InputStream)</div>
+<div class="b-r">At IOTests.java:[line 96]</div>
+<div class="b-d">Found reliance on default encoding in rougelikeLibrary.IOTests.testRequestNotAllowedMove(): new java.util.Scanner(InputStream)</div>
+</div>
+<div style="display:none;" id="b-uid-859e965bd1709934137028face8261b6-0">
+<div class="b-r">In class rougelikeLibrary.IOTests</div>
+<div class="b-r">In method rougelikeLibrary.IOTests.testRequstMovePlayer()</div>
+<div class="b-r">Called method String.getBytes()</div>
+<div class="b-r">At IOTests.java:[line 32]</div>
+<div class="b-d">Found reliance on default encoding in rougelikeLibrary.IOTests.testRequstMovePlayer(): String.getBytes()</div>
+</div>
+<div style="display:none;" id="b-uid-48f954a13ba8099f96f154725b4d5545-0">
+<div class="b-r">In class rougelikeLibrary.IOTests</div>
+<div class="b-r">In method rougelikeLibrary.IOTests.testRequstMovePlayerWrongInput()</div>
+<div class="b-r">Called method String.getBytes()</div>
+<div class="b-r">At IOTests.java:[line 65]</div>
+<div class="b-d">Found reliance on default encoding in rougelikeLibrary.IOTests.testRequstMovePlayerWrongInput(): String.getBytes()</div>
+</div>
+<div style="display:none;" id="b-uid-a28c4dfed8489df701a2875dbdf6e7eb-0">
+<div class="b-r">In class rougelikeLibrary.Inventory</div>
+<div class="b-r">In method rougelikeLibrary.Inventory.toString()</div>
+<div class="b-r">At Inventory.java:[line 147]</div>
+<div class="b-d">rougelikeLibrary.Inventory.toString() concatenates strings using + in a loop</div>
+</div>
+<div style="display:none;" id="b-uid-bccf5c6d7518ef07876919b633dfd5fd-0">
+<div class="b-r">In class rougelikeLibrary.InventoryItemTests</div>
+<div class="b-r">In method rougelikeLibrary.InventoryItemTests.testGetItems()</div>
+<div class="b-r">At InventoryItemTests.java:[line 113]</div>
+<div class="b-d">rougelikeLibrary.InventoryItemTests.testGetItems() concatenates strings using + in a loop</div>
+</div>
+<div style="display:none;" id="b-uid-2d22eadba476d9da2579c7bed0d8df70-0">
+<div class="b-r">In class rougelikeLibrary.InventoryItemTests</div>
+<div class="b-r">In method rougelikeLibrary.InventoryItemTests.testGetItemsByDamage()</div>
+<div class="b-r">At InventoryItemTests.java:[line 253]</div>
+<div class="b-d">rougelikeLibrary.InventoryItemTests.testGetItemsByDamage() concatenates strings using + in a loop</div>
+</div>
+<div style="display:none;" id="b-uid-72dd9c6af61997b7b001eaab291db674-0">
+<div class="b-r">In class rougelikeLibrary.InventoryItemTests</div>
+<div class="b-r">In method rougelikeLibrary.InventoryItemTests.testGetItemsByHealth()</div>
+<div class="b-r">At InventoryItemTests.java:[line 225]</div>
+<div class="b-d">rougelikeLibrary.InventoryItemTests.testGetItemsByHealth() concatenates strings using + in a loop</div>
+</div>
+<div style="display:none;" id="b-uid-ccf6aed41b4765b4d51fee1f786239c5-0">
+<div class="b-r">In class rougelikeLibrary.InventoryItemTests</div>
+<div class="b-r">In method rougelikeLibrary.InventoryItemTests.testGetItemsBySpeed()</div>
+<div class="b-r">At InventoryItemTests.java:[line 197]</div>
+<div class="b-d">rougelikeLibrary.InventoryItemTests.testGetItemsBySpeed() concatenates strings using + in a loop</div>
+</div>
+<div style="display:none;" id="b-uid-c0f6098c1beabd1adade5ee27637aeb-0">
+<div class="b-r">In class rougelikeLibrary.Item</div>
+<div class="b-r">In method rougelikeLibrary.Item.toString()</div>
+<div class="b-r">At Item.java:[line 62]</div>
+<div class="b-d">Use of non-localized String.toUpperCase() or String.toLowerCase() in rougelikeLibrary.Item.toString()</div>
+</div>
+<div style="display:none;" id="b-uid-cf333c013c671d252025846c2bb101ae-0">
+<div class="b-r">In class rougelikeLibrary.MapControllerTest</div>
+<div class="b-r">Field rougelikeLibrary.MapControllerTest.dummyCenterX</div>
+<div class="b-r">At MapControllerTest.java:[line 18]</div>
+<div class="b-d">Unread field: rougelikeLibrary.MapControllerTest.dummyCenterX; should this field be static?</div>
+</div>
+<div style="display:none;" id="b-uid-3db8d58fc6a7faa1583a5e3559d3c50d-0">
+<div class="b-r">In class rougelikeLibrary.MapControllerTest</div>
+<div class="b-r">Field rougelikeLibrary.MapControllerTest.dummyCenterY</div>
+<div class="b-r">At MapControllerTest.java:[line 19]</div>
+<div class="b-d">Unread field: rougelikeLibrary.MapControllerTest.dummyCenterY; should this field be static?</div>
+</div>
+<div style="display:none;" id="b-uid-d7167b6edff1aea3608538894594d9d0-0">
+<div class="b-r">In class rougelikeLibrary.MapControllerTest</div>
+<div class="b-r">Field rougelikeLibrary.MapControllerTest.dummySeed</div>
+<div class="b-r">At MapControllerTest.java:[line 17]</div>
+<div class="b-d">Unread field: rougelikeLibrary.MapControllerTest.dummySeed; should this field be static?</div>
+</div>
+<div style="display:none;" id="b-uid-1db98a309a631baebfac7553dd55ccf8-0">
+<div class="b-r">In class rougelikeLibrary.MapControllerTest</div>
+<div class="b-r">Field rougelikeLibrary.MapControllerTest.cardinalDirectionPermissions</div>
+<div class="b-r">At MapControllerTest.java:[line 26]</div>
+<div class="b-d">Unread field: rougelikeLibrary.MapControllerTest.cardinalDirectionPermissions</div>
+</div>
+<div style="display:none;" id="b-uid-1aca6a7d578f49b0213e3f5d0c2f5924-0">
+<div class="b-r">In class rougelikeLibrary.MapControllerTest</div>
+<div class="b-r">Field rougelikeLibrary.MapControllerTest.enemies</div>
+<div class="b-r">At MapControllerTest.java:[line 36]</div>
+<div class="b-d">Unread field: rougelikeLibrary.MapControllerTest.enemies</div>
+</div>
+<div style="display:none;" id="b-uid-dd9b85209c1e74585fa20ebf1d775e05-0">
+<div class="b-r">In class rougelikeLibrary.MapControllerTest</div>
+<div class="b-r">Field rougelikeLibrary.MapControllerTest.items</div>
+<div class="b-r">At MapControllerTest.java:[line 29]</div>
+<div class="b-d">Unread field: rougelikeLibrary.MapControllerTest.items</div>
+</div>
+<div style="display:none;" id="b-uid-3678038e24c677b819e04e635b4f52ca-0">
+<div class="b-r">In class rougelikeLibrary.MappableTypeWrapper</div>
+<div class="b-r">Field rougelikeLibrary.MappableTypeWrapper.io</div>
+<div class="b-r">At MappableTypeWrapper.java:[line 24]</div>
+<div class="b-d">Unread field: rougelikeLibrary.MappableTypeWrapper.io</div>
+</div>
+<div style="display:none;" id="b-uid-9cf93735892c2cb13dfbaa82954aa13a-0">
+<div class="b-r">In class rougelikeLibrary.PositionTests</div>
+<div class="b-r">In method rougelikeLibrary.PositionTests.testOverflowTranslateX()</div>
+<div class="b-r">Called method rougelikeLibrary.Position.translate(int, int)</div>
+<div class="b-r">At PositionTests.java:[line 140]</div>
+<div class="b-d">Return value of Position.translate(int, int) ignored, is this OK in rougelikeLibrary.PositionTests.testOverflowTranslateX()</div>
+</div>
+<div style="display:none;" id="b-uid-ba12c38e7e0a91aadfd7b5f33e681a54-0">
+<div class="b-r">In class rougelikeLibrary.PositionTests</div>
+<div class="b-r">In method rougelikeLibrary.PositionTests.testPositionOverflowTranslateY()</div>
+<div class="b-r">Called method rougelikeLibrary.Position.translate(int, int)</div>
+<div class="b-r">At PositionTests.java:[line 146]</div>
+<div class="b-d">Return value of Position.translate(int, int) ignored, is this OK in rougelikeLibrary.PositionTests.testPositionOverflowTranslateY()</div>
+</div>
+<div style="display:none;" id="b-uid-8004460d505ea301e91683ecd09cd1f4-0">
+<div class="b-r">In class rougelikeLibrary.PositionTests</div>
+<div class="b-r">In method rougelikeLibrary.PositionTests.testPositionSetNegativeX()</div>
+<div class="b-r">Called method rougelikeLibrary.Position.setX(int)</div>
+<div class="b-r">At PositionTests.java:[line 75]</div>
+<div class="b-d">Return value of Position.setX(int) ignored, is this OK in rougelikeLibrary.PositionTests.testPositionSetNegativeX()</div>
+</div>
+<div style="display:none;" id="b-uid-70b8cb58a216b815a400e31f66247573-0">
+<div class="b-r">In class rougelikeLibrary.PositionTests</div>
+<div class="b-r">In method rougelikeLibrary.PositionTests.testPositionSetNegativeY()</div>
+<div class="b-r">Called method rougelikeLibrary.Position.setY(int)</div>
+<div class="b-r">At PositionTests.java:[line 87]</div>
+<div class="b-d">Return value of Position.setY(int) ignored, is this OK in rougelikeLibrary.PositionTests.testPositionSetNegativeY()</div>
+</div>
+<div style="display:none;" id="b-uid-3005b58f993c644211bee96b18564587-0">
+<div class="b-r">In class rougelikeLibrary.PositionTests</div>
+<div class="b-r">In method rougelikeLibrary.PositionTests.testPositionTranslateResultNecativeX()</div>
+<div class="b-r">Called method rougelikeLibrary.Position.translate(int, int)</div>
+<div class="b-r">At PositionTests.java:[line 108]</div>
+<div class="b-d">Return value of Position.translate(int, int) ignored, is this OK in rougelikeLibrary.PositionTests.testPositionTranslateResultNecativeX()</div>
+</div>
+<div style="display:none;" id="b-uid-d0e6baef26c9184e489d62eebfc08420-0">
+<div class="b-r">In class rougelikeLibrary.PositionTests</div>
+<div class="b-r">In method rougelikeLibrary.PositionTests.testPositionTranslateResultNecativeY()</div>
+<div class="b-r">Called method rougelikeLibrary.Position.translate(int, int)</div>
+<div class="b-r">At PositionTests.java:[line 114]</div>
+<div class="b-d">Return value of Position.translate(int, int) ignored, is this OK in rougelikeLibrary.PositionTests.testPositionTranslateResultNecativeY()</div>
+</div>
+<div style="display:none;" id="b-uid-a6061f3992fccc944d2d0a611a56e72b-0">
+<div class="b-r">In class rougelikeLibrary.RoomCreator</div>
+<div class="b-r">Field rougelikeLibrary.RoomCreator.seed</div>
+<div class="b-r">At RoomCreator.java:[line 31]</div>
+<div class="b-d">Unread field: rougelikeLibrary.RoomCreator.seed</div>
+</div>
+<div style="display:none;" id="b-uid-d14d9138456ee31312c88350e2ce61cd-0">
+<div class="b-r">In class rougelikeLibrary.RoomCreatorBuilder</div>
+<div class="b-r">Field rougelikeLibrary.RoomCreatorBuilder.roomSpace</div>
+<div class="b-r">In method rougelikeLibrary.RoomCreatorBuilder.testMinMax(int, int)</div>
+<div class="b-r">At RoomCreatorBuilder.java:[line 129]</div>
+<div class="b-d">RoomCreatorBuilder.roomSpace not initialized in constructor and dereferenced in rougelikeLibrary.RoomCreatorBuilder.testMinMax(int, int)</div>
+</div>
+<div style="display:none;" id="b-uid-9fb3c9ea8f65548101a5e8627a1ed5f6-0">
+<div class="b-r">In class rougelikeLibrary.RoomCreatorBuilderTest</div>
+<div class="b-r">In method rougelikeLibrary.RoomCreatorBuilderTest.setPlayer()</div>
+<div class="b-r">Actual type rougelikeLibrary.Character</div>
+<div class="b-r">Expected rougelikeLibrary.Player</div>
+<div class="b-r">At RoomCreatorBuilderTest.java:[line 85]</div>
+<div class="b-d">Unchecked/unconfirmed cast from rougelikeLibrary.Character to rougelikeLibrary.Player of return value in rougelikeLibrary.RoomCreatorBuilderTest.setPlayer()</div>
+</div>
+<div style="display:none;" id="b-uid-cc5f5deeb0d3a532557254d3249e3c23-0">
+<div class="b-r">In class rougelikeLibrary.RoomCreatorTest</div>
+<div class="b-r">In method rougelikeLibrary.RoomCreatorTest.addToRoom()</div>
+<div class="b-r">Called method rougelikeLibrary.Room.existType(List, Class)</div>
+<div class="b-r">At RoomCreatorTest.java:[line 149]</div>
+<div class="b-d">Return value of Room.existType(List, Class) ignored, but method has no side effect</div>
+</div>
+<div style="display:none;" id="b-uid-bcdc3977b2602085dfef746d62bfaf8e-0">
+<div class="b-r">In class rougelikeLibrary.RoomCreatorTest</div>
+<div class="b-r">Field rougelikeLibrary.RoomCreatorTest.arbitraryX</div>
+<div class="b-r">At RoomCreatorTest.java:[line 13]</div>
+<div class="b-d">Unread field: rougelikeLibrary.RoomCreatorTest.arbitraryX; should this field be static?</div>
+</div>
+<div style="display:none;" id="b-uid-fec93d7262ba67472bb9c924eddff84e-0">
+<div class="b-r">In class rougelikeLibrary.RoomCreatorTest</div>
+<div class="b-r">Field rougelikeLibrary.RoomCreatorTest.arbitraryY</div>
+<div class="b-r">At RoomCreatorTest.java:[line 14]</div>
+<div class="b-d">Unread field: rougelikeLibrary.RoomCreatorTest.arbitraryY; should this field be static?</div>
+</div>
+<div style="display:none;" id="b-uid-6829f9e8a137b3f19e2014dc8cf37a6a-0">
+<div class="b-r">In class rougelikeLibrary.RoomCreatorTest</div>
+<div class="b-r">Field rougelikeLibrary.RoomCreatorTest.dummyX</div>
+<div class="b-r">At RoomCreatorTest.java:[line 19]</div>
+<div class="b-d">Unread field: rougelikeLibrary.RoomCreatorTest.dummyX; should this field be static?</div>
+</div>
+<div style="display:none;" id="b-uid-108164cd0b47de24fc3b357b863718b6-0">
+<div class="b-r">In class rougelikeLibrary.RoomCreatorTest</div>
+<div class="b-r">Field rougelikeLibrary.RoomCreatorTest.dummyY</div>
+<div class="b-r">At RoomCreatorTest.java:[line 20]</div>
+<div class="b-d">Unread field: rougelikeLibrary.RoomCreatorTest.dummyY; should this field be static?</div>
+</div>
+<div style="display:none;" id="b-uid-dc8f1efe818f8c5391bba5f774477022-0">
+<div class="b-r">In class rougelikeLibrary.RoomCreatorTest</div>
+<div class="b-r">Field rougelikeLibrary.RoomCreatorTest.roomCreatorSeed</div>
+<div class="b-r">At RoomCreatorTest.java:[line 15]</div>
+<div class="b-d">Unread field: rougelikeLibrary.RoomCreatorTest.roomCreatorSeed; should this field be static?</div>
+</div>
+<div style="display:none;" id="b-uid-93a72d915c441344c53392224f5c7b30-0">
+<div class="b-r">In class rougelikeLibrary.RoomCreatorTest</div>
+<div class="b-r">Field rougelikeLibrary.RoomCreatorTest.enemies</div>
+<div class="b-r">At RoomCreatorTest.java:[line 35]</div>
+<div class="b-d">Unread field: rougelikeLibrary.RoomCreatorTest.enemies</div>
+</div>
+<div style="display:none;" id="b-uid-20e19bf175ffc3c7279ecb0dfde45414-0">
+<div class="b-r">In class rougelikeLibrary.RoomCreatorTest</div>
+<div class="b-r">Field rougelikeLibrary.RoomCreatorTest.items</div>
+<div class="b-r">At RoomCreatorTest.java:[line 28]</div>
+<div class="b-d">Unread field: rougelikeLibrary.RoomCreatorTest.items</div>
+</div>
+<div style="display:none;" id="b-uid-dc7e9e59e135554235f404fc05efb4db-0">
+<div class="b-r">In class rougelikeLibrary.RoomTest</div>
+<div class="b-r">In method rougelikeLibrary.RoomTest.moveCharacter()</div>
+<div class="b-r">Local variable named toPosition3</div>
+<div class="b-r">At RoomTest.java:[line 434]</div>
+<div class="b-d">Dead store to toPosition3 in rougelikeLibrary.RoomTest.moveCharacter()</div>
+</div>
+<div style="display:none;" id="b-uid-fec956c5d2027aa1f62cb03f4498b484-0">
+<div class="b-r">In class rougelikeLibrary.RoomTest</div>
+<div class="b-r">Field rougelikeLibrary.RoomTest.dummyX</div>
+<div class="b-r">At RoomTest.java:[line 15]</div>
+<div class="b-d">Unread field: rougelikeLibrary.RoomTest.dummyX; should this field be static?</div>
+</div>
+<div style="display:none;" id="b-uid-61d1083dba2c5bdabf5500f6169dc66a-0">
+<div class="b-r">In class rougelikeLibrary.RoomTest</div>
+<div class="b-r">Field rougelikeLibrary.RoomTest.dummyY</div>
+<div class="b-r">At RoomTest.java:[line 16]</div>
+<div class="b-d">Unread field: rougelikeLibrary.RoomTest.dummyY; should this field be static?</div>
+</div>
+<div style="display:none;" id="b-uid-fafe95412e72b0fb35bd1da2af376435-0">
+<div class="b-r">In class rougelikeLibrary.TUI</div>
+<div class="b-r">In method rougelikeLibrary.TUI.getInputFromUser()</div>
+<div class="b-r">At TUI.java:[line 69]</div>
+<div class="b-d">Use of non-localized String.toUpperCase() or String.toLowerCase() in rougelikeLibrary.TUI.getInputFromUser()</div>
+</div>
+<div style="display:none;" id="b-uid-14ac0303128c9a5e694545c8490504e1-0">
+<div class="b-r">In class rougelikeLibrary.TUI</div>
+<div class="b-r">In method rougelikeLibrary.TUI.getInputFromUser()</div>
+<div class="b-r">Called method new java.util.Scanner(InputStream)</div>
+<div class="b-r">At TUI.java:[line 66]</div>
+<div class="b-d">Found reliance on default encoding in rougelikeLibrary.TUI.getInputFromUser(): new java.util.Scanner(InputStream)</div>
+</div>
+<div style="display:none;" id="b-uid-b24c2fdafcef93192ce07f877b56f6ba-0">
+<div class="b-r">In class rougelikeLibrary.TurnSystemTests</div>
+<div class="b-r">In method rougelikeLibrary.TurnSystemTests.testTurnCharacterPlacedInMap()</div>
+<div class="b-r">Local variable named ts</div>
+<div class="b-r">At TurnSystemTests.java:[line 15]</div>
+<div class="b-d">Dead store to ts in rougelikeLibrary.TurnSystemTests.testTurnCharacterPlacedInMap()</div>
+</div>
+<div style="display:none;" id="b-uid-7e59fa527d6442e405d446b1f347d8cd-0">
+<div class="b-r">In class rougelikeLibrary.TurnSystemTests</div>
+<div class="b-r">In method rougelikeLibrary.TurnSystemTests.testTurnSystemMove()</div>
+<div class="b-r">Local variable named ts</div>
+<div class="b-r">At TurnSystemTests.java:[line 27]</div>
+<div class="b-d">Dead store to ts in rougelikeLibrary.TurnSystemTests.testTurnSystemMove()</div>
+</div>
+<div style="display:none;" id="b-uid-357671039dda01c1a50cc504c17ada8-0">
+<div class="b-r">In class rougelikeLibrary.TurnSystemTests</div>
+<div class="b-r">In method rougelikeLibrary.TurnSystemTests.testTurnCharacterPlacedInMap()</div>
+<div class="b-r">Value ts</div>
+<div class="b-r">Type rougelikeLibrary.TurnSystem</div>
+<div class="b-r">At TurnSystemTests.java:[line 15]</div>
+<div class="b-d">Useless object stored in variable ts of method rougelikeLibrary.TurnSystemTests.testTurnCharacterPlacedInMap()</div>
+</div>
+<div style="display:none;" id="b-uid-46a0f7ba87ca818217fe1bd9b9035722-0">
+<div class="b-r">In class rougelikeLibrary.TurnSystemTests</div>
+<div class="b-r">In method rougelikeLibrary.TurnSystemTests.testTurnSystemMove()</div>
+<div class="b-r">Value ts</div>
+<div class="b-r">Type rougelikeLibrary.TurnSystem</div>
+<div class="b-r">At TurnSystemTests.java:[line 27]</div>
+<div class="b-d">Useless object stored in variable ts of method rougelikeLibrary.TurnSystemTests.testTurnSystemMove()</div>
+</div>
+</div>
+<div id="fixedbox">
+<div id="bug-placeholder"/>
+</div>
+</body>
+</html>
